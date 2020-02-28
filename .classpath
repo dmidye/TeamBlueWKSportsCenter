@@ -2,13 +2,13 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="C:/Users/Daniel/git/GymApplication/lib/jcalendar-1.4.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Daniel/git/GymApplication/lib/jfreechart-1.5.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Daniel/git/GymApplication/lib/jgoodies-forms-1.8.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Daniel/git/GymApplication/lib/json-simple-1.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Daniel/git/GymApplication/lib/junit-4.6.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Daniel/git/GymApplication/lib/miglayout15-swing.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Daniel/git/GymApplication/lib/mysql-connector.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Daniel/git/GymApplication/lib/mysql-connector-java-8.0.18.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Daniel/git/TeamBlueWKSportsCenter/lib/jcalendar-1.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Daniel/git/TeamBlueWKSportsCenter/lib/jfreechart-1.5.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Daniel/git/TeamBlueWKSportsCenter/lib/jgoodies-forms-1.8.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Daniel/git/TeamBlueWKSportsCenter/lib/json-simple-1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Daniel/git/TeamBlueWKSportsCenter/lib/junit-4.6.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Daniel/git/TeamBlueWKSportsCenter/lib/miglayout15-swing.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Daniel/git/TeamBlueWKSportsCenter/lib/mysql-connector.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Daniel/git/TeamBlueWKSportsCenter/lib/mysql-connector-java-8.0.18.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

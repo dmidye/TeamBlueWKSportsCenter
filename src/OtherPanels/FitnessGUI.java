@@ -718,13 +718,6 @@ import Database.DbManager;
 					}
 					
 				}
-				
-				
-				
-				
-				
-				
-				
 			}
 		});
 		
@@ -1012,16 +1005,11 @@ import Database.DbManager;
                 } catch (Exception e1) {
                 	//catches mismatched value exceptions when assigning variables.
                 	//The mismatches will have already been dealt with in the for each block so we do nothing on the exception.
-                	//e1.printStackTrace();
+                	e1.printStackTrace();
 				}
          	}
         });
-		
-		
-		
-		
-		
-	
+
 		//add bodyComp to scroll Pane
 		scrollPane = new JScrollPane(bodyCompPanel);
 		

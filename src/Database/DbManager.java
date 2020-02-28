@@ -134,10 +134,10 @@ public class DbManager {
 		        	}
 		        }
 			 
-			 /* Daniel Midyett
-			  * Lookup member based on user name
-			  * 
-			 */
+ /* Daniel Midyett
+  * Lookup member based on user name
+  * 
+ */
 				 public ResultSet lookupMember(String userName)  throws SQLException, ParseException {
 			        	
 			        	// Create a connection to the database.
@@ -160,11 +160,38 @@ public class DbManager {
 			            }
 			            return null;
 				 }
-		 
-		 /* Daniel Midyett
-		  * Delete member based on user name
-		  * 
-		 */
+				 
+ /* Daniel Midyett
+  * Overloaded method to lookup member based on id
+  * 
+ */
+	 public ResultSet lookupMember(int id)  throws SQLException, ParseException {
+        	
+        	// Create a connection to the database.
+            conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+  
+            // Create a Statement object for the query.
+            Statement stmt = conn.createStatement();
+         
+            try {
+            	PreparedStatement statement = conn.prepareStatement("SELECT * FROM wk_sports_center_db.user "
+            													  + "WHERE memberID = " + id);
+		                ResultSet rs = statement.executeQuery(); 
+		                if(rs.next() == false) {
+		                	return null;
+		                } else {
+		                	return rs;
+		                }
+		            } catch(Exception e) {
+		            	e.printStackTrace();
+		            }
+		            return null;
+			 }
+ 
+ /* Daniel Midyett
+  * Delete member based on user name
+  * 
+ */
 			 public boolean deleteMember(String userName)  throws SQLException, ParseException {
 		        	
 		        	// Create a connection to the database.
@@ -195,10 +222,10 @@ public class DbManager {
 		            	return false;
 		        	}
 		        }
-			 /*	Daniel Midyett
-				 * Update BMI calculation
-				 * 
-				 */
+ /*	Daniel Midyett
+	 * Update BMI calculation
+	 * 
+	 */
 		 public boolean updateBMI(int id, double bmi) throws SQLException, ParseException {
 	        	
 	        	// Create a connection to the database.
@@ -287,10 +314,12 @@ public class DbManager {
 			
 			// Create a connection to the database.
 		    conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-
+		    
 		    // Create a Statement object for the query.
 		    Statement stmt = conn.createStatement();
-
+		    ResultSet member = lookupMember(memberID);
+		    String username = member.getString("username");
+		    System.out.println("Username: " + username);
 		    Date date = new Date();
 	        String pattern = "yyyy-MM-dd";
 	        SimpleDateFormat formatter = new SimpleDateFormat(pattern);
@@ -298,15 +327,17 @@ public class DbManager {
 	        
 	        try {
 			    stmt.executeUpdate("INSERT INTO bodycomp"
-	    					+ "(memberID, date, trainerID, BMI, domForearm, domArm, domThigh, domAbdomen, waistCircumference,"
-	    					+ " hipCircumference, bodyCompProtocol, chest, midaxillary, triceps, subscapula, abdomen, suprailliac, thigh,"
+	    					+ "(username, memberID, date, trainerID, BMI, domForearm, domArm, domThigh, domAbdomen, waistCircumference,"
+	    					+ " hipCircumference, bodyCompProtocol, chest, midaxillary, triceps, subscapular, abdomen, suprailliac, thigh,"
 	    					+ " percentBodyFat, leanWeight, fatWeight, desiredWeight)"
-	    					+ "VALUES('" + memberID + s + mysqlDateString + s + trainerID + s + BMI + s + domForearm + s + domArm + s + domThigh
+	    					+ "VALUES('" + username + s + memberID + s + mysqlDateString + s + trainerID + s + BMI + s + domForearm + s + domArm + s + domThigh
 	    					+ s + domAbdomen + s + waistCircumference + s + hipCircumference + s + bodyCompProtocol + s + chest + s + midAxillary 
 	    					+ s + triceps + s + subscapular + s + abdomen + s + supralliac + s + thigh + s + percentBodyFat + s + leanWeight + s + fatWeight + s + desiredWeight + "')");
 			    conn.close();
+			    System.out.println("Successfully added body comp.");
 			    return true;
 	        } catch(Exception e) {
+	        	e.printStackTrace();
 	        	conn.close();
 	        	return false;
 	        }
