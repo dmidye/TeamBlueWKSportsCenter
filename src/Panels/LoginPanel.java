@@ -42,6 +42,7 @@ import javax.swing.JFrame;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+import Database.DbManager;
 import Database.databaseConnector;
 import OtherPanels.StaffView;
 
@@ -406,6 +407,7 @@ public class LoginPanel extends JPanel {
 				try {
 					rs.next();
 					String memberType = rs.getString("Status");
+					String name = rs.getString("memberFirst") + " " + rs.getString("memberLast");
 					System.out.println(memberType);
 					switch (memberType) {                               //Sign in based on member type
 						case ("Admin"):
@@ -413,6 +415,7 @@ public class LoginPanel extends JPanel {
 							staffView.assessment.setEnabled(true);
 							staffView.newStaff.setEnabled(true);
 							staffView.staffPosition2.setText("Admin");
+							staffView.staffName2.setText(name);
 							break;
 						case ("Member"):
 							changePanel(new HomeScreen(owningFrame, username));

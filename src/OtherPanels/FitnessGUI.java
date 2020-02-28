@@ -248,7 +248,7 @@ import Database.DbManager;
 				
             	
 						if(dbManager.newTrainerNotes( trainingNotesMemberID, trainingNotesID, trainernotes)) {
-							JOptionPane.showMessageDialog(aerobicCapacity, "Success! Aerobic Capacity information entered.");
+							JOptionPane.showMessageDialog(aerobicCapacity, "Success! Trainer notes entered.");
 						} else {
 							JOptionPane.showMessageDialog(aerobicCapacity, "Unable to add values. Please make sure valid IDs are being entered.");
 						}
@@ -1108,7 +1108,7 @@ import Database.DbManager;
 		
 		cr.gridx = 0;
 		cr.gridy = 8;
-		totalCholesteral = new JLabel("Total Cholesteral: ");
+		totalCholesteral = new JLabel("Total Cholesterol: ");
 		coronaryRiskPanel.add(totalCholesteral, cr);
 	
 		cr.gridx = 1;

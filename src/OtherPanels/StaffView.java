@@ -14,6 +14,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.HeadlessException;
 import java.awt.Insets;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
@@ -27,7 +28,7 @@ import com.toedter.calendar.JDateChooser;
 import Database.DbManager;
 
 import javax.swing.*;
-public class StaffView{
+public class StaffView {
 	
 JTextArea staffInfo;
 JScrollPane staffInfoScrollPanel;
@@ -52,7 +53,7 @@ CardLayout layout; // content panel card layout
  JLabel staffName;
  JLabel staffPosition;
  public JLabel staffPosition2;
- JLabel staffName2;
+ public JLabel staffName2;
  
  //lookup member GUI
  JLabel accountNumber;
@@ -978,7 +979,9 @@ public void createStaffView() throws SQLException {
 	//closes the staff view frame
 	private class logOutEvent implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			//TODO
+			JComponent comp = (JComponent) e.getSource();
+			Window win = SwingUtilities.getWindowAncestor(comp);
+			win.dispose();
 		}
 	}
 	

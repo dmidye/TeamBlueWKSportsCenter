@@ -36,7 +36,7 @@ public class DbManager {
 		 * 
 		 */
 		
-		 public boolean newTrainerNotes(int memberid, int trainerid, String trainingNotes) throws SQLException, ParseException {
+		 public boolean newTrainerNotes(int memberID, int trainerid, String trainingNotes) throws SQLException, ParseException {
 	        	
 	        	// Create a connection to the database.
 	            conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
@@ -44,6 +44,9 @@ public class DbManager {
 	            // Create a Statement object for the query.
 	            Statement stmt = conn.createStatement();
 	          
+	            ResultSet member = lookupMember(memberID);
+			    String username = member.getString("username");
+			    
 	            Date date = new Date();
 		        String pattern = "yyyy-MM-dd";
 		        SimpleDateFormat formatter = new SimpleDateFormat(pattern);
@@ -51,8 +54,9 @@ public class DbManager {
 	            
 	            try {
 	        	    stmt.executeUpdate("INSERT INTO wk_sports_center_db.trainingnotes"
-	        					+ "(memberID, date, trainerid, trainingNotes)"
-	        					+ "VALUES('" + memberid + s + mysqlDateString + s + trainerid + s + trainingNotes +"')");
+	        					+ "(username, memberID, date, trainerid, trainingNotes)"
+	        					+ "VALUES('" + username + s + memberID + s + mysqlDateString + s 
+	        					+ trainerid + s + trainingNotes +"')");
 	        			   	    
 	        	    conn.close();
 	        	   
@@ -138,28 +142,28 @@ public class DbManager {
   * Lookup member based on user name
   * 
  */
-				 public ResultSet lookupMember(String userName)  throws SQLException, ParseException {
-			        	
-			        	// Create a connection to the database.
-			            conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-			  
-			            // Create a Statement object for the query.
-			            Statement stmt = conn.createStatement();
-			         
-			            try {
-			            	PreparedStatement statement = conn.prepareStatement("SELECT * FROM wk_sports_center_db.user "
-			            													  + "WHERE username LIKE " + "'" + userName + "'");
-			                ResultSet rs = statement.executeQuery(); 
-			                if(rs.next() == false) {
-			                	return null;
-			                } else {
-			                	return rs;
-			                }
-			            } catch(Exception e) {
-			            	e.printStackTrace();
-			            }
-			            return null;
-				 }
+	 public ResultSet lookupMember(String userName)  throws SQLException, ParseException {
+        	
+        	// Create a connection to the database.
+            conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+  
+            // Create a Statement object for the query.
+            Statement stmt = conn.createStatement();
+         
+            try {
+            	PreparedStatement statement = conn.prepareStatement("SELECT * FROM wk_sports_center_db.user "
+            													  + "WHERE username LIKE " + "'" + userName + "'");
+                ResultSet rs = statement.executeQuery(); 
+                if(rs.next() == false) {
+                	return null;
+                } else {
+                	return rs;
+                }
+            } catch(Exception e) {
+            	e.printStackTrace();
+            }
+            return null;
+	 }
 				 
  /* Daniel Midyett
   * Overloaded method to lookup member based on id
@@ -203,7 +207,7 @@ public class DbManager {
 		            //see if the record exists. If not, return false
 		            try {
 		            	PreparedStatement statement = conn.prepareStatement("SELECT * FROM wk_sports_center_db.user "
-		            			                                          + "WHERE Username LIKE " + "'" + userName + "'");
+		            			                                          + "WHERE username LIKE " + "'" + userName + "'");
 		                ResultSet rs = statement.executeQuery(); 
 		                if(rs.next() == false) {
 		                	return false;
@@ -262,6 +266,9 @@ public class DbManager {
 		    // Create a Statement object for the query.
 		    Statement stmt = conn.createStatement();
 
+		    ResultSet member = lookupMember(memberID);
+		    String username = member.getString("username");
+		    
 		    Date date = new Date();
 	        String pattern = "yyyy-MM-dd";
 	        SimpleDateFormat formatter = new SimpleDateFormat(pattern);
@@ -269,13 +276,14 @@ public class DbManager {
 	        
 	        try {
 			    stmt.executeUpdate("INSERT INTO aerobiccapacity "
-	    					+ "(memberID, date, trainerID, heartRateMax, restedHeartRate, finalTestHeartRate, minTargetHeartRate, maxTargetHeartRate, protocol, timeInMin, maxVO2)"
-	    					+ "VALUES('" + memberID + s + mysqlDateString + s + trainerID + s + heartRateMax + s + restedHeartRate 
+	    					+ "(username, memberID, date, trainerID, heartRateMax, restedHeartRate, finalTestHeartRate, minTargetHeartRate, maxTargetHeartRate, protocol, timeInMin, maxVO2)"
+	    					+ "VALUES('" + username + s + memberID + s + mysqlDateString + s + trainerID + s + heartRateMax + s + restedHeartRate 
 	    					+ s + finalTestHeartRate + s + minTargetHeartRate + s + maxTargetHeartRate
 	    					+ s + protocol.toLowerCase().trim() + s + timeInMin + s + maxVO2 + "')");
 			    conn.close();
 			    return true;
 	        } catch(Exception e) {
+	        	e.printStackTrace();
 	        	conn.close();
 	        	return false;
 	        }
@@ -289,6 +297,9 @@ public class DbManager {
 		    // Create a Statement object for the query.
 		    Statement stmt = conn.createStatement();
 
+		    ResultSet member = lookupMember(memberID);
+		    String username = member.getString("username");
+		    
 		    Date date = new Date();
 	        String pattern = "yyyy-MM-dd";
 	        SimpleDateFormat formatter = new SimpleDateFormat(pattern);
@@ -296,12 +307,13 @@ public class DbManager {
 	        
 	        try {
 			    stmt.executeUpdate("INSERT INTO strengthflexibility "
-	    					+ "(memberID, date, trainerID, pushups, situps, sitreach)"
-	    					+ "VALUES('" + memberID + s + mysqlDateString + s + trainerID + s + pushUps + s + sitUps 
+	    					+ "(username, memberID, date, trainerID, pushups, situps, sitreach)"
+	    					+ "VALUES('" + username + s + memberID + s + mysqlDateString + s + trainerID + s + pushUps + s + sitUps 
 	    					+ s + sitReach + "')");
 			    conn.close();
 			    return true;
 	        } catch(Exception e) {
+	        	e.printStackTrace();
 	        	conn.close();
 	        	return false;
 	        }
@@ -317,9 +329,10 @@ public class DbManager {
 		    
 		    // Create a Statement object for the query.
 		    Statement stmt = conn.createStatement();
+		    
 		    ResultSet member = lookupMember(memberID);
 		    String username = member.getString("username");
-		    System.out.println("Username: " + username);
+		 
 		    Date date = new Date();
 	        String pattern = "yyyy-MM-dd";
 	        SimpleDateFormat formatter = new SimpleDateFormat(pattern);
@@ -334,7 +347,6 @@ public class DbManager {
 	    					+ s + domAbdomen + s + waistCircumference + s + hipCircumference + s + bodyCompProtocol + s + chest + s + midAxillary 
 	    					+ s + triceps + s + subscapular + s + abdomen + s + supralliac + s + thigh + s + percentBodyFat + s + leanWeight + s + fatWeight + s + desiredWeight + "')");
 			    conn.close();
-			    System.out.println("Successfully added body comp.");
 			    return true;
 	        } catch(Exception e) {
 	        	e.printStackTrace();
@@ -352,60 +364,25 @@ public class DbManager {
 		    // Create a Statement object for the query.
 		    Statement stmt = conn.createStatement();
 
+		    ResultSet member = lookupMember(memberID);
+		    String username = member.getString("username");
+		    
 		    Date date = new Date();
 	        String pattern = "yyyy-MM-dd";
 	        SimpleDateFormat formatter = new SimpleDateFormat(pattern);
 	        String mysqlDateString = formatter.format(date);
 	        
 	        try {
-			    stmt.executeUpdate("INSERT INTO coronaryRiskPanel "
-	    					+ "(memberID, date, trainerID, systolicBloodPressure, diastolicBloodPressure, yearsSmoked, idealBodyWeight, physicalActivity, totalCholesterol, hdlCholesterol, ldlCholesterol, hdlRatio, triglycerides, glucose)"
-	    					+ "VALUES('" + memberID + s + mysqlDateString + s + trainerID + s + diastolicBP + s + 000 + s + idealBodyWeight + s + physicalActivity + s + totalCholesterol
+			    stmt.executeUpdate("INSERT INTO coronaryrisk "
+	    					+ "(username, memberID, date, trainerID, systolicBloodPressure, diastolicBloodPressure, yearsSmoked, idealBodyWeight, physicalActivity, totalCholesterol, hdlCholesterol, ldlCholesterol, hdlRatio, triglycerides, glucose)"
+	    					+ "VALUES('" + username + s + memberID + s + mysqlDateString + s + trainerID + s + systolicBP + s + diastolicBP + s + 0 + s +  idealBodyWeight + s + physicalActivity + s + totalCholesterol
 	    					+ s + hdlCholesterol + s + ldlCholesterol + s + hdlRatio + s + triglycerides + s + glucose +  "')");
 			    conn.close();
 			    return true;
 	        } catch(Exception e) {
+	        	e.printStackTrace();
 	        	conn.close();
 	        	return false;
 	        }
 		}
-		
-		/*
-		 * Updates a form based on the field, value, and type of form it is given.
-		 * The 
-		 */
-		public void updateMemberForm(int memberID, String fieldToUpdate, String newValue, String formType) throws SQLException {
-		    conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-			Statement stmt = conn.createStatement();
-			Object newVal;
-			
-			try {
-				newVal = Integer.parseInt(newValue);//if this succeeds it is an integer, catch the exception on fail.
-			} catch(Exception e) {
-				newVal = newValue.toLowerCase().trim();//store the string value(should be the protocol field). Lowercase and trimmed of leading/trailing spaces.
-			}
-			
-			try {
-				stmt.executeUpdate("UPDATE " + formType + " SET " + fieldToUpdate + " = '" + newVal + "' WHERE memberID = '" + memberID + "'");
-			} catch(SQLException e) {
-				System.out.println("The value entered for the field did not match the data type.");//print to console for debugging, would need to print an
-																								   //error message to user.
-			}
-			conn.close();
-		}
-		
-		/*
-		 * Deletes a form from the database.
-		 * pass in the name of the form and the member ID.
-		 */
-		public void deleteForm(int memberID, String formType) throws SQLException {
-		    conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-			Statement stmt = conn.createStatement();
-					
-			stmt.executeUpdate("DELETE from " + formType.toLowerCase() + " WHERE memberID = '" + memberID + "'");
-			
-			conn.close();
-		}
-		
-	
 }
