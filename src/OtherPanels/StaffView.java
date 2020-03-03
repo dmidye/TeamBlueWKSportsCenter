@@ -22,7 +22,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.Enumeration;
-
+import java.awt.Dimension;
 import com.toedter.calendar.JDateChooser;
 
 import Database.DbManager;
@@ -56,12 +56,21 @@ CardLayout layout; // content panel card layout
  public JLabel staffName2;
  
  //lookup member GUI
+ JLabel BMI;
+ JTextField BMIText;
  JLabel accountNumber;
  JTextField accountNumberText;
  JButton lookup;
  JTextField firstNameTextLookup;
  JTextField lastNameTextLookup;
  //new member GUI
+ JTextField maxVO2Text;
+ JTextField restedHeartRateText;
+ JTextField heartRateMaxText;
+ JLabel restedHeartRate;
+ JLabel heartRateMax;
+ JLabel maxVO2;
+ JTextField userNameTextUC2;
  JPanel updateMemberPanel;
  JPanel updateMemberPanel2;
  JPanel removeMemberPanel;
@@ -95,13 +104,15 @@ CardLayout layout; // content panel card layout
  JRadioButton adminUp;
  ButtonGroup groupUp;
  
- // new staff member
- 
+ // Update Calculations panels
+ JLabel userNameUC;
+ JTextField userNameTextUC;
+ JPanel updateCalcsPanel2;
  JLabel staffFirstName;
  JLabel staffLastName;
  JLabel staffEmail;
  JLabel staffPassword;
- JPanel newStaffPanel;
+ JPanel updateCalcsPanel;
  JTextField staffFirstNameText;
  JTextField staffLastNameText;
  JTextField staffEmailText;
@@ -133,10 +144,6 @@ public void createStaffView() throws SQLException {
     sc.fill = GridBagConstraints.HORIZONTAL;
 
     sc.weighty = 1;
-    
-    
-
- 
 	
     /*
      * create the panel that holds the control buttons
@@ -188,7 +195,7 @@ public void createStaffView() throws SQLException {
 	
 	cb.gridx = 0;
 	cb.gridy = 5;
-	newStaff = new JButton("New Staff");
+	newStaff = new JButton("Update Calculations");
 	newStaff.setEnabled(false);
 	newStaff.addActionListener(new commandEvent());
 	controlButtons.add(newStaff, cb);
@@ -557,7 +564,7 @@ public void createStaffView() throws SQLException {
 	userNameTextRemove.setEditable(true);
 	removeMemberPanel.add(userNameTextRemove, rm);
 	
-	rm.gridx = 0;
+	rm.gridx = 1;
 	rm.gridy = 1;
 	JButton remove = new JButton("Remove Member");
 	removeMemberPanel.add(remove, rm);
@@ -650,99 +657,79 @@ public void createStaffView() throws SQLException {
 		contentPanel.add(memberLookupPanel, "Look Up");
 		
 		/*
-		 * create the panel for the new staff
+		 * create the panel for the Update Calculations panel
 		 */
-		newStaffPanel = new JPanel();
-		newStaffPanel.setLayout(new GridBagLayout());
-		newStaffPanel.setBorder(BorderFactory.createTitledBorder("New Staff"));
-		GridBagConstraints ns = new GridBagConstraints();
-		ns.fill = GridBagConstraints.HORIZONTAL;
-		ns.insets = new Insets(0, 0, 10, 5);
+		updateCalcsPanel = new JPanel();
+		updateCalcsPanel.setLayout(new GridBagLayout());
+		updateCalcsPanel.setBorder(BorderFactory.createTitledBorder("Update Calculations"));
+		GridBagConstraints uc = new GridBagConstraints();
+		uc.fill = GridBagConstraints.HORIZONTAL;
+		uc.insets = new Insets(0, 0, 10, 5);
 		
 		
-		ns.gridx = 0;
-		ns.gridy = 0;
-		staffFirstName = new JLabel("First Name: ");
-		newStaffPanel.add(staffFirstName, ns);
+		uc.gridx = 0;
+		uc.gridy = 0;
+		userNameUC = new JLabel("Username: ");
+		updateCalcsPanel.add(userNameUC, uc);
 		
-		ns.gridx = 1;
-		ns.gridy = 0;
-		ns.gridwidth = 2;
-		staffFirstNameText = new JTextField(20);
-		staffFirstNameText.setEditable(true);
-		newStaffPanel.add(staffFirstNameText, ns);
+		uc.gridx = 1;
+		uc.gridy = 0;
+		uc.gridwidth = 2;
+		userNameTextUC = new JTextField(20);
+		userNameTextUC.setEditable(true);
+		updateCalcsPanel.add(userNameTextUC, uc);
 		
-		ns.gridx = 0;
-		ns.gridy = 1;
-		staffLastName = new JLabel("Last Name: ");
-		newStaffPanel.add(staffLastName, ns);
+		//get values to prefill fields
 		
-		ns.gridx = 1;
-		ns.gridy = 1;
-		staffLastNameText = new JTextField(20);
-		staffLastNameText.setEditable(true);
-		newStaffPanel.add(staffLastNameText, ns);
+		DbManager db1 = new DbManager();
+		uc.gridx = 1;
+		uc.gridy = 1;
+		JButton lookup1 = new JButton("Go");
+		lookup1.setPreferredSize(new Dimension(20, 20));
+		updateCalcsPanel.add(lookup1, uc);
+		contentPanel.add(updateCalcsPanel, "Update Calculations");
 		
-		ns.gridx = 0;
-		ns.gridy = 2;
-		staffEmail = new JLabel("Email: ");
-		newStaffPanel.add(staffEmail, ns);
+		lookup1.addActionListener(new commandEvent());
 		
-		ns.gridx = 1;
-		ns.gridy = 2;
-		staffEmailText = new JTextField(20);
-		staffEmailText.setEditable(true);
-		newStaffPanel.add(staffEmailText, ns);
+		updateCalcsPanel2 = new JPanel();
+		updateCalcsPanel2.setLayout(new GridBagLayout());
+		updateCalcsPanel2.setBorder(BorderFactory.createTitledBorder("Update Calculations"));
+    	
+		userNameTextUC2= new JTextField(20);
+		userNameTextUC2.setEditable(false);
 		
-		ns.gridx = 0;
-		ns.gridy = 3;
-		staffPassword = new JLabel("Password: ");
-		newStaffPanel.add(staffPassword, ns);
+//		newPasswordText = new JPasswordField(30);
+//		newPasswordText.setEditable(true);
+
 		
-		ns.gridx = 1;
-		ns.gridy = 3;
-		staffPasswordText = new JPasswordField(20);
-		staffPasswordText.setEditable(true);
-		newStaffPanel.add(staffPasswordText, ns);
+//		contentPanel.add(updateCalcsPanel2, "Update Calculations");
 		
-		ns.gridx = 0;
-		ns.gridy = 4;
-		staffSave = new JButton("Save");
-		newStaffPanel.add(staffSave, ns);
-		
-		ns.gridx = 1;
-		ns.gridy = 4;
-		cancel = new JButton("Cancel");
-		newStaffPanel.add(cancel, ns);
-		
-		contentPanel.add(newStaffPanel, "New Staff");
-		
-		   /*
-	     * create the panel that holds the text area where the information is
-	     * sent
-	     */
-	    
-	    staffInfo = new JTextArea(5, 40);
-	    staffInfo.setEditable(false);
-	    staffInfoScrollPanel = new JScrollPane(staffInfo);
-	    staffInfoPanel = new JPanel();
-	    staffInfo.setLayout(new BorderLayout());
-	    staffInfoPanel.add(staffInfo);
-	    staffInfoPanel.setBorder(BorderFactory.createTitledBorder("Information"));
-	    sc.gridx = 0;
-	    sc.gridy = 2;
-	    sc.gridwidth = 2;
-	    sc.weighty = 1;
-	    sc.weightx = 1;
-	    sc.anchor = GridBagConstraints.NORTH;
-	    staffControl.add(staffInfoPanel, sc);
+//		 /*
+//	     * create the panel that holds the text area where the information is
+//	     * sent
+//	     */
+//	    
+//	    staffInfo = new JTextArea(5, 40);
+//	    staffInfo.setEditable(false);
+//	    staffInfoScrollPanel = new JScrollPane(staffInfo);
+//	    staffInfoPanel = new JPanel();
+//	    staffInfo.setLayout(new BorderLayout());
+//	    staffInfoPanel.add(staffInfo);
+//	    staffInfoPanel.setBorder(BorderFactory.createTitledBorder("Information"));
+//	    sc.gridx = 0;
+//	    sc.gridy = 2;
+//	    sc.gridwidth = 2;
+//	    sc.weighty = 1;
+//	    sc.weightx = 1;
+//	    sc.anchor = GridBagConstraints.NORTH;
+//	    staffControl.add(staffInfoPanel, sc);
 	
 
 } // end createStaffView()
 
 //action Listeners
 
-	// switches between New Member, Look Up, and New Staff
+	// switches between New Member, Look Up, and Update Calculations
 	private class commandEvent implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			 String command = e.getActionCommand();
@@ -752,17 +739,219 @@ public void createStaffView() throws SQLException {
 	            else if("Look Up".equals(command)) {
 	            	layout.show(contentPanel, "Look Up");
 	            }
-	            else if("New Staff".equals(command)) {
-	            	layout.show(contentPanel, "New Staff");
+	            else if("Update Calculations".equals(command)) {
+	            	layout.show(contentPanel, "Update Calculations");
 	            }
 	            else if("Remove Member".equals(command)) {
 	            	layout.show(contentPanel, "Remove Member");
 	            }
 	            else if("Update Member".equals(command)) {
-	            	
 	            	layout.show(contentPanel, "Update Member");
+	            }
+	            else if("Go".equals(command)) {
+	            	contentPanel.getRootPane().getParent().setSize(new Dimension(800, 675));
+	            	try {
+	            		if(!userNameTextUC.getText().equals("")) {
+	            			GridBagConstraints uc = new GridBagConstraints();
+	        				uc.fill = GridBagConstraints.HORIZONTAL;
+	        				uc.insets = new Insets(0, 0, 10, 5);
+	        				DbManager db = new DbManager();
+		            		ResultSet rs = db.lookupMember(userNameTextUC.getText().trim());
+		            		if(rs == null) {
+		            			layout.show(contentPanel, "Update Calculations");
+		            		} else {
+			            		rs.first();
+			        			uc.gridx = 0;
+			        			uc.gridy = 0;
+			        			userName = new JLabel("Username: ");
+			        			updateCalcsPanel2.add(userName, uc);
+			        			
+			        			uc.gridx = 1;
+			        			uc.gridy = 0;
+			        			uc.gridwidth = 2;
+			        			userNameText.setText(rs.getString("Username"));
+			        			updateCalcsPanel2.add(userNameText, uc);
+			            		
+			        			uc.gridx = 0;
+			        			uc.gridy = 9;
+			        			BMI = new JLabel("BMI: ");
+			        			updateCalcsPanel2.add(BMI, uc);
+			        		
+			        			uc.gridx = 1;
+			        			uc.gridy = 9;
+			        			BMIText = new JTextField(20);
+			        			BMIText.setEditable(false);
+			        			updateCalcsPanel2.add(BMIText, uc);
+			        			
+			        			uc.gridx = 3;
+			        			uc.gridy = 9;
+			        			JButton calculateBMI = new JButton("Calculate");
+			        			updateCalcsPanel2.add(calculateBMI, uc);
+			        			
+			        			uc.gridx = 0;
+			        			uc.gridy = 10;
+			        			restedHeartRate = new JLabel("Rested Heart Rate: ");
+			        			updateCalcsPanel2.add(restedHeartRate, uc);
+			        		
+			        			uc.gridx = 2;
+			        			uc.gridy = 10;
+			        			
+			        			restedHeartRateText = new JTextField(20);
+			        			restedHeartRateText.setEditable(true);
+			        			updateCalcsPanel2.add(restedHeartRateText, uc);
+			        			
+			        			uc.gridx = 0;
+			        			uc.gridy = 11;
+			        			heartRateMax = new JLabel("Max Heart Rate: ");
+			        			updateCalcsPanel2.add(heartRateMax, uc);
+			        		
+			        			uc.gridx = 2;
+			        			uc.gridy = 11;
+			        			
+			        			heartRateMaxText = new JTextField(20);
+			        			heartRateMaxText.setEditable(true);
+			        			updateCalcsPanel2.add(heartRateMaxText, uc);
+			        			
+			        			uc.gridx = 0;
+			        			uc.gridy = 12;
+			        			maxVO2 = new JLabel("Max VO2: ");
+			        			updateCalcsPanel2.add(maxVO2, uc);
+			        		
+			        			uc.gridx = 1;
+			        			uc.gridy = 12;
+			        			maxVO2Text = new JTextField(20);
+			        			maxVO2Text.setEditable(false);
+			        			updateCalcsPanel2.add(maxVO2Text, uc);
+			        			
+			        			uc.gridx = 3;
+			        			uc.gridy = 12;
+			        			JButton calculateAC = new JButton("Calculate");
+			        			calculateAC.addActionListener(new ActionListener() {
+			        				public void actionPerformed(ActionEvent e) {
+			        					maxVO2Text.setText(calculateAC(restedHeartRateText.getText(),heartRateMaxText.getText()));
+			        				}
+			        			});
+			        			updateCalcsPanel2.add(calculateAC, uc);
+			        			
+			        			calculateBMI.addActionListener(new ActionListener() {
+			        				@Override
+			        				public void actionPerformed(ActionEvent e){
+			        					String weight = "Weight: ";
+			        					String feet = "Feet: ";
+			        					String inches = "Inches: ";
+			        					
+			        					JOptionPane.showMessageDialog(null,"Please enter Weight in pounds");
+			        					String bmiWeight = JOptionPane.showInputDialog(weight);
+			        					
+			        					if(weight != null) {
+			        						
+			        						JOptionPane.showMessageDialog(null, "Please enter Height in Feet and Inches");
+			        						String bmiFeet = JOptionPane.showInputDialog(feet);
+			        							
+			        						if(bmiFeet != null) {
+			        							
+			        							String bmiInches = JOptionPane.showInputDialog(inches);
+			        							
+			        							if(bmiInches != null) {
+			        								
+			        								String calculatedBMI = calculateBMI(bmiWeight, bmiFeet, bmiInches);
+			        								BMIText.setText(calculatedBMI);
+			        							}
+			        						}
+			        					}
+			        				}
+			        			});
+			        			uc.gridx = 0;
+			        			uc.gridy = 13;
+			        			JButton update = new JButton("Update");
+			        			updateCalcsPanel2.add(update, uc);
+			        			
+			        			uc.gridx = 2;
+			        			uc.gridy = 13;
+			        			cancel = new JButton("Cancel");
+			        			updateCalcsPanel2.add(cancel, uc);
+			        			
+			        			cancel.addActionListener(new ActionListener() {
+			        				@Override
+			        		        public void actionPerformed(ActionEvent e) {	
+			        					layout.show(contentPanel, "Update Calculations");
+			        					userNameTextUC.setText("");
+			        					updateCalcsPanel2 = null;
+			        				}
+			        			});
+			        			
+			        			contentPanel.add(updateCalcsPanel2, "Update Calculations 2");
+			        			/* Implement capability to update member
+			        			 */
+			        			update.addActionListener(new ActionListener() {
+			        		        @Override
+			        		        public void actionPerformed(ActionEvent e) {	
+			        		        		//collect the values from each field
+			        		        		Double bmi;
+			        		        		if(!BMIText.getText().isEmpty()) {
+			        		        			bmi = Double.parseDouble(BMIText.getText());
+			        		        		} else {
+			        		        			bmi = null;
+			        		        		}
+			        		        		boolean successBMI = false;
+			        		        		try {
+			        		        			DbManager dbManager = new DbManager();
+			        		        			if(bmi != null) {
+			        		        				successBMI = dbManager.updateBMI(Integer.parseInt(rs.getString("memberID")), bmi);
+			        								if(successBMI) {
+			        									JOptionPane.showMessageDialog(newMember, "Success! BMI updated.");
+			        								} else {
+			        									JOptionPane.showMessageDialog(newMember, "Error updating BMI.");
+			        								}
+			        		        			}
+			        		        		} catch(Exception e1) {
+			        		        			e1.printStackTrace();
+			        		        		}
+			        		        		
+			        		        		Double maxVO2;
+			        		        		if(!maxVO2Text.getText().isEmpty()) {
+			        		        			maxVO2 = Double.parseDouble(maxVO2Text.getText());
+			        		        		} else {
+			        		        			maxVO2 = null;
+			        		        		}
+
+			        		        		try {
+			        		        			DbManager dbManager = new DbManager();
+			        		        			boolean successVO2 = false;
+			        		        			if(maxVO2 != null) {
+			        		        				successVO2 = dbManager.updateVO2(Integer.parseInt(rs.getString("memberID")), maxVO2);
+			        								if(successVO2) {
+			        									JOptionPane.showMessageDialog(newMember, "Success! Max VO2 updated.");
+			        								} else {
+			        									JOptionPane.showMessageDialog(newMember, "Error updating Max VO2.");
+			        								}
+			        		        			}
+			        		        		} catch(Exception e1) {
+			        		        			e1.printStackTrace();
+			        		        		}
+			        		        } 
+			        			});
+			        		}
+	            		}	            	
+		            } catch (Exception e1) {
+            			e1.printStackTrace();
+            		}
+	            	try {
+            			DbManager db = new DbManager();
+            			ResultSet rs = db.lookupMember(userNameTextUC.getText());
+            			if(userNameTextUC.getText().equals("") || rs == null) {
+            				layout.show(contentPanel, "Update Calculations");
+	            		} else {
+	            			layout.show(contentPanel, "Update Calculations 2");
+	            		}
+	            	} catch (Exception e1) {
+            			e1.printStackTrace();
+            		}
 	            	
 	            }
+		            	
+	            	
+	            
 	            else if("Go To Member".equals(command)) {
 	            	try {
 		        			if(!userNameText1.getText().equals("")) {
@@ -771,7 +960,10 @@ public void createStaffView() throws SQLException {
 		        				um.insets = new Insets(0, 0, 10, 5);
 		        				DbManager db = new DbManager();
 			            		ResultSet rs = db.lookupMember(userNameText1.getText().trim());
-			                	System.out.println("new username " + rs.getString("username"));
+			            		if(rs == null) {
+			            			layout.show(contentPanel, "Update Member");
+			            		} else {
+			            		rs.first();
 			        			um.gridx = 0;
 			        			um.gridy = 0;
 			        			userName = new JLabel("Username: ");
@@ -900,15 +1092,69 @@ public void createStaffView() throws SQLException {
 			        			if(status.equals(adminUp.getText())) {
 			        				adminUp.setSelected(true);
 			        			}
+			        			
 			        			um.gridx = 0;
 			        			um.gridy = 9;
+			        			BMI = new JLabel("BMI: ");
+			        			updateMemberPanel2.add(BMI, um);
+			        		
+			        			um.gridx = 1;
+			        			um.gridy = 9;
+			        			BMIText = new JTextField(20);
+			        			BMIText.setEditable(false);
+			        			updateMemberPanel2.add(BMIText, um);
+			        			
+			        			um.gridx = 3;
+			        			um.gridy = 9;
+			        			JButton calculateBMI = new JButton("Calculate");
+			        			updateMemberPanel2.add(calculateBMI, um);
+			        			calculateBMI.addActionListener(new ActionListener() {
+			        				
+			        				@Override
+			        				public void actionPerformed(ActionEvent e){
+			        					String weight = "Weight: ";
+			        					String feet = "Feet: ";
+			        					String inches = "Inches: ";
+			        					
+			        					JOptionPane.showMessageDialog(null,"Please enter Weight in pounds");
+			        					String bmiWeight = JOptionPane.showInputDialog(weight);
+			        					
+			        					if(weight != null) {
+			        						
+			        						JOptionPane.showMessageDialog(null, "Please enter Height in Feet and Inches");
+			        						String bmiFeet = JOptionPane.showInputDialog(feet);
+			        							
+			        						if(bmiFeet != null) {
+			        							
+			        							String bmiInches = JOptionPane.showInputDialog(inches);
+			        							
+			        							if(bmiInches != null) {
+			        								
+			        								String calculatedBMI = calculateBMI(bmiWeight, bmiFeet, bmiInches);
+			        								BMIText.setText(calculatedBMI);
+			        							}
+			        						}
+			        					}
+			        				}
+			        			});
+			        			um.gridx = 0;
+			        			um.gridy = 10;
 			        			JButton update = new JButton("Update");
 			        			updateMemberPanel2.add(update, um);
 			        			
 			        			um.gridx = 1;
-			        			um.gridy = 9;
+			        			um.gridy = 10;
 			        			cancel = new JButton("Cancel");
 			        			updateMemberPanel2.add(cancel, um);
+			        			
+			        			cancel.addActionListener(new ActionListener() {
+			        				@Override
+			        		        public void actionPerformed(ActionEvent e) {	
+			        					layout.show(contentPanel, "Update Member");
+			        					userNameText1.setText("");
+			        					updateMemberPanel2 = null;
+			        				}
+			        			});
 			        			
 			        			contentPanel.add(updateMemberPanel2, "Update Member 2");
 			        			/* Implement capability to update member
@@ -937,13 +1183,20 @@ public void createStaffView() throws SQLException {
 			        		        		Date birthday = birthdayChooser.getDate();
 			        		        		Integer phone = Integer.parseInt(phoneNumberText.getText());
 			        		        		Integer areaCode = Integer.parseInt(areaCodeText.getText());
-			        		        		
+			        		        		Double bmi;
+			        		        		if(!BMIText.getText().isEmpty()) {
+			        		        			bmi = Double.parseDouble(BMIText.getText());
+			        		        		} else {
+			        		        			bmi = null;
+			        		        		}
 			        		        		int createdBy = 0;
 			        		        		String password = newPasswordText.getText(); //TODO:use getPassword() instead. I think we need to change the
 			        		        														//  password field in the db to a character array
 			        		        		try {
 			        		        			DbManager dbManager = new DbManager();
-			        						
+			        		        			if(bmi != null) {
+			        		        				dbManager.updateBMI(Integer.parseInt(rs.getString("memberID")), bmi);
+			        		        			}
 			        							try {
 			        								if(dbManager.updateMember(username, firstName, lastName, email, birthday, password, createdBy, phone, areaCode, status) 
 			        									) {
@@ -960,10 +1213,22 @@ public void createStaffView() throws SQLException {
 			        		        } 
 			        			});
 			        		}
+		        		}
 	        			} catch(Exception e2) {
 	        			     e2.printStackTrace();
 	        		    }
-		            	layout.show(contentPanel, "Update Member 2");
+	            		try {
+	            			DbManager db = new DbManager();
+	            			ResultSet rs = db.lookupMember(userNameText1.getText());
+	            			if(userNameText1.getText().equals("") || rs == null) {
+	            				layout.show(contentPanel, "Update Member");
+		            		} else {
+		            			layout.show(contentPanel, "Update Member 2");
+		            		}
+		            	} catch (Exception e1) {
+	            			e1.printStackTrace();
+	            		}
+	            		
 		            }
 		}
 	}
@@ -994,5 +1259,29 @@ public void createStaffView() throws SQLException {
 		 * in the JTextArea
 		 */
 		}
+	}
+	
+	//calculate BMI
+	private String calculateBMI(String w, String f, String i) {
+		double weight = Double.parseDouble(w);
+		double feet = Double.parseDouble(f);
+		double inches = Double.parseDouble(i);
+		
+		double k = weight / 2.20462; // convert pounds to kilogram
+		double cm = inches / 2.54;
+		double m = (feet / 3.2808) + (cm / 100); //convert height to meters
+		double bmi = (k / (m * m));
+		String calculation = String.format("%.2f", bmi);
+		return calculation;
+	}
+	//calculate aerobic capacity or Max VO2
+	private String calculateAC(String rhr, String mhr) {
+		String calculation ="";
+		double rhrate = Double.parseDouble(rhr);
+		double mhrate = Double.parseDouble(mhr);
+		double maxVO2 = 15.3*(rhrate/mhrate);
+		//calculation = String.valueOf(maxVO2);
+		 calculation = String.format("%.2f", maxVO2);
+		return calculation;
 	}
 }

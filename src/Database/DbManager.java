@@ -252,6 +252,32 @@ public class DbManager {
 	            	return false;
 	        	}
 	        }
+ /*	Daniel Midyett
+ * Update BMI calculation
+ * 
+ */
+ public boolean updateVO2(int id, double maxVO2) throws SQLException, ParseException {
+    	
+    	// Create a connection to the database.
+        conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+
+        // Create a Statement object for the query.
+        Statement stmt = conn.createStatement();
+        
+        try {
+    	    stmt.executeUpdate("UPDATE wk_sports_center_db.aerobiccapacity "
+    						 + "SET maxVO2 = '" + maxVO2 + "' "
+    						 + "WHERE memberID = '" + id + "'" );
+    			  	    
+    	    conn.close();
+    	   
+    	    return true;
+        } catch(Exception e) {
+        	e.printStackTrace();
+        	conn.close();
+        	return false;
+    	}
+    }
 		 
 		/*
 		 * Adds a a form to the aerobiccapacity table.
