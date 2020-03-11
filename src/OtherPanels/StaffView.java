@@ -750,6 +750,15 @@ public void createStaffView() throws SQLException {
 	            }
 	            else if("Go".equals(command)) {
 	            	contentPanel.getRootPane().getParent().setSize(new Dimension(800, 675));
+	            	if(updateCalcsPanel2 != null) {
+	            		updateCalcsPanel2 = new JPanel();
+	            		updateCalcsPanel2.setLayout(new GridBagLayout());
+	            		updateCalcsPanel2.setBorder(BorderFactory.createTitledBorder("Update Calculations"));
+	                	
+	            		userNameTextUC2= new JTextField(20);
+	            		userNameTextUC2.setEditable(false);
+	            	}
+	            	
 	            	try {
 	            		if(!userNameTextUC.getText().equals("")) {
 	            			GridBagConstraints uc = new GridBagConstraints();
