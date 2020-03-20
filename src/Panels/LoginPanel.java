@@ -69,7 +69,7 @@ public class LoginPanel extends JPanel {
 	private JTextField newEmail;
 	private JTextField newFirstName;
 	private JTextField newLastName;
-	private StaffView staffView = new StaffView();
+	private StaffView staffView;
 	private JPanel MainPanel;
 
 	/**
@@ -411,23 +411,16 @@ public class LoginPanel extends JPanel {
 					System.out.println(memberType);
 					switch (memberType) {                               //Sign in based on member type
 						case ("Admin"):
-							staffView.createStaffView();
-							staffView.assessment.setEnabled(true);
-							staffView.newStaff.setEnabled(true);
-							staffView.staffPosition2.setText("Admin");
-							staffView.staffName2.setText(name);
+							new StaffView();
 							break;
 						case ("Member"):
 							changePanel(new HomeScreen(owningFrame, username));
 							break;
 						case("FrontDesk"):
-							staffView.createStaffView();
-							staffView.staffPosition2.setText("Front Desk");
+							new StaffView();
 							break;
 						case("Trainer"):
-							staffView.createStaffView();
-							staffView.staffPosition2.setText("Trainer");
-							staffView.assessment.setEnabled(true);
+							new StaffView();
 							break;
 					}
 					

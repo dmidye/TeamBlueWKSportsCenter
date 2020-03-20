@@ -19,7 +19,7 @@ public class Login {
 			public void run() {
 				try {
 					Login window = new Login();
-					window.frame.setVisible(true);
+					window.frame.setVisible(true);				
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
