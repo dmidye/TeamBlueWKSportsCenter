@@ -16,8 +16,6 @@ import javax.swing.JTextField;
 
 public class coronaryRiskForm extends JFrame{
 	
-	
-	
 	/**
 	 * 
 	 */

@@ -80,6 +80,7 @@ public class AssessmentView extends JFrame {
 			coronaryRisk.setContentAreaFilled(false);
 			coronaryRisk.setBorderPainted(false);
 			coronaryRisk.setFocusPainted(false);
+			coronaryRisk.addActionListener(new coronaryRiskAssessment());
 			background.add(coronaryRisk);
 			
 			//Add Note
