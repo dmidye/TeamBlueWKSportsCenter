@@ -49,7 +49,7 @@ public class BodyCompForm extends JFrame{
 	JButton save;
 	JButton cancel;
 
-	public BodyCompForm(String fName, String lName, String bDay) {
+	public BodyCompForm(String username) {
 		setTitle("Body Compositions Form");
 		setSize(1200, 675);
 		setLocationRelativeTo(null);
@@ -65,7 +65,7 @@ public class BodyCompForm extends JFrame{
 		form.setBounds(50, 20, 1105, 641);
 		form.setLayout(null);
 		
-		name = new JLabel (fName + " " + lName);
+		name = new JLabel (username);
 		name.setBounds(880, 40, 200, 25);
 		name.setFont(font1);
 		form.add(name);

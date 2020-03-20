@@ -80,7 +80,6 @@ public class AssessmentView extends JFrame {
 			coronaryRisk.setContentAreaFilled(false);
 			coronaryRisk.setBorderPainted(false);
 			coronaryRisk.setFocusPainted(false);
-			coronaryRisk.addActionListener(new coronaryRiskAssessment());
 			background.add(coronaryRisk);
 			
 			//Add Note
@@ -118,58 +117,51 @@ public class AssessmentView extends JFrame {
 	
 	private class bodyCompAssessment implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			String fname, lname, bDay;
+			String userName;
 			enterMemberInfo member = new enterMemberInfo();
 			int result = JOptionPane.showConfirmDialog(null, member, "Enter Member Information", JOptionPane.OK_CANCEL_OPTION );
 			if (result == JOptionPane.OK_OPTION) {
-				fname = member.fName.getText();
-				lname = member.lName.getText();
-				bDay = member.bday.getText();
-			new BodyCompForm(fname, lname, bDay);	
+				userName = member.uName.getText();
+			new BodyCompForm(userName);	
 			}
 		}
 	}
 	
 	private class AerobicCapacityAssessment implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			String fname, lname, bDay;
+			String userName;
 			enterMemberInfo member = new enterMemberInfo();
 			int result = JOptionPane.showConfirmDialog(null, member, "Enter Member Information", JOptionPane.OK_CANCEL_OPTION );
 			if (result == JOptionPane.OK_OPTION) {
-				fname = member.fName.getText();
-				lname = member.lName.getText();
-				bDay = member.bday.getText();
-			new AerobicCapacityForm(fname, lname, bDay);
+				userName = member.uName.getText();
+			new AerobicCapacityForm(userName);
 			}
 		}
 	}
 	
 	private class strengthAndFlexAssessment implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			String fname, lname, bDay;
+			String userName;
 			enterMemberInfo member = new enterMemberInfo();
 			int result = JOptionPane.showConfirmDialog(null, member, "Enter Member Information", JOptionPane.OK_CANCEL_OPTION );
 			if (result == JOptionPane.OK_OPTION) {
-				fname = member.fName.getText();
-				lname = member.lName.getText();
-				bDay = member.bday.getText();
+				userName = member.uName.getText();
 			
-			new strengthAndFlexForm(fname, lname, bDay);
+			new strengthAndFlexForm(userName);
 			}
 		}
 	}
 	
 	private class coronaryRiskAssessment implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			String fname, lname, bDay;
+			String userName;
 			enterMemberInfo member = new enterMemberInfo();
 			int result = JOptionPane.showConfirmDialog(null, member, "Enter Member Information", JOptionPane.OK_CANCEL_OPTION );
 			if (result == JOptionPane.OK_OPTION) {
-				fname = member.fName.getText();
-				lname = member.lName.getText();
-				bDay = member.bday.getText();
+				userName = member.uName.getText();
+				
 			
-			new coronaryRiskForm(fname, lname, bDay);
+			new coronaryRiskForm(userName);
 			}
 		}
 		}

@@ -42,7 +42,7 @@ public class AerobicCapacityForm  extends JFrame{
 	JButton save;
 	JButton cancel;
 
-	public AerobicCapacityForm(String fName, String lName, String bDay) {
+	public AerobicCapacityForm(String username) {
 		setTitle("Aerobic Capacity Form");
 		setSize(1200, 675);
 		setLocationRelativeTo(null);
@@ -58,7 +58,7 @@ public class AerobicCapacityForm  extends JFrame{
 		form.setBounds(50, 20, 1105, 641);
 		form.setLayout(null);
 		
-		name = new JLabel (fName + " " + lName);
+		name = new JLabel (username);
 		name.setBounds(880, 40, 200, 25);
 		name.setFont(font1);
 		form.add(name);

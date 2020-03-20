@@ -35,7 +35,7 @@ public class strengthAndFlexForm  extends JFrame{
 	JButton save;
 	JButton cancel;
 
-	public strengthAndFlexForm(String fName, String lName, String bDay) {
+	public strengthAndFlexForm(String username) {
 		setTitle("Strength and Flex Form");
 		setSize(1200, 675);
 		setLocationRelativeTo(null);
@@ -52,7 +52,7 @@ public class strengthAndFlexForm  extends JFrame{
 		form.setLayout(null);
 		
 		
-		name = new JLabel (fName + " " + lName);
+		name = new JLabel (username);
 		name.setBounds(880, 50, 200, 25);
 		name.setFont(font1);
 		form.add(name);
