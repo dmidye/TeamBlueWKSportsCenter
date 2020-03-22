@@ -21,7 +21,7 @@ import javax.swing.table.JTableHeader;
 
 import Database.DbManager;
 
-public class memberComments  extends JFrame{
+public class MemberComments  extends JFrame{
 	/**
 	 * 
 	 */
@@ -38,7 +38,7 @@ public class memberComments  extends JFrame{
 	JTable tableClosed;
 	Font font1 = new Font("Agency FB", Font.PLAIN, 25);
 	
-	public memberComments() {
+	public MemberComments() {
 		this.
 		setTitle("Member Comments");
 		setSize(1200, 675);
@@ -51,7 +51,7 @@ public class memberComments  extends JFrame{
 		add(background);
 		background.setLayout(null);
 		
-		JLabel form = new JLabel(new ImageIcon(newUserForm.class.getResource("/StaffViewAssets/memberComments.png")));
+		JLabel form = new JLabel(new ImageIcon(NewUserForm.class.getResource("/StaffViewAssets/memberComments.png")));
 		form.setBounds(50, 20, 1105, 641);
 		form.setLayout(null);
 		
@@ -129,7 +129,6 @@ public class memberComments  extends JFrame{
 	// tab in the JTabbedPane
 	private void populateTables() throws SQLException {
 		DbManager db = new DbManager();
-		//Get new data for tables after feedback is marked closed
 		Object[][] commentsOpen = db.getOpenFeedback();;
 		Object[][] commentsClosed = db.getClosedFeedback();
 		String[] columnNames = {"ID", "Title", "Description", "Open?", "Date Opened"};
@@ -144,6 +143,7 @@ public class memberComments  extends JFrame{
 		tableClosed = new JTable(commentsClosed, columnNames);
 		
 		tableOpen.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tableOpen.setDefaultEditor(Object.class, null);
 		JTableHeader header = tableOpen.getTableHeader();
 		panelOpen = new JPanel();
 		panelOpen.setLayout(new BorderLayout());
@@ -151,6 +151,7 @@ public class memberComments  extends JFrame{
 		panelOpen.add(tableOpen, BorderLayout.CENTER);
 		
 		tableClosed.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tableClosed.setDefaultEditor(Object.class, null);
 		JTableHeader headerClosed = tableClosed.getTableHeader();
 		panelClosed = new JPanel();
 		panelClosed.setLayout(new BorderLayout());

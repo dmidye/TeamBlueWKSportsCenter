@@ -9,7 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class enterMemberInfo extends JPanel{
+public class EnterMemberInfo extends JPanel{
 	
 	/**
 	 * 
@@ -20,7 +20,7 @@ public class enterMemberInfo extends JPanel{
 	JLabel userName;
 	JTextField uName;
 
-	public enterMemberInfo() {
+	public EnterMemberInfo() {
 		
 		setLayout(new GridLayout(0, 2));
 		

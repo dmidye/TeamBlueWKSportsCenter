@@ -45,7 +45,7 @@ public class StaffView extends JFrame {
 		newMember.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new newUserForm();				
+				new NewUserForm();				
 			}
 		});
 		background.add(newMember);
@@ -60,7 +60,7 @@ public class StaffView extends JFrame {
 		memberLookUp.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new lookupForm();				
+				new LookupForm();				
 			}
 		});
 		background.add(memberLookUp);

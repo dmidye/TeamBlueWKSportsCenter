@@ -14,7 +14,7 @@ import javax.swing.JTextField;
 
 
 
-public class lookupForm extends JFrame{
+public class LookupForm extends JFrame{
 
 	/**
 	 * 
@@ -29,7 +29,7 @@ public class lookupForm extends JFrame{
 	JButton lookUpUser;
 	JButton Cancel;
 	
-	public lookupForm() {
+	public LookupForm() {
 		
 		
 			
@@ -40,11 +40,11 @@ public class lookupForm extends JFrame{
 			setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	
 			
 			setLayout(new BorderLayout());
-			JLabel background = new JLabel(new ImageIcon(newUserForm.class.getResource("/StaffViewAssets/NewUserFormBackground.png")));
+			JLabel background = new JLabel(new ImageIcon(NewUserForm.class.getResource("/StaffViewAssets/NewUserFormBackground.png")));
 			add(background);
 			background.setLayout(null);
 			
-			JLabel form = new JLabel(new ImageIcon(newUserForm.class.getResource("/StaffViewAssets/Look-UpForm.png")));
+			JLabel form = new JLabel(new ImageIcon(NewUserForm.class.getResource("/StaffViewAssets/Look-UpForm.png")));
 			form.setBounds(22, 32, 472, 597);
 			form.setLayout(null);
 			fName = new JTextField(20);
@@ -72,7 +72,7 @@ public class lookupForm extends JFrame{
 			form.add(userName);
 			
 						
-			lookUpUser = new JButton(new ImageIcon(newUserForm.class.getResource("/StaffViewAssets/Look-UpButton.png")));
+			lookUpUser = new JButton(new ImageIcon(NewUserForm.class.getResource("/StaffViewAssets/Look-UpButton.png")));
 			lookUpUser.setBounds(50, 468,142, 59);
 			lookUpUser.setOpaque(false);
 			lookUpUser.setContentAreaFilled(false);
@@ -81,7 +81,7 @@ public class lookupForm extends JFrame{
 			lookUpUser.addActionListener(new lookUpUserButton());
 			form.add(lookUpUser);
 			
-			Cancel = new JButton(new ImageIcon(newUserForm.class.getResource("/StaffViewAssets/Cancel.png")));
+			Cancel = new JButton(new ImageIcon(NewUserForm.class.getResource("/StaffViewAssets/Cancel.png")));
 			Cancel.setBounds(250, 468,142, 59);
 			Cancel.setOpaque(false);
 			Cancel.setContentAreaFilled(false);
@@ -111,7 +111,7 @@ public class lookupForm extends JFrame{
 		
 		private class lookUpUserButton implements ActionListener{
 			public void actionPerformed(ActionEvent e) {
-				new editUserForm();			
+				new EditUserForm();			
 			}
 		}
 	}

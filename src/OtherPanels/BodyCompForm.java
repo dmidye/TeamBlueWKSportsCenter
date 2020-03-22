@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.text.ParseException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -11,6 +13,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+
+import Database.DbManager;
 
 public class BodyCompForm extends JFrame{
 	
@@ -21,6 +25,7 @@ public class BodyCompForm extends JFrame{
 	private static final long serialVersionUID = 1L;
 	
 	Font font1 = new Font("Agency FB", Font.PLAIN, 25);
+	JFrame parentFrame;
 	JTextField bmi;
 	JTextField forearm;
 	JTextField arm;
@@ -38,7 +43,7 @@ public class BodyCompForm extends JFrame{
 	JTextField abdomenType;
 	JTextField suprailiac;
 	JTextField thighType;
-	JTextField bodyDesnity;
+	JTextField bodyDensity;
 	JTextField percentBodyFat;
 	JTextField leanWeight;
 	JTextField desiredBodyFat;
@@ -50,18 +55,19 @@ public class BodyCompForm extends JFrame{
 	JButton cancel;
 
 	public BodyCompForm(String username) {
-		setTitle("Body Compositions Form");
-		setSize(1200, 675);
-		setLocationRelativeTo(null);
-		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
+		parentFrame = new JFrame();
+		parentFrame.setTitle("Body Compositions Form");
+		parentFrame.setSize(1200, 675);
+		parentFrame.setLocationRelativeTo(null);
+		parentFrame.setResizable(false);
+		parentFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);		
 				
-		setLayout(new BorderLayout());
+		parentFrame.setLayout(new BorderLayout());
 		JLabel background = new JLabel(new ImageIcon(StaffView.class.getResource("/StaffViewAssets/staffViewBackground2.png")));
-		add(background);
+		parentFrame.add(background);
 		background.setLayout(null);
 		
-		JLabel form = new JLabel(new ImageIcon(newUserForm.class.getResource("StaffViewAssets/BodyCompForm.png")));
+		JLabel form = new JLabel(new ImageIcon(NewUserForm.class.getResource("/StaffViewAssets/BodyCompForm.png")));
 		form.setBounds(50, 20, 1105, 641);
 		form.setLayout(null);
 		
@@ -223,13 +229,13 @@ public class BodyCompForm extends JFrame{
 		
 		// body
 		
-		bodyDesnity = new JTextField(10);
-		bodyDesnity.setBounds(165, 399, 80, 25);
-		bodyDesnity.setOpaque(false);
-		bodyDesnity.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-		bodyDesnity.setFont(font1);
-		bodyDesnity.setEditable(true);
-		form.add(bodyDesnity);
+		bodyDensity = new JTextField(10);
+		bodyDensity.setBounds(165, 399, 80, 25);
+		bodyDensity.setOpaque(false);
+		bodyDensity.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		bodyDensity.setFont(font1);
+		bodyDensity.setEditable(true);
+		form.add(bodyDensity);
 		
 		percentBodyFat = new JTextField(10);
 		percentBodyFat.setBounds(165, 427, 80, 25);
@@ -263,6 +269,7 @@ public class BodyCompForm extends JFrame{
 		save.setContentAreaFilled(false);
 		save.setBorderPainted(false);
 		save.setFocusPainted(false);
+		save.addActionListener(new saveButton(username));
 		form.add(save);
 		
 		cancel = new JButton(new ImageIcon(StaffView.class.getResource("/StaffViewAssets/CancelAssessment.png")));
@@ -274,15 +281,14 @@ public class BodyCompForm extends JFrame{
 		cancel.addActionListener(new cancelButton());
 		form.add(cancel);
 		
-		
 		background.add(form);
 		
-		setVisible(true);
+		parentFrame.setVisible(true);
 	}
 	
 	//method of closing the frame
 	private void closeFrame() {
-		this.dispose();
+		parentFrame.dispose();
 	}//end closeFrame()
 	
 	//calculate BMI
@@ -310,10 +316,49 @@ public class BodyCompForm extends JFrame{
 	//save button action listener
 	//saves to the database	
 	private class saveButton implements ActionListener{
-		public void actionPerformed(ActionEvent e) {
-			//TODO: write save method
+		private String username;
+		public saveButton(String username) {
+			this.username = username;
 		}
-	}//end saveButton
+		public void actionPerformed(ActionEvent e) {
+			try {
+				DbManager db = new DbManager();
+				Double BMI = Double.parseDouble(bmi.getText());
+				Integer fa = Integer.parseInt(forearm.getText());
+				Integer a = Integer.parseInt(arm.getText());
+				//Integer thi = Integer.parseInt(thigh.getText());
+				Integer abd = Integer.parseInt(abdomen.getText());
+				//Integer ca = Integer.parseInt(calf.getText());
+				Integer wc = Integer.parseInt(waistCircumference.getText());
+				Integer hc = Integer.parseInt(hipCircumference.getText());
+				//Integer wthr = Integer.parseInt(waistToHipRatio.getText());
+				String prot = protocol.getText();
+				Integer ch = Integer.parseInt(chest.getText());
+				Integer ma = Integer.parseInt(midaxillary.getText());
+				Integer tri = Integer.parseInt(triceps.getText());
+				Integer sub = Integer.parseInt(subscapular.getText());
+				//Integer at = Integer.parseInt(abdomenType.getText());
+				Integer sup = Integer.parseInt(suprailiac.getText());
+				Integer tt = Integer.parseInt(thighType.getText());
+				//Integer bd = Integer.parseInt(bodyDensity.getText());
+				Integer pbf = Integer.parseInt(percentBodyFat.getText());
+				Integer lw = Integer.parseInt(leanWeight.getText());
+				Integer dbf = Integer.parseInt(desiredBodyFat.getText());
+				
+				//call method to create the form
+				if(db.createNewMemberBCForm(username, BMI, fa, a, -1, -1, wc, hc, prot, ch, 
+											ma, tri, sub, abd, sup, tt, pbf, lw, -1, dbf)) {
+					JOptionPane.showMessageDialog(null, "Form added.");
+					parentFrame.dispose();
+				}
+			} catch (SQLException e1) {
+				System.out.println("Error connecting to database.");
+				e1.printStackTrace();
+			} catch (ParseException e1) {
+				e1.printStackTrace();
+			}
+		}
+	}
 	
 	// calculate button action listener
 	public class calculateButton implements ActionListener{

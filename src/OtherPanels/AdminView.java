@@ -28,7 +28,7 @@ public class AdminView extends JFrame {
 		setSize(1200, 675);
 		setLocationRelativeTo(null);
 		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);		
 		
 		
 		
@@ -47,7 +47,7 @@ public class AdminView extends JFrame {
 		memberComments.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new memberComments();
+				new MemberComments();
 				
 			}	
 		});
@@ -63,7 +63,7 @@ public class AdminView extends JFrame {
 		calculationControls.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new calculationControls();				
+				new CalculationControls();				
 			}
 		});
 		background.add(calculationControls);

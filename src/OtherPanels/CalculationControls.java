@@ -1,5 +1,4 @@
 package OtherPanels;
-
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -9,12 +8,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JTextField;
 
 
 
 
-public class strengthAndFlexForm  extends JFrame{
+
+public class CalculationControls  extends JFrame{
 	
 	
 	
@@ -23,65 +22,31 @@ public class strengthAndFlexForm  extends JFrame{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	JTextField pushups;
-	JTextField oneMinuteSitUps;
-	JTextField sitAndReach;
-	
-	JLabel name;
+	//instantiate components here (JTextfields, JLabels etc.)
+	JButton save;
+	JButton cancel;
 	
 	Font font1 = new Font("Agency FB", Font.PLAIN, 25);
 	
-	JButton calculate;
-	JButton save;
-	JButton cancel;
+	
 
-	public strengthAndFlexForm(String username) {
-		setTitle("Strength and Flex Form");
+	public CalculationControls() {
+		setTitle("Calculation Controls");
 		setSize(1200, 675);
 		setLocationRelativeTo(null);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
 				
 		setLayout(new BorderLayout());
-		JLabel background = new JLabel(new ImageIcon(strengthAndFlexForm.class.getResource("/StaffViewAssets/staffViewBackground2.png")));
+		JLabel background = new JLabel(new ImageIcon(StaffView.class.getResource("/StaffViewAssets/staffViewBackground2.png")));
 		add(background);
 		background.setLayout(null);
 		
-		JLabel form = new JLabel(new ImageIcon(strengthAndFlexForm.class.getResource("StaffViewAssets/strengthAndFlexForm.png")));
+		JLabel form = new JLabel(new ImageIcon(NewUserForm.class.getResource("/StaffViewAssets/calculationsControls.png")));
 		form.setBounds(50, 20, 1105, 641);
 		form.setLayout(null);
 		
-		
-		name = new JLabel (username);
-		name.setBounds(880, 50, 200, 25);
-		name.setFont(font1);
-		form.add(name);
-		
-		pushups = new JTextField(10);
-		pushups.setBounds(225, 195, 80, 25);
-		pushups.setOpaque(false);
-		pushups.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-		pushups.setFont(font1);
-		pushups.setEditable(true);
-		form.add(pushups);
-		
-		oneMinuteSitUps = new JTextField(10);
-		oneMinuteSitUps.setBounds(225, 230, 80, 25);
-		oneMinuteSitUps.setOpaque(false);
-		oneMinuteSitUps.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-		oneMinuteSitUps.setFont(font1);
-		oneMinuteSitUps.setEditable(true);
-		form.add(oneMinuteSitUps);
-				
-		sitAndReach = new JTextField(10);
-		sitAndReach.setBounds(225, 397, 80, 25);
-		sitAndReach.setOpaque(false);
-		sitAndReach.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-		sitAndReach.setFont(font1);
-		sitAndReach.setEditable(true);
-		form.add(sitAndReach);
-		
-		
+		//start adding components here remember to add them to the form
 		
 		//save and cancel
 		
@@ -111,7 +76,6 @@ public class strengthAndFlexForm  extends JFrame{
 	private void closeFrame() {
 		this.dispose();
 	}
-	
 	
 	
 	//cancel button action listener than calls the closeFrame() method

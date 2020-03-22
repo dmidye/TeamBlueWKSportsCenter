@@ -4,23 +4,28 @@ import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.text.ParseException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
+import Database.DbManager;
 
 
 
-public class coronaryRiskForm extends JFrame{
+
+public class CoronaryRiskForm extends JFrame{
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+	JFrame parentFrame;
 	JTextField systolic;
 	JTextField diastolic;
 	JTextField yearsSmoked;
@@ -32,7 +37,7 @@ public class coronaryRiskForm extends JFrame{
 	JTextField ldlCholesterol;
 	JTextField hdlRatio;
 	JTextField triglycerides;
-	JTextField glucos;
+	JTextField glucose;
 	
 	JLabel name;
 	Font font1 = new Font("Agency FB", Font.PLAIN, 25);
@@ -41,19 +46,20 @@ public class coronaryRiskForm extends JFrame{
 	JButton save;
 	JButton cancel;
 
-	public coronaryRiskForm(String username) {
-		setTitle("Coronary Risk Form");
-		setSize(1200, 675);
-		setLocationRelativeTo(null);
-		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
+	public CoronaryRiskForm(String username) {
+		parentFrame = new JFrame();
+		parentFrame.setTitle("Coronary Risk Form");
+		parentFrame.setSize(1200, 675);
+		parentFrame.setLocationRelativeTo(null);
+		parentFrame.setResizable(false);
+		parentFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);		
 				
-		setLayout(new BorderLayout());
-		JLabel background = new JLabel(new ImageIcon(coronaryRiskForm.class.getResource("/StaffViewAssets/staffViewBackground2.png")));
-		add(background);
+		parentFrame.setLayout(new BorderLayout());
+		JLabel background = new JLabel(new ImageIcon(CoronaryRiskForm.class.getResource("/StaffViewAssets/staffViewBackground2.png")));
+		parentFrame.add(background);
 		background.setLayout(null);
 		
-		JLabel form = new JLabel(new ImageIcon(coronaryRiskForm.class.getResource("/StaffViewAssets/CoronaryRiskForm.png")));
+		JLabel form = new JLabel(new ImageIcon(CoronaryRiskForm.class.getResource("/StaffViewAssets/CoronaryRiskForm.png")));
 		form.setBounds(50, 20, 1105, 641);
 		form.setLayout(null);
 		
@@ -150,13 +156,13 @@ public class coronaryRiskForm extends JFrame{
 		triglycerides.setEditable(true);
 		form.add(triglycerides);
 		
-		glucos = new JTextField(10);
-		glucos.setBounds(640, 300, 80, 25);
-		glucos.setOpaque(false);
-		glucos.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-		glucos.setFont(font1);
-		glucos.setEditable(true);
-		form.add(glucos);
+		glucose = new JTextField(10);
+		glucose.setBounds(640, 300, 80, 25);
+		glucose.setOpaque(false);
+		glucose.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		glucose.setFont(font1);
+		glucose.setEditable(true);
+		form.add(glucose);
 		
 		
 		
@@ -168,6 +174,7 @@ public class coronaryRiskForm extends JFrame{
 		save.setContentAreaFilled(false);
 		save.setBorderPainted(false);
 		save.setFocusPainted(false);
+		save.addActionListener(new saveButton(username));
 		form.add(save);
 		
 		cancel = new JButton(new ImageIcon(StaffView.class.getResource("/StaffViewAssets/CancelAssessment.png")));
@@ -181,24 +188,55 @@ public class coronaryRiskForm extends JFrame{
 		
 		background.add(form);
 		
-		setVisible(true);
+		parentFrame.setVisible(true);
 	}
 	
 	//method of closing the frame
 	private void closeFrame() {
-		this.dispose();
+		parentFrame.dispose();
 	}
-	
-	
 	
 	//cancel button action listener than calls the closeFrame() method
 		//to close the frame.
-		private class cancelButton implements ActionListener{
-			public void actionPerformed(ActionEvent e) {
-				closeFrame();			
+	private class cancelButton implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			closeFrame();			
+		}
+	}
+	
+	private class saveButton implements ActionListener{
+		private String username;
+		public saveButton(String username) {
+			this.username = username;
+		}
+		public void actionPerformed(ActionEvent e) {
+			try {
+				DbManager db = new DbManager();
+				
+				//getting each variable from text fields and parsing them if needed
+				Integer sys = Integer.parseInt(systolic.getText());
+				Integer dias = Integer.parseInt(diastolic.getText());
+				Integer ibw = Integer.parseInt(idealBodyWeight.getText());
+				String pa = physicalActivity.getText();
+				Integer tc = Integer.parseInt(totalCholesterol.getText());
+				Double hdlr = Double.parseDouble(hdlRatio.getText());
+				Integer hdlc = Integer.parseInt(hdlCholesterol.getText());
+				Integer ldlc = Integer.parseInt(ldlCholesterol.getText());
+				Integer trig = Integer.parseInt(triglycerides.getText());
+				Integer gluc = Integer.parseInt(glucose.getText());
+				
+				//call method to create the form
+				if(db.createNewMemberCRForm(username, sys, dias, ibw, pa, tc, hdlr, hdlc, ldlc, trig, gluc)) {
+					JOptionPane.showMessageDialog(null, "Form added.");
+					parentFrame.dispose();
+				}
+
+			} catch (SQLException e1) {
+				System.out.println("Error connecting to database.");
+				e1.printStackTrace();
+			} catch (ParseException e1) {
+				e1.printStackTrace();
 			}
 		}
-		
-		
-
+	}
 }

@@ -4,12 +4,17 @@ import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.text.ParseException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+
+import Database.DbManager;
 
 
 
@@ -22,7 +27,7 @@ public class AerobicCapacityForm  extends JFrame{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+	JFrame parentFrame;
 	JTextField heartRateMax;
 	JTextField restingHeartRate;
 	JTextField finalTestedHeartRate;
@@ -43,18 +48,19 @@ public class AerobicCapacityForm  extends JFrame{
 	JButton cancel;
 
 	public AerobicCapacityForm(String username) {
-		setTitle("Aerobic Capacity Form");
-		setSize(1200, 675);
-		setLocationRelativeTo(null);
-		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
+		parentFrame = new JFrame();
+		parentFrame.setTitle("Aerobic Capacity Form");
+		parentFrame.setSize(1200, 675);
+		parentFrame.setLocationRelativeTo(null);
+		parentFrame.setResizable(false);
+		parentFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);		
 				
-		setLayout(new BorderLayout());
+		parentFrame.setLayout(new BorderLayout());
 		JLabel background = new JLabel(new ImageIcon(StaffView.class.getResource("/StaffViewAssets/staffViewBackground2.png")));
-		add(background);
+		parentFrame.add(background);
 		background.setLayout(null);
 		
-		JLabel form = new JLabel(new ImageIcon(newUserForm.class.getResource("StaffViewAssets/AerobicCapacityForm.png")));
+		JLabel form = new JLabel(new ImageIcon(NewUserForm.class.getResource("/StaffViewAssets/AerobicCapacityForm.png")));
 		form.setBounds(50, 20, 1105, 641);
 		form.setLayout(null);
 		
@@ -125,7 +131,7 @@ public class AerobicCapacityForm  extends JFrame{
 		heartRateRange.setFont(font1);
 		form.add(heartRateRange);
 		
-		MaxVO2 = new JLabel("You're MaxVO2 is: ");
+		MaxVO2 = new JLabel("Your MaxVO2 is: ");
 		MaxVO2.setBounds(50, 300, 200, 50);
 		MaxVO2.setFont(font1);
 		form.add(MaxVO2);
@@ -138,6 +144,7 @@ public class AerobicCapacityForm  extends JFrame{
 		save.setContentAreaFilled(false);
 		save.setBorderPainted(false);
 		save.setFocusPainted(false);
+		save.addActionListener(new saveButton(username));
 		form.add(save);
 		
 		cancel = new JButton(new ImageIcon(StaffView.class.getResource("/StaffViewAssets/CancelAssessment.png")));
@@ -151,39 +158,67 @@ public class AerobicCapacityForm  extends JFrame{
 		
 		background.add(form);
 		
-		setVisible(true);
+		parentFrame.setVisible(true);
 	}
 	
 	//method of closing the frame
 	private void closeFrame() {
-		this.dispose();
+		parentFrame.dispose();
 	}
 	
 	//calculate aerobic capacity or Max VO2
-		private String calculateAC(String rhr, String mhr) {
-			String calculation ="";
-			double rhrate = Double.parseDouble(rhr);
-			double mhrate = Double.parseDouble(mhr);
-			double maxVO2 = 15.3*(rhrate/mhrate);
-			//calculation = String.valueOf(maxVO2);
-			 calculation = String.format("%.2f", maxVO2);
-			return calculation;
+	private String calculateAC(String rhr, String mhr) {
+		String calculation ="";
+		double rhrate = Double.parseDouble(rhr);
+		double mhrate = Double.parseDouble(mhr);
+		double maxVO2 = 15.3*(rhrate/mhrate);
+		//calculation = String.valueOf(maxVO2);
+		 calculation = String.format("%.2f", maxVO2);
+		return calculation;
+	}
+	
+	private class calculateButton implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			workTarget.setText(calculateAC(restingHeartRate.getText(), heartRateMax.getText()));
 		}
-		
-		private class calculateButton implements ActionListener{
-			public void actionPerformed(ActionEvent e) {
-				workTarget.setText(calculateAC(restingHeartRate.getText(), heartRateMax.getText()));
-			}
-		}
+	}
 	
 	//cancel button action listener than calls the closeFrame() method
-		//to close the frame.
-		private class cancelButton implements ActionListener{
-			public void actionPerformed(ActionEvent e) {
-				closeFrame();			
+	//to close the frame.
+	private class cancelButton implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			closeFrame();			
+		}
+	}
+		
+	private class saveButton implements ActionListener{
+		private String username;
+		public saveButton(String username) {
+			this.username = username;
+		}
+		public void actionPerformed(ActionEvent e) {
+			try {
+				DbManager db = new DbManager();
+				Integer hrm = Integer.parseInt(heartRateMax.getText());
+				Integer rhr = Integer.parseInt(restingHeartRate.getText());
+				Integer fthr = Integer.parseInt(finalTestedHeartRate.getText());
+				String prot = protocol.getText();
+				Integer tim = Integer.parseInt(timeInMinutes.getText());
+				//Double wt = Double.parseDouble(workTarget.getText());
+				Double mv02 = Double.parseDouble(calculateAC(heartRateMax.getText(), restingHeartRate.getText()));
+
+				//call method to create the form
+				if(db.createNewMemberACForm(username, hrm, rhr, fthr, 0, 0, prot, tim, mv02)) {
+					JOptionPane.showMessageDialog(null, "Form added.");
+					parentFrame.dispose();
+				}
+
+			} catch (SQLException e1) {
+				System.out.println("Error connecting to database.");
+				e1.printStackTrace();
+			} catch (ParseException e1) {
+				e1.printStackTrace();
 			}
 		}
-		
-		
-
+	}
 }

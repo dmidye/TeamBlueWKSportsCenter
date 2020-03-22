@@ -16,9 +16,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-
-
-public class editUserForm extends JFrame {
+public class NewUserForm extends JFrame{
 
 	/**
 	 * 
@@ -37,23 +35,21 @@ public class editUserForm extends JFrame {
     ButtonGroup group;
 	JButton saveUser;
 	JButton Cancel;
-	JButton remove;
-	public editUserForm() {
+	
+	public NewUserForm() {
 		
-		//TODO: set each JTextField to display the information corresponding the user
-		
-		setTitle("Edit User");
+		setTitle("New User");
 		setSize(500, 675);
 		setLocationRelativeTo(null);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	
 		
 		setLayout(new BorderLayout());
-		JLabel background = new JLabel(new ImageIcon(newUserForm.class.getResource("/StaffViewAssets/NewUserFormBackground.png")));
+		JLabel background = new JLabel(new ImageIcon(NewUserForm.class.getResource("/StaffViewAssets/NewUserFormBackground.png")));
 		add(background);
 		background.setLayout(null);
 		
-		JLabel form = new JLabel(new ImageIcon(newUserForm.class.getResource("StaffViewAssets/NewUserForm.png")));
+		JLabel form = new JLabel(new ImageIcon(NewUserForm.class.getResource("/StaffViewAssets/NewUserForm.png")));
 		form.setBounds(22, 32, 472, 597);
 		form.setLayout(null);
 		fName = new JTextField(20);
@@ -155,8 +151,8 @@ public class editUserForm extends JFrame {
 		group.add(Admin);
 		
 		
-		saveUser = new JButton(new ImageIcon(newUserForm.class.getResource("/StaffViewAssets/Look-upSaveButton.png")));
-		saveUser.setBounds(20, 468,142, 59);
+		saveUser = new JButton(new ImageIcon(NewUserForm.class.getResource("/StaffViewAssets/AddUserButton.png")));
+		saveUser.setBounds(50, 468,142, 59);
 		saveUser.setOpaque(false);
 		saveUser.setContentAreaFilled(false);
 		saveUser.setBorderPainted(false);
@@ -164,18 +160,8 @@ public class editUserForm extends JFrame {
 		saveUser.addActionListener(new saveButton());
 		form.add(saveUser);
 		
-		remove = new JButton(new ImageIcon(newUserForm.class.getResource("/StaffViewAssets/RemoveButton.png")));
-		remove.setBounds(150, 468,142, 59);
-		remove.setOpaque(false);
-		remove.setContentAreaFilled(false);
-		remove.setBorderPainted(false);
-		remove.setFocusPainted(false);
-		//TODO: complete removeButton ActionListener
-		//remove.addActionListener(new removeButton());
-		form.add(remove);
-		
-		Cancel = new JButton(new ImageIcon(newUserForm.class.getResource("/StaffViewAssets/CancelLookUpButton.png")));
-		Cancel.setBounds(280, 468,142, 59);
+		Cancel = new JButton(new ImageIcon(NewUserForm.class.getResource("/StaffViewAssets/Cancel.png")));
+		Cancel.setBounds(250, 468,142, 59);
 		Cancel.setOpaque(false);
 		Cancel.setContentAreaFilled(false);
 		Cancel.setBorderPainted(false);
@@ -193,8 +179,9 @@ public class editUserForm extends JFrame {
 	private void closeFrame() {
 		this.dispose();
 	}
+	
 	//method to add a new user to the database
-	private void editUser() {
+	private void addUser() {
 		
 		ArrayList<String> list = new ArrayList<String>();
 		list.add(fName.getText());
@@ -258,7 +245,7 @@ public class editUserForm extends JFrame {
 		String userPassword = password.getText();
 		String confirmedPassword = confirm.getText();
 		
-		//TODO: add code to save updates to database here.
+		//TO DO: add code to add new user to database here.
 		
 	}
 	
@@ -270,13 +257,13 @@ public class editUserForm extends JFrame {
 		}
 	}
 	
+	//TODO: Save Button
 	private class saveButton implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			editUser();
+			
 		}
 	}
 	
-	//TODO: create removeButton actionListener
 	
-
+	
 }

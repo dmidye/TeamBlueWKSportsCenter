@@ -175,21 +175,21 @@ public class DbManager {
  */
  public ResultSet lookupMember(int id)  throws SQLException, ParseException {
     	
-    	// Create a connection to the database.
-            conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+	// Create a connection to the database.
+    conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
   
-            // Create a Statement object for the query.
+    // Create a Statement object for the query.
     Statement stmt = conn.createStatement();
  
     try {
     	PreparedStatement statement = conn.prepareStatement("SELECT * FROM wk_sports_center_db.user "
 													  + "WHERE memberID = " + id);
-    ResultSet rs = statement.executeQuery(); 
-    if(rs.next() == false) {
-          return null;
-    } else {
-          return rs;
-    }
+	    ResultSet rs = statement.executeQuery(); 
+	    if(rs.next() == false) {
+	          return null;
+	    } else {
+	          return rs;
+	    }
     } catch(Exception e) {
     	e.printStackTrace();
     }
@@ -394,7 +394,7 @@ public class DbManager {
 	 * Adds a a form to the aerobiccapacity table.
 	 * Generates the current date.
 	 */
-	public boolean createNewMemberACForm(int memberID, int trainerID, int heartRateMax, int restedHeartRate, int finalTestHeartRate, 
+	public boolean createNewMemberACForm(String username, int heartRateMax, int restedHeartRate, int finalTestHeartRate, 
 			int minTargetHeartRate, int maxTargetHeartRate, String protocol, int timeInMin, double maxVO2) throws SQLException, ParseException {
 		
 		// Create a connection to the database.
@@ -403,8 +403,8 @@ public class DbManager {
 	    // Create a Statement object for the query.
 	    Statement stmt = conn.createStatement();
 
-	    ResultSet member = lookupMember(memberID);
-	    String username = member.getString("username");
+	    ResultSet member = lookupMember(username);
+	    int id = member.getInt("memberID");
 	    
 	    Date date = new Date();
         String pattern = "yyyy-MM-dd";
@@ -414,7 +414,7 @@ public class DbManager {
         try {
 		    stmt.executeUpdate("INSERT INTO aerobiccapacity "
     					+ "(username, memberID, date, trainerID, heartRateMax, restedHeartRate, finalTestHeartRate, minTargetHeartRate, maxTargetHeartRate, protocol, timeInMin, maxVO2)"
-    					+ "VALUES('" + username + s + memberID + s + mysqlDateString + s + trainerID + s + heartRateMax + s + restedHeartRate 
+    					+ "VALUES('" + username + s + id + s + mysqlDateString + s + 0 + s + heartRateMax + s + restedHeartRate 
     					+ s + finalTestHeartRate + s + minTargetHeartRate + s + maxTargetHeartRate
     					+ s + protocol.toLowerCase().trim() + s + timeInMin + s + maxVO2 + "')");
 		    conn.close();
@@ -426,7 +426,7 @@ public class DbManager {
         }
 	}
 		
-	public boolean createNewMemberSFForm(int memberID, int trainerID, int pushUps, int sitUps, int sitReach) throws SQLException, ParseException {
+	public boolean createNewMemberSFForm(String username, int pushUps, int sitUps, int sitReach) throws SQLException, ParseException {
 		
 		// Create a connection to the database.
 	    conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
@@ -434,8 +434,8 @@ public class DbManager {
 	    // Create a Statement object for the query.
 	    Statement stmt = conn.createStatement();
 
-	    ResultSet member = lookupMember(memberID);
-	    String username = member.getString("username");
+	    ResultSet member = lookupMember(username);
+	    int id = member.getInt("memberID");
 	    
 	    Date date = new Date();
         String pattern = "yyyy-MM-dd";
@@ -445,7 +445,7 @@ public class DbManager {
         try {
 		    stmt.executeUpdate("INSERT INTO strengthflexibility "
     					+ "(username, memberID, date, trainerID, pushups, situps, sitreach)"
-    					+ "VALUES('" + username + s + memberID + s + mysqlDateString + s + trainerID + s + pushUps + s + sitUps 
+    					+ "VALUES('" + username + s + id + s + mysqlDateString + s + 0 + s + pushUps + s + sitUps 
     					+ s + sitReach + "')");
 		    conn.close();
 		    return true;
@@ -457,7 +457,7 @@ public class DbManager {
 	}
 		
 		
-	public boolean createNewMemberBCForm(int memberID, int trainerID, double BMI, int domForearm, int domArm, int domThigh, int domAbdomen, 
+	public boolean createNewMemberBCForm(String username, double BMI, int domForearm, int domArm, int domThigh, int domAbdomen, 
 			int waistCircumference, int hipCircumference, String bodyCompProtocol, int chest, int midAxillary, int triceps, int subscapular, int abdomen,
 			int supralliac, int thigh, int percentBodyFat, int leanWeight, int fatWeight, int desiredWeight) throws SQLException, ParseException {
 		
@@ -467,8 +467,8 @@ public class DbManager {
 	    // Create a Statement object for the query.
 	    Statement stmt = conn.createStatement();
 	    
-	    ResultSet member = lookupMember(memberID);
-	    String username = member.getString("username");
+	    ResultSet member = lookupMember(username);
+	    int id = member.getInt("memberID");
 	 
 	    Date date = new Date();
         String pattern = "yyyy-MM-dd";
@@ -480,7 +480,7 @@ public class DbManager {
     					+ "(username, memberID, date, trainerID, BMI, domForearm, domArm, domThigh, domAbdomen, waistCircumference,"
     					+ " hipCircumference, bodyCompProtocol, chest, midaxillary, triceps, subscapular, abdomen, suprailliac, thigh,"
     					+ " percentBodyFat, leanWeight, fatWeight, desiredWeight)"
-    					+ "VALUES('" + username + s + memberID + s + mysqlDateString + s + trainerID + s + BMI + s + domForearm + s + domArm + s + domThigh
+    					+ "VALUES('" + username + s + id + s + mysqlDateString + s + 0 + s + BMI + s + domForearm + s + domArm + s + domThigh
     					+ s + domAbdomen + s + waistCircumference + s + hipCircumference + s + bodyCompProtocol + s + chest + s + midAxillary 
     					+ s + triceps + s + subscapular + s + abdomen + s + supralliac + s + thigh + s + percentBodyFat + s + leanWeight + s + fatWeight + s + desiredWeight + "')");
 		    conn.close();
@@ -492,8 +492,8 @@ public class DbManager {
         }
 	}
 		
-	public boolean createNewMemberCRForm(int memberID, int trainerID, int systolicBP, int diastolicBP, int idealBodyWeight, String physicalActivity, 
-			int totalCholesterol, int hdlRatio, int hdlCholesterol, int ldlCholesterol, int triglycerides, int glucose) throws SQLException, ParseException {
+	public boolean createNewMemberCRForm(String username, int systolicBP, int diastolicBP, int idealBodyWeight, String physicalActivity, 
+			int totalCholesterol, double hdlRatio, int hdlCholesterol, int ldlCholesterol, int triglycerides, int glucose) throws SQLException, ParseException {
 		
 		// Create a connection to the database.
 	    conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
@@ -501,8 +501,8 @@ public class DbManager {
 	    // Create a Statement object for the query.
 	    Statement stmt = conn.createStatement();
 
-	    ResultSet member = lookupMember(memberID);
-	    String username = member.getString("username");
+	    ResultSet member = lookupMember(username);
+	    int id = member.getInt("memberID");
 	    
 	    Date date = new Date();
         String pattern = "yyyy-MM-dd";
@@ -512,7 +512,7 @@ public class DbManager {
         try {
 		    stmt.executeUpdate("INSERT INTO coronaryrisk "
     					+ "(username, memberID, date, trainerID, systolicBloodPressure, diastolicBloodPressure, yearsSmoked, idealBodyWeight, physicalActivity, totalCholesterol, hdlCholesterol, ldlCholesterol, hdlRatio, triglycerides, glucose)"
-    					+ "VALUES('" + username + s + memberID + s + mysqlDateString + s + trainerID + s + systolicBP + s + diastolicBP + s + 0 + s +  idealBodyWeight + s + physicalActivity + s + totalCholesterol
+    					+ "VALUES('" + username + s + id + s + mysqlDateString + s + 0 + s + systolicBP + s + diastolicBP + s + 0 + s +  idealBodyWeight + s + physicalActivity + s + totalCholesterol
     					+ s + hdlCholesterol + s + ldlCholesterol + s + hdlRatio + s + triglycerides + s + glucose +  "')");
 		    conn.close();
 		    return true;
