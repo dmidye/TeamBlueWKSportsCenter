@@ -452,7 +452,7 @@ public class HomeScreen extends JPanel {
 				String title = CommentTitleInputArea.getText();
 				String description = CommentInputArea.getText();
 				
-				databaseConnector.sendUpdate("INSERT INTO `feedback`(`Title`, `Description`) VALUES (\"" + title + "\", \"" + description + "\")");
+				databaseConnector.sendUpdate("INSERT INTO `feedback`(`Title`, `Description`, `Closed`) VALUES (\"" + title + "\", \"" + description + "\" , \"" + 1 + "\")");
 				
 				CardPanel.removeAll();
 				CardPanel.add(ThanksPanel);

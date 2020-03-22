@@ -100,7 +100,8 @@ public class MemberComments  extends JFrame{
 							idToActUpon = (int) tableOpen.getValueAt(tableOpen.getSelectedRow(), 0);
 							DbManager db = new DbManager();
 							db.deleteFeedBack(idToActUpon);
-							populateTables();
+							JTabbedPane tp = populateTables();
+							tp.setSelectedIndex(0);
 						} catch (SQLException e1) {
 							e1.printStackTrace();
 						} 
@@ -110,7 +111,8 @@ public class MemberComments  extends JFrame{
 							idToActUpon = (int) tableClosed.getValueAt(tableClosed.getSelectedRow(), 0);
 							DbManager db = new DbManager();
 							db.deleteFeedBack(idToActUpon);
-							populateTables();
+							JTabbedPane tp = populateTables();
+							tp.setSelectedIndex(1);
 						} catch (SQLException e1) {
 							e1.printStackTrace();
 						} 
@@ -127,20 +129,31 @@ public class MemberComments  extends JFrame{
 	
 	// gets table data for open and closed comments, creates tables out of the data, and adds the table to a 
 	// tab in the JTabbedPane
-	private void populateTables() throws SQLException {
+	private JTabbedPane populateTables() throws SQLException {
 		DbManager db = new DbManager();
 		Object[][] commentsOpen = db.getOpenFeedback();;
 		Object[][] commentsClosed = db.getClosedFeedback();
 		String[] columnNames = {"ID", "Title", "Description", "Open?", "Date Opened"};
 		
-		//pass in an empty table if there are no open comments
-		if(commentsOpen == null) {
+		// if no comments at all
+		if(commentsClosed == null && commentsOpen == null) {
 			tableOpen = new JTable(new Object[0][0], columnNames);
+			tableClosed = new JTable(new Object[0][0], columnNames);
 		} else {
-			tableOpen = new JTable(commentsOpen, columnNames);
+			// if no open comments
+			if(commentsOpen == null) {
+				tableOpen = new JTable(new Object[0][0], columnNames);
+			} else {
+				tableOpen = new JTable(commentsOpen, columnNames);
+			}
+			
+			// if no closed comments
+			if(commentsClosed == null) {
+				tableClosed = new JTable(new Object[0][0], columnNames);
+			} else {
+				tableClosed = new JTable(commentsClosed, columnNames);
+			}
 		}
-		
-		tableClosed = new JTable(commentsClosed, columnNames);
 		
 		tableOpen.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tableOpen.setDefaultEditor(Object.class, null);
@@ -161,6 +174,8 @@ public class MemberComments  extends JFrame{
 		tabbedPane.removeAll();
 		tabbedPane.add("Open", panelOpen);
 		tabbedPane.add("Closed", panelClosed);
+		
+		return tabbedPane;
 	}
 	
 	// Creates the initial tabbedPane and calls populateTables()

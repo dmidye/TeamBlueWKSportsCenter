@@ -3,8 +3,14 @@ import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Enumeration;
+import java.util.Locale;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
@@ -15,6 +21,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
+
+import Database.DbManager;
 
 public class NewUserForm extends JFrame{
 
@@ -181,7 +189,7 @@ public class NewUserForm extends JFrame{
 	}
 	
 	//method to add a new user to the database
-	private void addUser() {
+	private void addUser() throws SQLException, ParseException {
 		
 		ArrayList<String> list = new ArrayList<String>();
 		list.add(fName.getText());
@@ -219,7 +227,7 @@ public class NewUserForm extends JFrame{
 		
 		//check to see if areaCode is a number
 		try {
-		Integer areaCodeNum = Integer.parseInt(areaCode.getText());
+			Integer areaCodeNum = Integer.parseInt(areaCode.getText());
 		} catch(NumberFormatException e) {
 			JOptionPane.showMessageDialog(null, "Area Code must be a number");
 			areaCode.setText("");
@@ -234,8 +242,6 @@ public class NewUserForm extends JFrame{
 			JOptionPane.showMessageDialog(null, "Passwords do not match");			
 		}
 		
-		
-		
 		String firstName = fName.getText();
 		String lastName = lName.getText();
 		String birthday = bday.getText();
@@ -245,8 +251,10 @@ public class NewUserForm extends JFrame{
 		String userPassword = password.getText();
 		String confirmedPassword = confirm.getText();
 		
-		//TO DO: add code to add new user to database here.
-		
+		DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
+		Date date = format.parse(birthday);
+		DbManager db = new DbManager();
+		//db.createNewMember("", firstName, lastName, emailAddress, date, userPassword, 0, phoneNumber, areacode, status);
 	}
 	
 	//cancel button action listener than calls the closeFrame() method
@@ -260,10 +268,13 @@ public class NewUserForm extends JFrame{
 	//TODO: Save Button
 	private class saveButton implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			
+			try {
+				addUser();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			} catch (ParseException e1) {
+				e1.printStackTrace();
+			}
 		}
 	}
-	
-	
-	
 }
