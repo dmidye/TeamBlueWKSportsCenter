@@ -79,13 +79,10 @@ public class CalculationControls  extends JFrame{
 	
 	
 	//cancel button action listener than calls the closeFrame() method
-		//to close the frame.
-		private class cancelButton implements ActionListener{
-			public void actionPerformed(ActionEvent e) {
-				closeFrame();			
-			}
+	//to close the frame.
+	private class cancelButton implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			closeFrame();			
 		}
-		
-		
-
+	}
 }

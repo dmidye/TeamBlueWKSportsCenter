@@ -1,5 +1,6 @@
 package OtherPanels;
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,15 +10,14 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
+
 
 import Database.DbManager;
 
@@ -39,7 +39,6 @@ public class MemberComments  extends JFrame{
 	Font font1 = new Font("Agency FB", Font.PLAIN, 25);
 	
 	public MemberComments() {
-		this.
 		setTitle("Member Comments");
 		setSize(1200, 675);
 		setLocationRelativeTo(null);
@@ -58,6 +57,10 @@ public class MemberComments  extends JFrame{
 		//create tables to add to the tabbed pane
 		try {
 			loadCommentTabs();
+//			Component[] arr = loadCommentTabs();
+//			form.add(arr[0]);
+//			form.add(arr[1]);
+			
 			//grey out the "mark read" button when in closed tab
 			ChangeListener changeListener = new ChangeListener() {
 			    public void stateChanged(ChangeEvent changeEvent) {
@@ -124,6 +127,7 @@ public class MemberComments  extends JFrame{
 		}
 		
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		background.add(form);
 		setVisible(true);
 	}
 	
@@ -179,7 +183,7 @@ public class MemberComments  extends JFrame{
 	}
 	
 	// Creates the initial tabbedPane and calls populateTables()
-	private void loadCommentTabs() throws SQLException {
+	private Component[] loadCommentTabs() throws SQLException {
 		tabbedPane = new JTabbedPane();
 		populateTables();
 		
@@ -191,5 +195,10 @@ public class MemberComments  extends JFrame{
 		
 		this.add(tabbedPane);
 		this.add(buttonPanel,BorderLayout.SOUTH);	
+		
+		Component[] arr = new Component[2];
+//		arr[0] = tabbedPane;
+//		arr[1] = buttonPanel;
+		return arr;
 	}
 }

@@ -180,8 +180,6 @@ public class NewUserForm extends JFrame{
 		background.add(form);
 		
 		setVisible(true);
-		
-		
 	}
 	//close frame method
 	private void closeFrame() {
@@ -248,13 +246,15 @@ public class NewUserForm extends JFrame{
 		String areacode = areaCode.getText();
 		String phoneNumber = phone.getText();
 		String emailAddress = email.getText();
+		String username = userName.getText();
 		String userPassword = password.getText();
 		String confirmedPassword = confirm.getText();
 		
+		//change birthday into Date for storing in db
 		DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
 		Date date = format.parse(birthday);
 		DbManager db = new DbManager();
-		//db.createNewMember("", firstName, lastName, emailAddress, date, userPassword, 0, phoneNumber, areacode, status);
+		//db.createNewMember(username, firstName, lastName, emailAddress, date, userPassword, 0, phoneNumber, areacode, status);
 	}
 	
 	//cancel button action listener than calls the closeFrame() method

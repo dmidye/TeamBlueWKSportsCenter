@@ -326,7 +326,7 @@ public class BodyCompForm extends JFrame{
 				Double BMI = Double.parseDouble(bmi.getText());
 				Integer fa = Integer.parseInt(forearm.getText());
 				Integer a = Integer.parseInt(arm.getText());
-				//Integer thi = Integer.parseInt(thigh.getText());
+				Integer thi = Integer.parseInt(thigh.getText());
 				Integer abd = Integer.parseInt(abdomen.getText());
 				//Integer ca = Integer.parseInt(calf.getText());
 				Integer wc = Integer.parseInt(waistCircumference.getText());
@@ -346,7 +346,7 @@ public class BodyCompForm extends JFrame{
 				Integer dbf = Integer.parseInt(desiredBodyFat.getText());
 				
 				//call method to create the form
-				if(db.createNewMemberBCForm(username, BMI, fa, a, -1, -1, wc, hc, prot, ch, 
+				if(db.createNewMemberBCForm(username, BMI, fa, a, thi, -1, wc, hc, prot, ch, 
 											ma, tri, sub, abd, sup, tt, pbf, lw, -1, dbf)) {
 					JOptionPane.showMessageDialog(null, "Form added.");
 					parentFrame.dispose();
