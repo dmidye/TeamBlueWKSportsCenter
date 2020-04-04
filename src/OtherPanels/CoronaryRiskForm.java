@@ -15,6 +15,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import Database.DbManager;
+import Panels.StaffView;
 
 
 
@@ -45,8 +46,12 @@ public class CoronaryRiskForm extends JFrame{
 	JButton calculate;
 	JButton save;
 	JButton cancel;
-
-	public CoronaryRiskForm(String username) {
+	
+	int staffID;
+	
+	public CoronaryRiskForm(String username, int staffID) {
+		this.staffID = staffID;
+		
 		parentFrame = new JFrame();
 		parentFrame.setTitle("Coronary Risk Form");
 		parentFrame.setSize(1200, 675);
@@ -224,9 +229,11 @@ public class CoronaryRiskForm extends JFrame{
 				Integer ldlc = Integer.parseInt(ldlCholesterol.getText());
 				Integer trig = Integer.parseInt(triglycerides.getText());
 				Integer gluc = Integer.parseInt(glucose.getText());
+				Integer ys = Integer.parseInt(yearsSmoked.getText());
+				Integer sn = Integer.parseInt(stressNumber.getText());
 				
 				//call method to create the form
-				if(db.createNewMemberCRForm(username, sys, dias, ibw, pa, tc, hdlr, hdlc, ldlc, trig, gluc)) {
+				if(db.createNewMemberCRForm(username, staffID, sys, dias, ys, ibw, pa, sn, tc, hdlr, hdlc, ldlc, trig, gluc)) {
 					JOptionPane.showMessageDialog(null, "Form added.");
 					parentFrame.dispose();
 				}

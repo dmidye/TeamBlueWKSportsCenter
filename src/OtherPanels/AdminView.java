@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import Database.DbManager;
+import Panels.StaffView;
 
 public class AdminView extends JFrame {
 	JButton calculationControls;

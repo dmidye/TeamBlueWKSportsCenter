@@ -44,7 +44,6 @@ import java.awt.event.ActionEvent;
 
 import Database.DbManager;
 import Database.databaseConnector;
-import OtherPanels.StaffView;
 
 import java.awt.CardLayout;
 import javax.swing.JSeparator;
@@ -407,22 +406,23 @@ public class LoginPanel extends JPanel {
 				try {
 					rs.next();
 					String memberType = rs.getString("Status");
-					String name = rs.getString("memberFirst") + " " + rs.getString("memberLast");
+//					String name = rs.getString("memberFirst") + " " + rs.getString("memberLast");
+					Integer staffID = Integer.parseInt(rs.getString("memberID"));
 					System.out.println(memberType);
-					switch (memberType) {                               //Sign in based on member type
-						case ("Admin"):
-							new StaffView();
-							break;
-						case ("Member"):
-							changePanel(new HomeScreen(owningFrame, username));
-							break;
-						case("FrontDesk"):
-							new StaffView();
-							break;
-						case("Trainer"):
-							new StaffView();
-							break;
-					}
+					switch (memberType) { //Sign in based on member type
+					case ("Admin"):
+						new StaffView(staffID);
+						break;
+					case ("Member"):
+						changePanel(new HomeScreen(owningFrame, username));
+						break;
+					case("FrontDesk"):
+						new StaffView(staffID);
+						break;
+					case("Trainer"):
+						new StaffView(staffID);
+						break;
+				}
 					
 				} catch (SQLException | IOException e1) {
 					e1.printStackTrace();

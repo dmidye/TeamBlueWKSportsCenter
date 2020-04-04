@@ -44,7 +44,10 @@ public class NewUserForm extends JFrame{
 	JButton saveUser;
 	JButton Cancel;
 	
-	public NewUserForm() {
+	int staffID;
+	
+	public NewUserForm(int staffID) {
+		this.staffID = staffID;
 		
 		setTitle("New User");
 		setSize(500, 675);
@@ -239,7 +242,7 @@ public class NewUserForm extends JFrame{
 		if(!password.getText().equals(confirm.getText())) {
 			JOptionPane.showMessageDialog(null, "Passwords do not match");			
 		}
-		
+		DbManager db = new DbManager();
 		String firstName = fName.getText();
 		String lastName = lName.getText();
 		String birthday = bday.getText();
@@ -248,13 +251,10 @@ public class NewUserForm extends JFrame{
 		String emailAddress = email.getText();
 		String username = userName.getText();
 		String userPassword = password.getText();
-		String confirmedPassword = confirm.getText();
+		//String confirmedPassword = confirm.getText();
 		
-		//change birthday into Date for storing in db
-		DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
-		Date date = format.parse(birthday);
-		DbManager db = new DbManager();
-		//db.createNewMember(username, firstName, lastName, emailAddress, date, userPassword, 0, phoneNumber, areacode, status);
+		db.createNewMember(username, firstName, lastName, emailAddress, birthday, userPassword, 
+							staffID, areacode, phoneNumber, status);
 	}
 	
 	//cancel button action listener than calls the closeFrame() method

@@ -53,7 +53,7 @@ public class EditUserForm extends JFrame {
 		add(background);
 		background.setLayout(null);
 		
-		JLabel form = new JLabel(new ImageIcon(NewUserForm.class.getResource("StaffViewAssets/NewUserForm.png")));
+		JLabel form = new JLabel(new ImageIcon(NewUserForm.class.getResource("/StaffViewAssets/NewUserForm.png")));
 		form.setBounds(22, 32, 472, 597);
 		form.setLayout(null);
 		fName = new JTextField(20);

@@ -15,6 +15,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import Database.DbManager;
+import Panels.StaffView;
 
 
 
@@ -39,8 +40,11 @@ public class StrengthAndFlexForm  extends JFrame{
 	JButton calculate;
 	JButton save;
 	JButton cancel;
-
-	public StrengthAndFlexForm(String username) {
+	
+	int staffID;
+	
+	public StrengthAndFlexForm(String username, int staffID) {
+		this.staffID = staffID;
 		parentFrame = new JFrame();
 		parentFrame.setTitle("Strength and Flex Form");
 		parentFrame.setSize(1200, 675);
@@ -142,7 +146,7 @@ public class StrengthAndFlexForm  extends JFrame{
 				Integer sar = Integer.parseInt(sitAndReach.getText());
 				
 				//call method to create the form
-				if(db.createNewMemberSFForm(username, pu, omsu, sar)) {
+				if(db.createNewMemberSFForm(username, staffID, pu, omsu, sar)) {
 					JOptionPane.showMessageDialog(null, "Form added.");
 					parentFrame.dispose();
 				}

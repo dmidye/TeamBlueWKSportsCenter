@@ -15,6 +15,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import Database.DbManager;
+import Panels.StaffView;
 
 public class BodyCompForm extends JFrame{
 	
@@ -23,7 +24,9 @@ public class BodyCompForm extends JFrame{
 	 */
 	
 	private static final long serialVersionUID = 1L;
-	
+	calculations result = new calculations();
+	JLabel bmiResult;
+	JButton calculate2;
 	Font font1 = new Font("Agency FB", Font.PLAIN, 25);
 	JFrame parentFrame;
 	JTextField bmi;
@@ -53,8 +56,10 @@ public class BodyCompForm extends JFrame{
 	JButton calculate;
 	JButton save;
 	JButton cancel;
+	int staffID;
 
-	public BodyCompForm(String username) {
+	public BodyCompForm(String username, int staffID) {
+		this.staffID = staffID;
 		parentFrame = new JFrame();
 		parentFrame.setTitle("Body Compositions Form");
 		parentFrame.setSize(1200, 675);
@@ -84,6 +89,11 @@ public class BodyCompForm extends JFrame{
 		bmi.setFont(font1);
 		bmi.setEditable(true);
 		form.add(bmi);
+		
+		bmiResult = new JLabel("Results Here");
+		bmiResult.setBounds(350, 77, 150, 25);
+		bmiResult.setFont(font1);
+		form.add(bmiResult);
 		
 		calculate = new JButton(new ImageIcon(StaffView.class.getResource("/StaffViewAssets/CalculateButton.png")));
 		calculate.setBounds(175, 72, 153, 33);
@@ -159,6 +169,15 @@ public class BodyCompForm extends JFrame{
 		waistToHipRatio.setFont(font1);
 		waistToHipRatio.setEditable(true);
 		form.add(waistToHipRatio);
+		
+		calculate2 = new JButton(new ImageIcon(StaffView.class.getResource("/StaffViewAssets/CalculateButton.png")));
+		calculate2.setBounds(600, 205, 153, 33);
+		calculate2.setOpaque(false);
+		calculate2.setContentAreaFilled(false);
+		calculate2.setBorderPainted(false);
+		calculate2.setFocusPainted(false);
+		calculate2.addActionListener(new calculateButton2());
+		form.add(calculate2);
 		
 		//Select Assessment Type
 		
@@ -328,7 +347,7 @@ public class BodyCompForm extends JFrame{
 				Integer a = Integer.parseInt(arm.getText());
 				Integer thi = Integer.parseInt(thigh.getText());
 				Integer abd = Integer.parseInt(abdomen.getText());
-				//Integer ca = Integer.parseInt(calf.getText());
+				Integer ca = Integer.parseInt(calf.getText());
 				Integer wc = Integer.parseInt(waistCircumference.getText());
 				Integer hc = Integer.parseInt(hipCircumference.getText());
 				//Integer wthr = Integer.parseInt(waistToHipRatio.getText());
@@ -340,14 +359,14 @@ public class BodyCompForm extends JFrame{
 				//Integer at = Integer.parseInt(abdomenType.getText());
 				Integer sup = Integer.parseInt(suprailiac.getText());
 				Integer tt = Integer.parseInt(thighType.getText());
-				//Integer bd = Integer.parseInt(bodyDensity.getText());
+				Integer bd = Integer.parseInt(bodyDensity.getText());
 				Integer pbf = Integer.parseInt(percentBodyFat.getText());
 				Integer lw = Integer.parseInt(leanWeight.getText());
 				Integer dbf = Integer.parseInt(desiredBodyFat.getText());
 				
 				//call method to create the form
-				if(db.createNewMemberBCForm(username, BMI, fa, a, thi, -1, wc, hc, prot, ch, 
-											ma, tri, sub, abd, sup, tt, pbf, lw, -1, dbf)) {
+				if(db.createNewMemberBCForm(username, staffID, BMI, fa, a, thi, -1, ca, wc, hc, prot, ch, 
+											ma, tri, sub, abd, sup, tt, pbf, lw, bd, dbf)) {
 					JOptionPane.showMessageDialog(null, "Form added.");
 					parentFrame.dispose();
 				}
@@ -386,6 +405,16 @@ public class BodyCompForm extends JFrame{
 				}				
 			}
 		}
+		bmiResult.setText(result.resultBMI(bmi.getText()));
 		}
 	} // end CalculateButton()
+	
+	public class calculateButton2 implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			Double hip = Double.parseDouble(hipCircumference.getText());
+			Double waist = Double.parseDouble(waistCircumference.getText());
+			String calculation = String.format("%.2f", result.waistToHipRatio(hip, waist));
+			waistToHipRatio.setText(calculation);
+		}
+	}
 }

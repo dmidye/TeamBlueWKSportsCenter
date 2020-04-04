@@ -20,6 +20,7 @@ import javax.swing.table.JTableHeader;
 
 
 import Database.DbManager;
+import Panels.StaffView;
 
 public class MemberComments  extends JFrame{
 	/**

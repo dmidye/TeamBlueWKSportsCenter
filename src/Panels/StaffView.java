@@ -1,4 +1,4 @@
-package OtherPanels;
+package Panels;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -9,6 +9,11 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import OtherPanels.AdminView;
+import OtherPanels.AssessmentView;
+import OtherPanels.LookupForm;
+import OtherPanels.NewUserForm;
 
 public class StaffView extends JFrame {
 	JButton newMember;
@@ -21,7 +26,7 @@ public class StaffView extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public StaffView() {
+	public StaffView(int staffID) {
 		setTitle("Staff View");
 		setSize(1200, 675);
 		setLocationRelativeTo(null);
@@ -45,7 +50,7 @@ public class StaffView extends JFrame {
 		newMember.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new NewUserForm();				
+				new NewUserForm(staffID);				
 			}
 		});
 		background.add(newMember);
@@ -76,7 +81,7 @@ public class StaffView extends JFrame {
 		assessment.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new AssessmentView();
+				new AssessmentView(staffID);
 			}
 		});
 		background.add(assessment);
