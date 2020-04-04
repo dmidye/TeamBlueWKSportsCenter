@@ -3,6 +3,8 @@ import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -11,7 +13,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Locale;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
+import javax.naming.SizeLimitExceededException;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -88,6 +93,14 @@ public class NewUserForm extends JFrame{
 		form.add(bday);
 		
 		areaCode = new JTextField(3);
+		areaCode = new JTextField();
+		areaCode.addKeyListener(new KeyAdapter() {
+		    public void keyTyped(KeyEvent e) {
+		        if (areaCode.getText().length() >= 3 ) // limit textfield to 3 characters
+		            e.consume(); 
+		    }
+		});
+		
 		areaCode.setBounds(120, 170, 44, 25);
 		areaCode.setOpaque(false);
 		areaCode.setBorder(javax.swing.BorderFactory.createEmptyBorder());
@@ -136,22 +149,22 @@ public class NewUserForm extends JFrame{
 		form.add(confirm);
 		
 		group = new ButtonGroup();
-		JRadioButton member = new JRadioButton();
+		JRadioButton member = new JRadioButton("Member");
 		member.setBounds(89, 393, 25, 25);
 		member.setOpaque(false);
 		form.add(member);
 		
-		JRadioButton fStaff = new JRadioButton();
+		JRadioButton fStaff = new JRadioButton("Front Desk");
 		fStaff.setBounds(205, 393, 25, 25);
 		fStaff.setOpaque(false);
 		form.add(fStaff);
 		
-		JRadioButton Trainer = new JRadioButton();
+		JRadioButton Trainer = new JRadioButton("Trainer");
 		Trainer.setBounds(300, 393, 25, 25);
 		Trainer.setOpaque(false);
 		form.add(Trainer);
 		
-		JRadioButton Admin = new JRadioButton();
+		JRadioButton Admin = new JRadioButton("Admin");
 		Admin.setBounds(390, 393, 25, 25);
 		Admin.setOpaque(false);
 		form.add(Admin);
@@ -189,6 +202,33 @@ public class NewUserForm extends JFrame{
 		this.dispose();
 	}
 	
+	//email validation
+	private boolean validateEmail(String email) {
+	      String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
+	      return email.matches(regex);
+	 }
+	
+	//birthday validation
+	final static String DATE_FORMAT = "MM-dd-yyyy";
+	private boolean dateValidation(String date) {
+        try {
+            DateFormat df = new SimpleDateFormat(DATE_FORMAT);
+            df.setLenient(false);
+            df.parse(date);
+            return true;
+        } catch (ParseException e) {
+        	e.printStackTrace();
+            return false;
+        }
+	}
+	
+	private boolean phoneValidation(String phone) {
+		if(Pattern.matches("[0-9]{7}", phone)) {
+			return true;
+		}
+		return false;
+	}
+	
 	//method to add a new user to the database
 	private void addUser() throws SQLException, ParseException {
 		
@@ -209,52 +249,78 @@ public class NewUserForm extends JFrame{
 				break;		
 			}
 		}
-		
-		//check for user type
-		//check that a user type is selected
-		String status = null;
-		Enumeration<AbstractButton> buttons = group.getElements();
-				
-		while(buttons.hasMoreElements()) {
-			AbstractButton button = buttons.nextElement();
-
-            if (button.isSelected()) {
-                status = button.getText().replaceAll(" ", "");//trim spaces
-            }
-		}
-		if(status == null) {//if no button is selected, initialize member to member status
-			JOptionPane.showMessageDialog(null, "Please select a user type");
-		}
-		
-		//check to see if areaCode is a number
+	
 		try {
-			Integer areaCodeNum = Integer.parseInt(areaCode.getText());
+			//check that a user type is selected
+			String status = null;
+			Enumeration<AbstractButton> buttons = group.getElements();
+			
+			while(buttons.hasMoreElements()) {
+				AbstractButton button = buttons.nextElement();
+	            if (button.isSelected()) {
+	                status = button.getText().replaceAll(" ", "");//trim spaces
+	            }
+			}
+
+			DbManager db = new DbManager();
+			String firstName = fName.getText();
+			String lastName = lName.getText();
+			String birthday = bday.getText();
+			String areacode = areaCode.getText();
+			String phoneNumber = phone.getText();
+			String emailAddress = email.getText();
+			String username = userName.getText();
+			String userPassword = password.getText();
+			//String confirmedPassword = confirm.getText();
+			
+			//FORM VALIDATION START
+			if(status == null) {
+				throw new NullStatusException();
+			}
+			
+			Integer areaCodeNum = Integer.parseInt(areaCode.getText());//throws number format exception if fails
+			
+			if(areaCode.getText().length() > 3 ) {
+				throw new SizeLimitExceededException();
+			} 
+			if(!password.getText().equals(confirm.getText())) {
+				throw new PasswordMismatchException();	
+			}
+			if(!validateEmail(emailAddress)) { 
+				throw new InvalidEmailException();
+			}
+			if(!dateValidation(birthday)) {
+				throw new InvalidDateException();
+			}
+			if(!phoneValidation(phoneNumber)) {
+				throw new InvalidPhoneException();
+			}
+			//FORM VALIDATION END
+			
+			if(db.createNewMember(username, firstName, lastName, emailAddress, birthday, userPassword, 
+								staffID, areacode, phoneNumber, status)) {
+				JOptionPane.showMessageDialog(null, "Member added.");
+			} else {
+				JOptionPane.showMessageDialog(null, "A user with that username already exists.");
+			}
+			
 		} catch(NumberFormatException e) {
-			JOptionPane.showMessageDialog(null, "Area Code must be a number");
+			JOptionPane.showMessageDialog(null, "Area Code must be a number.");
 			areaCode.setText("");
-		}
-		if(areaCode.getText().length() > 3 ) {
-			JOptionPane.showMessageDialog(null, "Area Code must be three digits long");
+		} catch(SizeLimitExceededException e) {
+			JOptionPane.showMessageDialog(null, "Area Code must be three digits long.");
 			areaCode.setText("");
+		} catch(PasswordMismatchException e) {
+			JOptionPane.showMessageDialog(null, "Passwords do not match.");		
+		} catch(InvalidEmailException e) {
+			JOptionPane.showMessageDialog(null, "Email must be in the form: example@mail.com");		
+		} catch(NullStatusException e) {
+			JOptionPane.showMessageDialog(null, "Please select a status.");		
+		} catch(InvalidPhoneException e) {
+			JOptionPane.showMessageDialog(null, "Phone number must have 7 digits.");
+		} catch(InvalidDateException e) {
+        	JOptionPane.showMessageDialog(null, "Date must be in the form: mm-dd-yyyy");
 		}
-		
-		//check to make sure password and confirmed password match
-		if(!password.getText().equals(confirm.getText())) {
-			JOptionPane.showMessageDialog(null, "Passwords do not match");			
-		}
-		DbManager db = new DbManager();
-		String firstName = fName.getText();
-		String lastName = lName.getText();
-		String birthday = bday.getText();
-		String areacode = areaCode.getText();
-		String phoneNumber = phone.getText();
-		String emailAddress = email.getText();
-		String username = userName.getText();
-		String userPassword = password.getText();
-		//String confirmedPassword = confirm.getText();
-		
-		db.createNewMember(username, firstName, lastName, emailAddress, birthday, userPassword, 
-							staffID, areacode, phoneNumber, status);
 	}
 	
 	//cancel button action listener than calls the closeFrame() method
@@ -277,4 +343,12 @@ public class NewUserForm extends JFrame{
 			}
 		}
 	}
+	
+	// Exceptions for form validation
+	private class PasswordMismatchException extends Exception {}
+	private class InvalidEmailException extends Exception {}
+	private class NullStatusException extends Exception {}
+	private class InvalidPhoneException extends Exception {}
+	private class InvalidDateException extends Exception {}
+	
 }
