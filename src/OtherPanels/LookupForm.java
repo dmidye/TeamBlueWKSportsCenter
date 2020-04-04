@@ -11,6 +11,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
@@ -123,6 +124,9 @@ public class LookupForm extends JFrame{
 					ResultSet rs = db.lookupMember(username);
 					if(rs != null) {
 						new EditUserForm(rs);	
+					} else {
+						JOptionPane.showMessageDialog(null, "Username does not exist.");
+
 					}
 				} catch (SQLException | ParseException e1) {
 					// TODO Auto-generated catch block

@@ -298,6 +298,7 @@ public class EditUserForm extends JFrame {
 			if(db.updateMember(username, firstName, lastName, emailAddress, birthday, userPassword, 
 								  phoneNumber, areacode, status)) {
 				JOptionPane.showMessageDialog(null, "Member updated.");
+				dispose();
 			} 
 			
 		} catch(NumberFormatException e) {
