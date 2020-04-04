@@ -60,16 +60,16 @@ public class BodyCompForm extends JFrame{
 
 	public BodyCompForm(String username, int staffID) {
 		this.staffID = staffID;
-		parentFrame = new JFrame();
-		parentFrame.setTitle("Body Compositions Form");
-		parentFrame.setSize(1200, 675);
-		parentFrame.setLocationRelativeTo(null);
-		parentFrame.setResizable(false);
-		parentFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);		
+		
+		setTitle("Body Compositions Form");
+		setSize(1200, 675);
+		setLocationRelativeTo(null);
+		setResizable(false);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);		
 				
-		parentFrame.setLayout(new BorderLayout());
+		setLayout(new BorderLayout());
 		JLabel background = new JLabel(new ImageIcon(StaffView.class.getResource("/StaffViewAssets/staffViewBackground2.png")));
-		parentFrame.add(background);
+		add(background);
 		background.setLayout(null);
 		
 		JLabel form = new JLabel(new ImageIcon(NewUserForm.class.getResource("/StaffViewAssets/BodyCompForm.png")));
@@ -302,12 +302,12 @@ public class BodyCompForm extends JFrame{
 		
 		background.add(form);
 		
-		parentFrame.setVisible(true);
+		setVisible(true);
 	}
 	
 	//method of closing the frame
 	private void closeFrame() {
-		parentFrame.dispose();
+		dispose();
 	}//end closeFrame()
 	
 	//calculate BMI
@@ -368,7 +368,7 @@ public class BodyCompForm extends JFrame{
 				if(db.createNewMemberBCForm(username, staffID, BMI, fa, a, thi, -1, ca, wc, hc, prot, ch, 
 											ma, tri, sub, abd, sup, tt, pbf, lw, bd, dbf)) {
 					JOptionPane.showMessageDialog(null, "Form added.");
-					parentFrame.dispose();
+					closeFrame();
 				}
 			} catch (SQLException e1) {
 				System.out.println("Error connecting to database.");

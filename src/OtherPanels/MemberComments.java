@@ -58,9 +58,6 @@ public class MemberComments  extends JFrame{
 		//create tables to add to the tabbed pane
 		try {
 			loadCommentTabs();
-//			Component[] arr = loadCommentTabs();
-//			form.add(arr[0]);
-//			form.add(arr[1]);
 			
 			//grey out the "mark read" button when in closed tab
 			ChangeListener changeListener = new ChangeListener() {
@@ -132,7 +129,7 @@ public class MemberComments  extends JFrame{
 		setVisible(true);
 	}
 	
-	// gets table data for open and closed comments, creates tables out of the data, and adds the table to a 
+	// gets table data for open and closed comments, creates tables out of the data and adds the table to a 
 	// tab in the JTabbedPane
 	private JTabbedPane populateTables() throws SQLException {
 		DbManager db = new DbManager();
@@ -145,14 +142,14 @@ public class MemberComments  extends JFrame{
 			tableOpen = new JTable(new Object[0][0], columnNames);
 			tableClosed = new JTable(new Object[0][0], columnNames);
 		} else {
-			// if no open comments
+			// if no open comments and some closed comments
 			if(commentsOpen == null) {
 				tableOpen = new JTable(new Object[0][0], columnNames);
 			} else {
 				tableOpen = new JTable(commentsOpen, columnNames);
 			}
 			
-			// if no closed comments
+			// if no closed comments and some open comments
 			if(commentsClosed == null) {
 				tableClosed = new JTable(new Object[0][0], columnNames);
 			} else {
@@ -198,8 +195,7 @@ public class MemberComments  extends JFrame{
 		this.add(buttonPanel,BorderLayout.SOUTH);	
 		
 		Component[] arr = new Component[2];
-//		arr[0] = tabbedPane;
-//		arr[1] = buttonPanel;
+
 		return arr;
 	}
 }

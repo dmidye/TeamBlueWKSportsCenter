@@ -45,16 +45,15 @@ public class StrengthAndFlexForm  extends JFrame{
 	
 	public StrengthAndFlexForm(String username, int staffID) {
 		this.staffID = staffID;
-		parentFrame = new JFrame();
-		parentFrame.setTitle("Strength and Flex Form");
-		parentFrame.setSize(1200, 675);
-		parentFrame.setLocationRelativeTo(null);
-		parentFrame.setResizable(false);
-		parentFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
+		setTitle("Strength and Flex Form");
+		setSize(1200, 675);
+		setLocationRelativeTo(null);
+		setResizable(false);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
 				
-		parentFrame.setLayout(new BorderLayout());
+		setLayout(new BorderLayout());
 		JLabel background = new JLabel(new ImageIcon(StrengthAndFlexForm.class.getResource("/StaffViewAssets/staffViewBackground2.png")));
-		parentFrame.add(background);
+		add(background);
 		background.setLayout(null);
 		
 		JLabel form = new JLabel(new ImageIcon(StrengthAndFlexForm.class.getResource("/StaffViewAssets/strengthAndFlexForm.png")));
@@ -115,12 +114,12 @@ public class StrengthAndFlexForm  extends JFrame{
 		
 		background.add(form);
 		
-		parentFrame.setVisible(true);
+		setVisible(true);
 	}
 	
 	//method of closing the frame
 	private void closeFrame() {
-		parentFrame.dispose();
+		dispose();
 	}
 	
 	
@@ -148,7 +147,7 @@ public class StrengthAndFlexForm  extends JFrame{
 				//call method to create the form
 				if(db.createNewMemberSFForm(username, staffID, pu, omsu, sar)) {
 					JOptionPane.showMessageDialog(null, "Form added.");
-					parentFrame.dispose();
+					closeFrame();
 				}
 
 			} catch (SQLException e1) {

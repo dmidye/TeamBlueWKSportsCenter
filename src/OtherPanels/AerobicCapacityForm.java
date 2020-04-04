@@ -52,16 +52,15 @@ public class AerobicCapacityForm  extends JFrame{
 	
 	public AerobicCapacityForm(String username, int staffID) {
 		this.staffID = staffID;
-		parentFrame = new JFrame();
-		parentFrame.setTitle("Aerobic Capacity Form");
-		parentFrame.setSize(1200, 675);
-		parentFrame.setLocationRelativeTo(null);
-		parentFrame.setResizable(false);
-		parentFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);		
+		setTitle("Aerobic Capacity Form");
+		setSize(1200, 675);
+		setLocationRelativeTo(null);
+		setResizable(false);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);		
 				
-		parentFrame.setLayout(new BorderLayout());
+		setLayout(new BorderLayout());
 		JLabel background = new JLabel(new ImageIcon(StaffView.class.getResource("/StaffViewAssets/staffViewBackground2.png")));
-		parentFrame.add(background);
+		add(background);
 		background.setLayout(null);
 		
 		JLabel form = new JLabel(new ImageIcon(NewUserForm.class.getResource("/StaffViewAssets/AerobicCapacityForm.png")));
@@ -162,12 +161,12 @@ public class AerobicCapacityForm  extends JFrame{
 		
 		background.add(form);
 		
-		parentFrame.setVisible(true);
+		setVisible(true);
 	}
 	
 	//method of closing the frame
 	private void closeFrame() {
-		parentFrame.dispose();
+		dispose();
 	}
 	
 	//calculate aerobic capacity or Max VO2
@@ -214,7 +213,7 @@ public class AerobicCapacityForm  extends JFrame{
 				//call method to create the form
 				if(db.createNewMemberACForm(username, staffID, hrm, rhr, fthr, prot, tim, mv02)) {
 					JOptionPane.showMessageDialog(null, "Form added.");
-					parentFrame.dispose();
+					closeFrame();
 				}
 
 			} catch (SQLException e1) {
