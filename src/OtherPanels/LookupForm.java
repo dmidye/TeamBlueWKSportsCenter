@@ -3,6 +3,8 @@ import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.text.ParseException;
 
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -11,6 +13,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
+
+import java.sql.ResultSet;
+
+import Database.DbManager;
 
 
 
@@ -111,7 +117,18 @@ public class LookupForm extends JFrame{
 		
 		private class lookUpUserButton implements ActionListener{
 			public void actionPerformed(ActionEvent e) {
-				new EditUserForm();			
+				String username = userName.getText().trim();
+				try {
+					DbManager db = new DbManager();
+					ResultSet rs = db.lookupMember(username);
+					if(rs != null) {
+						new EditUserForm(rs);	
+					}
+				} catch (SQLException | ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+						
 			}
 		}
 	}

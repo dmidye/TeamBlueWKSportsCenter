@@ -93,14 +93,12 @@ public class NewUserForm extends JFrame{
 		form.add(bday);
 		
 		areaCode = new JTextField(3);
-		areaCode = new JTextField();
 		areaCode.addKeyListener(new KeyAdapter() {
 		    public void keyTyped(KeyEvent e) {
 		        if (areaCode.getText().length() >= 3 ) // limit textfield to 3 characters
 		            e.consume(); 
 		    }
 		});
-		
 		areaCode.setBounds(120, 170, 44, 25);
 		areaCode.setOpaque(false);
 		areaCode.setBorder(javax.swing.BorderFactory.createEmptyBorder());
@@ -202,36 +200,9 @@ public class NewUserForm extends JFrame{
 		this.dispose();
 	}
 	
-	//email validation
-	private boolean validateEmail(String email) {
-	      String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
-	      return email.matches(regex);
-	 }
-	
-	//birthday validation
-	final static String DATE_FORMAT = "MM-dd-yyyy";
-	private boolean dateValidation(String date) {
-        try {
-            DateFormat df = new SimpleDateFormat(DATE_FORMAT);
-            df.setLenient(false);
-            df.parse(date);
-            return true;
-        } catch (ParseException e) {
-        	e.printStackTrace();
-            return false;
-        }
-	}
-	
-	private boolean phoneValidation(String phone) {
-		if(Pattern.matches("[0-9]{7}", phone)) {
-			return true;
-		}
-		return false;
-	}
-	
 	//method to add a new user to the database
 	private void addUser() throws SQLException, ParseException {
-		
+		FieldValidation fv = new FieldValidation();
 		ArrayList<String> list = new ArrayList<String>();
 		list.add(fName.getText());
 		list.add(lName.getText());
@@ -286,13 +257,13 @@ public class NewUserForm extends JFrame{
 			if(!password.getText().equals(confirm.getText())) {
 				throw new PasswordMismatchException();	
 			}
-			if(!validateEmail(emailAddress)) { 
+			if(!fv.validateEmail(emailAddress)) { 
 				throw new InvalidEmailException();
 			}
-			if(!dateValidation(birthday)) {
+			if(!fv.dateValidation(birthday)) {
 				throw new InvalidDateException();
 			}
-			if(!phoneValidation(phoneNumber)) {
+			if(!fv.phoneValidation(phoneNumber)) {
 				throw new InvalidPhoneException();
 			}
 			//FORM VALIDATION END
@@ -300,6 +271,7 @@ public class NewUserForm extends JFrame{
 			if(db.createNewMember(username, firstName, lastName, emailAddress, birthday, userPassword, 
 								staffID, areacode, phoneNumber, status)) {
 				JOptionPane.showMessageDialog(null, "Member added.");
+				dispose();
 			} else {
 				JOptionPane.showMessageDialog(null, "A user with that username already exists.");
 			}

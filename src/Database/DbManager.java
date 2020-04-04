@@ -111,21 +111,20 @@ public class DbManager {
 	 * Update member
 	 * 
 	 */
-	 public boolean updateMember(String userName, String firstName, String lastName, String email, Date birthday, String password, 
-			 int createdBy, Integer phone, Integer areaCode, String status) throws SQLException, ParseException {
+	 public boolean updateMember(String userName, String firstName, String lastName, 
+			 					String email, String birthday, String password, 
+			 					String phone, String areaCode, String status) throws SQLException, ParseException {
 	    	
 	    	// Create a connection to the database.
 	    conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
 	
 	    // Create a Statement object for the query.
 	    Statement stmt = conn.createStatement();
-	    String pattern = "yyyy-MM-dd";
-	    SimpleDateFormat formatter = new SimpleDateFormat(pattern);
-	    String birthdayString = formatter.format(birthday);    
+	    
 	    try {
 		    stmt.executeUpdate("UPDATE wk_sports_center_db.user "
 						+ "SET memberFirst = '" + firstName + "', memberLast = '" + lastName + 
-						"', memberEmail = '" + email + "', memberBday = '" + birthdayString + 
+						"', memberEmail = '" + email + "', memberBday = '" + birthday + 
 						"', memberPswd = '" + password + "', phone = '" + phone + 
 						"', areaCode = '" + areaCode + "', status = '" + status + "'"
 					   + "WHERE username = '" + userName + "'");

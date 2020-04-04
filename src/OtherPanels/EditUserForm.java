@@ -1,11 +1,19 @@
 package OtherPanels;
 import java.awt.BorderLayout;
 import java.awt.Font;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
+import javax.naming.SizeLimitExceededException;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -15,6 +23,10 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
+
+import Database.DbManager;
+
+import java.sql.ResultSet;
 
 
 
@@ -38,8 +50,9 @@ public class EditUserForm extends JFrame {
 	JButton saveUser;
 	JButton Cancel;
 	JButton remove;
-	public EditUserForm() {
-		
+	ResultSet rs;
+	public EditUserForm(ResultSet rs) throws SQLException {
+		this.rs = rs;
 		//TODO: set each JTextField to display the information corresponding the user
 		
 		setTitle("Edit User");
@@ -56,7 +69,7 @@ public class EditUserForm extends JFrame {
 		JLabel form = new JLabel(new ImageIcon(NewUserForm.class.getResource("/StaffViewAssets/NewUserForm.png")));
 		form.setBounds(22, 32, 472, 597);
 		form.setLayout(null);
-		fName = new JTextField(20);
+		fName = new JTextField(rs.getString("memberFirst"), 20);
 		fName.setBounds(120, 50, 278, 25);
 		fName.setOpaque(false);
 		fName.setBorder(javax.swing.BorderFactory.createEmptyBorder());
@@ -64,7 +77,7 @@ public class EditUserForm extends JFrame {
 		fName.setEditable(true);
 		form.add(fName);
 		
-		lName = new JTextField(20);
+		lName = new JTextField(rs.getString("memberLast"), 20);
 		lName.setBounds(120, 90, 278, 25);
 		lName.setOpaque(false);
 		lName.setBorder(javax.swing.BorderFactory.createEmptyBorder());
@@ -72,7 +85,7 @@ public class EditUserForm extends JFrame {
 		lName.setEditable(true);
 		form.add(lName);
 		
-		bday = new JTextField(20);
+		bday = new JTextField(rs.getString("memberBday"), 20);
 		bday.setBounds(120, 130, 278, 25);
 		bday.setOpaque(false);
 		bday.setBorder(javax.swing.BorderFactory.createEmptyBorder());
@@ -80,7 +93,13 @@ public class EditUserForm extends JFrame {
 		bday.setEditable(true);
 		form.add(bday);
 		
-		areaCode = new JTextField(3);
+		areaCode = new JTextField(rs.getString("areaCode"), 3);
+		areaCode.addKeyListener(new KeyAdapter() {
+		    public void keyTyped(KeyEvent e) {
+		        if (areaCode.getText().length() >= 3 ) // limit textfield to 3 characters
+		            e.consume(); 
+		    }
+		});
 		areaCode.setBounds(120, 170, 44, 25);
 		areaCode.setOpaque(false);
 		areaCode.setBorder(javax.swing.BorderFactory.createEmptyBorder());
@@ -88,7 +107,7 @@ public class EditUserForm extends JFrame {
 		areaCode.setEditable(true);
 		form.add(areaCode);
 		
-		phone = new JTextField(20);
+		phone = new JTextField(rs.getString("phone"), 20);
 		phone.setBounds(170, 170, 250, 25);
 		phone.setOpaque(false);
 		phone.setBorder(javax.swing.BorderFactory.createEmptyBorder());
@@ -96,7 +115,7 @@ public class EditUserForm extends JFrame {
 		phone.setEditable(true);
 		form.add(phone);
 		
-		email = new JTextField(20);
+		email = new JTextField(rs.getString("memberEmail"), 20);
 		email.setBounds(120, 210, 250, 25);
 		email.setOpaque(false);
 		email.setBorder(javax.swing.BorderFactory.createEmptyBorder());
@@ -104,15 +123,15 @@ public class EditUserForm extends JFrame {
 		email.setEditable(true);
 		form.add(email);
 		
-		userName = new JTextField(20);
+		userName = new JTextField(rs.getString("username"), 20);
 		userName.setBounds(120, 248, 250, 25);
 		userName.setOpaque(false);
 		userName.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		userName.setFont(font1);
-		userName.setEditable(true);
+		userName.setEditable(false);
 		form.add(userName);
 		
-		password = new JTextField(20);
+		password = new JTextField(rs.getString("memberPswd"), 20);
 		password.setBounds(120, 285, 250, 25);
 		password.setOpaque(false);
 		password.setBorder(javax.swing.BorderFactory.createEmptyBorder());
@@ -129,22 +148,22 @@ public class EditUserForm extends JFrame {
 		form.add(confirm);
 		
 		group = new ButtonGroup();
-		JRadioButton member = new JRadioButton();
+		JRadioButton member = new JRadioButton("Member");
 		member.setBounds(89, 393, 25, 25);
 		member.setOpaque(false);
 		form.add(member);
 		
-		JRadioButton fStaff = new JRadioButton();
+		JRadioButton fStaff = new JRadioButton("FrontDesk");
 		fStaff.setBounds(205, 393, 25, 25);
 		fStaff.setOpaque(false);
 		form.add(fStaff);
 		
-		JRadioButton Trainer = new JRadioButton();
+		JRadioButton Trainer = new JRadioButton("Trainer");
 		Trainer.setBounds(300, 393, 25, 25);
 		Trainer.setOpaque(false);
 		form.add(Trainer);
 		
-		JRadioButton Admin = new JRadioButton();
+		JRadioButton Admin = new JRadioButton("Admin");
 		Admin.setBounds(390, 393, 25, 25);
 		Admin.setOpaque(false);
 		form.add(Admin);
@@ -154,6 +173,21 @@ public class EditUserForm extends JFrame {
 		group.add(Trainer);
 		group.add(Admin);
 		
+		//pre-select status radio button
+		String status = rs.getString("status");
+		System.out.println("status: " + status);
+		if(status.equals(member.getText())) {
+			member.setSelected(true);
+		}
+		if(status.equals(fStaff.getText().replaceAll(" ", ""))) {
+			fStaff.setSelected(true);
+		}
+		if(status.equals(Trainer.getText())) {
+			Trainer.setSelected(true);
+		}
+		if(status.equals(Admin.getText())) {
+			Admin.setSelected(true);
+		}
 		
 		saveUser = new JButton(new ImageIcon(NewUserForm.class.getResource("/StaffViewAssets/Look-upSaveButton.png")));
 		saveUser.setBounds(20, 468,142, 59);
@@ -170,8 +204,7 @@ public class EditUserForm extends JFrame {
 		remove.setContentAreaFilled(false);
 		remove.setBorderPainted(false);
 		remove.setFocusPainted(false);
-		//TODO: complete removeButton ActionListener
-		//remove.addActionListener(new removeButton());
+		remove.addActionListener(new removeButton());
 		form.add(remove);
 		
 		Cancel = new JButton(new ImageIcon(NewUserForm.class.getResource("/StaffViewAssets/CancelLookUpButton.png")));
@@ -193,9 +226,10 @@ public class EditUserForm extends JFrame {
 	private void closeFrame() {
 		this.dispose();
 	}
-	//method to add a new user to the database
-	private void editUser() {
 		
+	//method to add a new user to the database
+	private void editUser() throws SQLException, HeadlessException, ParseException {
+		FieldValidation fv = new FieldValidation();
 		ArrayList<String> list = new ArrayList<String>();
 		list.add(fName.getText());
 		list.add(lName.getText());
@@ -213,53 +247,76 @@ public class EditUserForm extends JFrame {
 				break;		
 			}
 		}
-		
-		//check for user type
-		//check that a user type is selected
-		String status = null;
-		Enumeration<AbstractButton> buttons = group.getElements();
-				
-		while(buttons.hasMoreElements()) {
-			AbstractButton button = buttons.nextElement();
-
-            if (button.isSelected()) {
-                status = button.getText().replaceAll(" ", "");//trim spaces
-            }
-		}
-		if(status == null) {//if no button is selected, initialize member to member status
-			JOptionPane.showMessageDialog(null, "Please select a user type");
-		}
-		
-		//check to see if areaCode is a number
 		try {
-		Integer areaCodeNum = Integer.parseInt(areaCode.getText());
+			//check for user type
+			//check that a user type is selected
+			String status = null;
+			Enumeration<AbstractButton> buttons = group.getElements();
+					
+			while(buttons.hasMoreElements()) {
+				AbstractButton button = buttons.nextElement();
+	
+	            if (button.isSelected()) {
+	                status = button.getText().replaceAll(" ", "");//trim spaces
+	            }
+			}
+			DbManager db = new DbManager();
+			String firstName = fName.getText();
+			String lastName = lName.getText();
+			String birthday = bday.getText();
+			String areacode = areaCode.getText();
+			String phoneNumber = phone.getText();
+			String emailAddress = email.getText();
+			String username = userName.getText();
+			String userPassword = password.getText();
+			//String confirmedPassword = confirm.getText();
+			
+			//FORM VALIDATION START
+			if(status == null) {
+				throw new NullStatusException();
+			}
+			
+			Integer areaCodeNum = Integer.parseInt(areaCode.getText());//throws number format exception if fails
+			
+			if(areaCode.getText().length() > 3 ) {//area code greater than 3 characters
+				throw new SizeLimitExceededException();
+			} 
+			if(!password.getText().equals(confirm.getText())) {//passwords don't match
+				throw new PasswordMismatchException();	
+			}
+			if(!fv.validateEmail(emailAddress)) {//wrong email pattern
+				throw new InvalidEmailException();
+			}
+			if(!fv.dateValidation(birthday)) {//wront date format
+				throw new InvalidDateException();
+			}
+			if(!fv.phoneValidation(phoneNumber)) {//wrong phone format
+				throw new InvalidPhoneException();
+			}
+			//FORM VALIDATION END
+			
+			if(db.updateMember(username, firstName, lastName, emailAddress, birthday, userPassword, 
+								  phoneNumber, areacode, status)) {
+				JOptionPane.showMessageDialog(null, "Member updated.");
+			} 
+			
 		} catch(NumberFormatException e) {
-			JOptionPane.showMessageDialog(null, "Area Code must be a number");
+			JOptionPane.showMessageDialog(null, "Area Code must be a number.");
 			areaCode.setText("");
-		}
-		if(areaCode.getText().length() > 3 ) {
-			JOptionPane.showMessageDialog(null, "Area Code must be three digits long");
+		} catch(SizeLimitExceededException e) {
+			JOptionPane.showMessageDialog(null, "Area Code must be three digits long.");
 			areaCode.setText("");
-		}
-		
-		//check to make sure password and confirmed password match
-		if(!password.getText().equals(confirm.getText())) {
-			JOptionPane.showMessageDialog(null, "Passwords do not match");			
-		}
-		
-		
-		
-		String firstName = fName.getText();
-		String lastName = lName.getText();
-		String birthday = bday.getText();
-		String areacode = areaCode.getText();
-		String phoneNumber = phone.getText();
-		String emailAddress = email.getText();
-		String userPassword = password.getText();
-		String confirmedPassword = confirm.getText();
-		
-		//TODO: add code to save updates to database here.
-		
+		} catch(PasswordMismatchException e) {
+			JOptionPane.showMessageDialog(null, "Passwords do not match.");		
+		} catch(InvalidEmailException e) {
+			JOptionPane.showMessageDialog(null, "Email must be in the form: example@mail.com");		
+		} catch(NullStatusException e) {
+			JOptionPane.showMessageDialog(null, "Please select a member type.");	
+		} catch(InvalidPhoneException e) {
+			JOptionPane.showMessageDialog(null, "Phone number must have 7 digits.");
+		} catch(InvalidDateException e) {
+	    	JOptionPane.showMessageDialog(null, "Date must be in the form: mm-dd-yyyy");
+		}	
 	}
 	
 	//cancel button action listener than calls the closeFrame() method
@@ -272,11 +329,42 @@ public class EditUserForm extends JFrame {
 	
 	private class saveButton implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			editUser();
+			try {
+				editUser();
+			} catch (HeadlessException e1) {
+				e1.printStackTrace();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			} catch (ParseException e1) {
+				e1.printStackTrace();
+			}
 		}
 	}
 	
 	//TODO: create removeButton actionListener
+	private class removeButton implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			int confirmed = JOptionPane.showConfirmDialog(null, 
+			        "Are you sure you want to exit the program?", "Exit Program Message Box",
+			        JOptionPane.YES_NO_OPTION);
+
+		    if (confirmed == JOptionPane.YES_OPTION) {
+		      	try {
+					DbManager db = new DbManager();
+					db.deleteMember(rs.getString("username"));
+					dispose();
+				} catch (SQLException | ParseException e1) {
+					e1.printStackTrace();
+				}	
+		    }
+		}
+	}
 	
+	// Exceptions for form validation
+	private class PasswordMismatchException extends Exception {}
+	private class InvalidEmailException extends Exception {}
+	private class NullStatusException extends Exception {}
+	private class InvalidPhoneException extends Exception {}
+	private class InvalidDateException extends Exception {}
 
 }
