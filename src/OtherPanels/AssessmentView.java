@@ -14,7 +14,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import Database.DbManager;
-import Panels.StaffView;
 
 public class AssessmentView extends JFrame {
 	
@@ -29,11 +28,11 @@ public class AssessmentView extends JFrame {
 	JButton coronaryRisk;
 	JButton addNote;
 	JButton back;
-	int staffID;
+	private String userID;
 	
-	public AssessmentView(int staffID) {
-			this.staffID = staffID;
+	public AssessmentView(String userID) {
 		
+			this.userID = userID;
 			setTitle("Assessment View");
 			setSize(1200, 675);
 			setLocationRelativeTo(null);
@@ -98,6 +97,7 @@ public class AssessmentView extends JFrame {
 			addNote.setContentAreaFilled(false);
 			addNote.setBorderPainted(false);
 			addNote.setFocusPainted(false);
+			addNote.addActionListener(new notes());
 			background.add(addNote);
 			
 			//back button
@@ -123,6 +123,15 @@ public class AssessmentView extends JFrame {
 		}
 	}
 	
+	private class notes implements ActionListener{		
+
+		public void actionPerformed(ActionEvent e) {
+			
+			new notesForm(userID);
+		}
+	}
+	
+	
 	private class bodyCompAssessment implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			String userName;
@@ -135,7 +144,7 @@ public class AssessmentView extends JFrame {
 				try {
 					DbManager db = new DbManager();
 					if(db.lookupMember(userName) != null) {
-						new BodyCompForm(userName, staffID);	
+						new BodyCompForm(userName, userID);	
 					} else {
 						JOptionPane.showMessageDialog(null, "Username doesn't exist.");
 					}
@@ -159,7 +168,7 @@ public class AssessmentView extends JFrame {
 				try {
 					DbManager db = new DbManager();
 					if(db.lookupMember(userName) != null) {
-						new AerobicCapacityForm(userName, staffID);	
+						new AerobicCapacityForm(userName, userID);	
 					} else {
 						JOptionPane.showMessageDialog(null, "Username doesn't exist.");
 					}
@@ -181,7 +190,7 @@ public class AssessmentView extends JFrame {
 				try {
 					DbManager db = new DbManager();
 					if(db.lookupMember(userName) != null) {
-						new StrengthAndFlexForm(userName, staffID);
+						new StrengthAndFlexForm(userName, userID);
 					} else {
 						JOptionPane.showMessageDialog(null, "Username doesn't exist.");
 					}
@@ -204,7 +213,7 @@ public class AssessmentView extends JFrame {
 				try {
 					DbManager db = new DbManager();
 					if(db.lookupMember(userName) != null) {
-						new CoronaryRiskForm(userName, staffID);	
+						new CoronaryRiskForm(userName, userID);	
 					} else {
 						JOptionPane.showMessageDialog(null, "Username doesn't exist.");
 					}

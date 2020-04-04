@@ -15,7 +15,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import Database.DbManager;
-import Panels.StaffView;
 
 
 
@@ -28,7 +27,7 @@ public class AerobicCapacityForm  extends JFrame{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	JFrame parentFrame;
+	private String userID;
 	JTextField heartRateMax;
 	JTextField restingHeartRate;
 	JTextField finalTestedHeartRate;
@@ -47,21 +46,18 @@ public class AerobicCapacityForm  extends JFrame{
 	JButton calculate;
 	JButton save;
 	JButton cancel;
-	
-	int staffID;
-	
-	public AerobicCapacityForm(String username, int staffID) {
-		this.staffID = staffID;
-		parentFrame = new JFrame();
-		parentFrame.setTitle("Aerobic Capacity Form");
-		parentFrame.setSize(1200, 675);
-		parentFrame.setLocationRelativeTo(null);
-		parentFrame.setResizable(false);
-		parentFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);		
+
+	public AerobicCapacityForm(String username, String userID) {
+		this.userID = userID;
+		setTitle("Aerobic Capacity Form");
+		setSize(1200, 675);
+		setLocationRelativeTo(null);
+		setResizable(false);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);		
 				
-		parentFrame.setLayout(new BorderLayout());
+		setLayout(new BorderLayout());
 		JLabel background = new JLabel(new ImageIcon(StaffView.class.getResource("/StaffViewAssets/staffViewBackground2.png")));
-		parentFrame.add(background);
+		add(background);
 		background.setLayout(null);
 		
 		JLabel form = new JLabel(new ImageIcon(NewUserForm.class.getResource("/StaffViewAssets/AerobicCapacityForm.png")));
@@ -162,12 +158,12 @@ public class AerobicCapacityForm  extends JFrame{
 		
 		background.add(form);
 		
-		parentFrame.setVisible(true);
+		setVisible(true);
 	}
 	
 	//method of closing the frame
 	private void closeFrame() {
-		parentFrame.dispose();
+		dispose();
 	}
 	
 	//calculate aerobic capacity or Max VO2
@@ -210,11 +206,11 @@ public class AerobicCapacityForm  extends JFrame{
 				Integer tim = Integer.parseInt(timeInMinutes.getText());
 				//Double wt = Double.parseDouble(workTarget.getText());
 				Double mv02 = Double.parseDouble(calculateAC(heartRateMax.getText(), restingHeartRate.getText()));
-				
+
 				//call method to create the form
-				if(db.createNewMemberACForm(username, staffID, hrm, rhr, fthr, prot, tim, mv02)) {
+				if(db.createNewMemberACForm(username, hrm, rhr, fthr, 0, 0, prot, tim, mv02)) {
 					JOptionPane.showMessageDialog(null, "Form added.");
-					parentFrame.dispose();
+					closeFrame();
 				}
 
 			} catch (SQLException e1) {

@@ -15,7 +15,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import Database.DbManager;
-import Panels.StaffView;
 
 
 
@@ -28,7 +27,7 @@ public class StrengthAndFlexForm  extends JFrame{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	JFrame parentFrame;
+	private String userID;
 	JTextField pushups;
 	JTextField oneMinuteSitUps;
 	JTextField sitAndReach;
@@ -40,21 +39,19 @@ public class StrengthAndFlexForm  extends JFrame{
 	JButton calculate;
 	JButton save;
 	JButton cancel;
-	
-	int staffID;
-	
-	public StrengthAndFlexForm(String username, int staffID) {
-		this.staffID = staffID;
-		parentFrame = new JFrame();
-		parentFrame.setTitle("Strength and Flex Form");
-		parentFrame.setSize(1200, 675);
-		parentFrame.setLocationRelativeTo(null);
-		parentFrame.setResizable(false);
-		parentFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
+
+	public StrengthAndFlexForm(String username, String userID) {
+		
+		this.userID = userID;
+		setTitle("Strength and Flex Form");
+		setSize(1200, 675);
+		setLocationRelativeTo(null);
+		setResizable(false);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
 				
-		parentFrame.setLayout(new BorderLayout());
+		setLayout(new BorderLayout());
 		JLabel background = new JLabel(new ImageIcon(StrengthAndFlexForm.class.getResource("/StaffViewAssets/staffViewBackground2.png")));
-		parentFrame.add(background);
+		add(background);
 		background.setLayout(null);
 		
 		JLabel form = new JLabel(new ImageIcon(StrengthAndFlexForm.class.getResource("/StaffViewAssets/strengthAndFlexForm.png")));
@@ -115,12 +112,12 @@ public class StrengthAndFlexForm  extends JFrame{
 		
 		background.add(form);
 		
-		parentFrame.setVisible(true);
+		setVisible(true);
 	}
 	
 	//method of closing the frame
 	private void closeFrame() {
-		parentFrame.dispose();
+		dispose();
 	}
 	
 	
@@ -146,9 +143,9 @@ public class StrengthAndFlexForm  extends JFrame{
 				Integer sar = Integer.parseInt(sitAndReach.getText());
 				
 				//call method to create the form
-				if(db.createNewMemberSFForm(username, staffID, pu, omsu, sar)) {
+				if(db.createNewMemberSFForm(username, pu, omsu, sar)) {
 					JOptionPane.showMessageDialog(null, "Form added.");
-					parentFrame.dispose();
+					closeFrame();
 				}
 
 			} catch (SQLException e1) {

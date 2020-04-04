@@ -15,7 +15,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import Database.DbManager;
-import Panels.StaffView;
 
 public class BodyCompForm extends JFrame{
 	
@@ -27,8 +26,9 @@ public class BodyCompForm extends JFrame{
 	calculations result = new calculations();
 	JLabel bmiResult;
 	JButton calculate2;
+	private String userID;
 	Font font1 = new Font("Agency FB", Font.PLAIN, 25);
-	JFrame parentFrame;
+
 	JTextField bmi;
 	JTextField forearm;
 	JTextField arm;
@@ -56,20 +56,18 @@ public class BodyCompForm extends JFrame{
 	JButton calculate;
 	JButton save;
 	JButton cancel;
-	int staffID;
 
-	public BodyCompForm(String username, int staffID) {
-		this.staffID = staffID;
-		parentFrame = new JFrame();
-		parentFrame.setTitle("Body Compositions Form");
-		parentFrame.setSize(1200, 675);
-		parentFrame.setLocationRelativeTo(null);
-		parentFrame.setResizable(false);
-		parentFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);		
+	public BodyCompForm(String username, String userID) {
+		this.userID = userID;
+		setTitle("Body Compositions Form");
+		setSize(1200, 675);
+		setLocationRelativeTo(null);
+		setResizable(false);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);		
 				
-		parentFrame.setLayout(new BorderLayout());
+		setLayout(new BorderLayout());
 		JLabel background = new JLabel(new ImageIcon(StaffView.class.getResource("/StaffViewAssets/staffViewBackground2.png")));
-		parentFrame.add(background);
+		add(background);
 		background.setLayout(null);
 		
 		JLabel form = new JLabel(new ImageIcon(NewUserForm.class.getResource("/StaffViewAssets/BodyCompForm.png")));
@@ -302,12 +300,12 @@ public class BodyCompForm extends JFrame{
 		
 		background.add(form);
 		
-		parentFrame.setVisible(true);
+		setVisible(true);
 	}
 	
 	//method of closing the frame
 	private void closeFrame() {
-		parentFrame.dispose();
+		dispose();
 	}//end closeFrame()
 	
 	//calculate BMI
@@ -342,33 +340,33 @@ public class BodyCompForm extends JFrame{
 		public void actionPerformed(ActionEvent e) {
 			try {
 				DbManager db = new DbManager();
-				Double BMI = Double.parseDouble(bmi.getText());
-				Integer fa = Integer.parseInt(forearm.getText());
-				Integer a = Integer.parseInt(arm.getText());
-				Integer thi = Integer.parseInt(thigh.getText());
-				Integer abd = Integer.parseInt(abdomen.getText());
-				Integer ca = Integer.parseInt(calf.getText());
-				Integer wc = Integer.parseInt(waistCircumference.getText());
-				Integer hc = Integer.parseInt(hipCircumference.getText());
-				//Integer wthr = Integer.parseInt(waistToHipRatio.getText());
+				double BMI = Double.parseDouble(bmi.getText());
+				int fa = Integer.parseInt(forearm.getText());
+				int a = Integer.parseInt(arm.getText());
+				int thi = Integer.parseInt(thigh.getText());
+				int abd = Integer.parseInt(abdomen.getText());
+				int ca = Integer.parseInt(calf.getText());
+				int wc = Integer.parseInt(waistCircumference.getText());
+				int hc = Integer.parseInt(hipCircumference.getText());
+				//double wthr = Double.parseDouble(waistToHipRatio.getText());
 				String prot = protocol.getText();
-				Integer ch = Integer.parseInt(chest.getText());
-				Integer ma = Integer.parseInt(midaxillary.getText());
-				Integer tri = Integer.parseInt(triceps.getText());
-				Integer sub = Integer.parseInt(subscapular.getText());
-				//Integer at = Integer.parseInt(abdomenType.getText());
-				Integer sup = Integer.parseInt(suprailiac.getText());
-				Integer tt = Integer.parseInt(thighType.getText());
-				Integer bd = Integer.parseInt(bodyDensity.getText());
-				Integer pbf = Integer.parseInt(percentBodyFat.getText());
-				Integer lw = Integer.parseInt(leanWeight.getText());
-				Integer dbf = Integer.parseInt(desiredBodyFat.getText());
+				int ch = Integer.parseInt(chest.getText());
+				int ma = Integer.parseInt(midaxillary.getText());
+				int tri = Integer.parseInt(triceps.getText());
+				int sub = Integer.parseInt(subscapular.getText());
+				int at = Integer.parseInt(abdomenType.getText());
+				int sup = Integer.parseInt(suprailiac.getText());
+				int tt = Integer.parseInt(thighType.getText());
+				int bd = Integer.parseInt(bodyDensity.getText());
+				int pbf = Integer.parseInt(percentBodyFat.getText());
+				int lw = Integer.parseInt(leanWeight.getText());
+				int dbf = Integer.parseInt(desiredBodyFat.getText());
 				
 				//call method to create the form
-				if(db.createNewMemberBCForm(username, staffID, BMI, fa, a, thi, -1, ca, wc, hc, prot, ch, 
-											ma, tri, sub, abd, sup, tt, pbf, lw, bd, dbf)) {
+				if(db.createNewMemberBCForm(username, userID, BMI, fa, a, thi, abd, ca, wc, hc, prot, ch, 
+											ma, tri, sub, at, sup, tt, bd, pbf, lw, dbf)) {
 					JOptionPane.showMessageDialog(null, "Form added.");
-					parentFrame.dispose();
+					closeFrame();
 				}
 			} catch (SQLException e1) {
 				System.out.println("Error connecting to database.");

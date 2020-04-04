@@ -15,7 +15,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import Database.DbManager;
-import Panels.StaffView;
 
 
 
@@ -26,7 +25,7 @@ public class CoronaryRiskForm extends JFrame{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	JFrame parentFrame;
+	
 	JTextField systolic;
 	JTextField diastolic;
 	JTextField yearsSmoked;
@@ -40,28 +39,25 @@ public class CoronaryRiskForm extends JFrame{
 	JTextField triglycerides;
 	JTextField glucose;
 	
+	private String userID;
 	JLabel name;
 	Font font1 = new Font("Agency FB", Font.PLAIN, 25);
 	
 	JButton calculate;
 	JButton save;
 	JButton cancel;
-	
-	int staffID;
-	
-	public CoronaryRiskForm(String username, int staffID) {
-		this.staffID = staffID;
-		
-		parentFrame = new JFrame();
-		parentFrame.setTitle("Coronary Risk Form");
-		parentFrame.setSize(1200, 675);
-		parentFrame.setLocationRelativeTo(null);
-		parentFrame.setResizable(false);
-		parentFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);		
+
+	public CoronaryRiskForm(String username, String userID) {
+		this.userID = userID;
+		setTitle("Coronary Risk Form");
+		setSize(1200, 675);
+		setLocationRelativeTo(null);
+		setResizable(false);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);		
 				
-		parentFrame.setLayout(new BorderLayout());
+		setLayout(new BorderLayout());
 		JLabel background = new JLabel(new ImageIcon(CoronaryRiskForm.class.getResource("/StaffViewAssets/staffViewBackground2.png")));
-		parentFrame.add(background);
+		add(background);
 		background.setLayout(null);
 		
 		JLabel form = new JLabel(new ImageIcon(CoronaryRiskForm.class.getResource("/StaffViewAssets/CoronaryRiskForm.png")));
@@ -193,12 +189,12 @@ public class CoronaryRiskForm extends JFrame{
 		
 		background.add(form);
 		
-		parentFrame.setVisible(true);
+		setVisible(true);
 	}
 	
 	//method of closing the frame
 	private void closeFrame() {
-		parentFrame.dispose();
+		dispose();
 	}
 	
 	//cancel button action listener than calls the closeFrame() method
@@ -229,13 +225,11 @@ public class CoronaryRiskForm extends JFrame{
 				Integer ldlc = Integer.parseInt(ldlCholesterol.getText());
 				Integer trig = Integer.parseInt(triglycerides.getText());
 				Integer gluc = Integer.parseInt(glucose.getText());
-				Integer ys = Integer.parseInt(yearsSmoked.getText());
-				Integer sn = Integer.parseInt(stressNumber.getText());
 				
 				//call method to create the form
-				if(db.createNewMemberCRForm(username, staffID, sys, dias, ys, ibw, pa, sn, tc, hdlr, hdlc, ldlc, trig, gluc)) {
+				if(db.createNewMemberCRForm(username, sys, dias, ibw, pa, tc, hdlr, hdlc, ldlc, trig, gluc)) {
 					JOptionPane.showMessageDialog(null, "Form added.");
-					parentFrame.dispose();
+					closeFrame();
 				}
 
 			} catch (SQLException e1) {
