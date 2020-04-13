@@ -19,13 +19,14 @@ import Database.DbManager;
 
 
 
+
 public class CoronaryRiskForm extends JFrame{
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+	JFrame parentFrame;
 	JTextField systolic;
 	JTextField diastolic;
 	JTextField yearsSmoked;
@@ -39,16 +40,18 @@ public class CoronaryRiskForm extends JFrame{
 	JTextField triglycerides;
 	JTextField glucose;
 	
-	private String userID;
 	JLabel name;
 	Font font1 = new Font("Agency FB", Font.PLAIN, 25);
 	
 	JButton calculate;
 	JButton save;
 	JButton cancel;
-
-	public CoronaryRiskForm(String username, String userID) {
-		this.userID = userID;
+	
+	String staffID;
+	
+	public CoronaryRiskForm(String username, String staffID) {
+		this.staffID = staffID;
+		
 		setTitle("Coronary Risk Form");
 		setSize(1200, 675);
 		setLocationRelativeTo(null);
@@ -225,9 +228,12 @@ public class CoronaryRiskForm extends JFrame{
 				Integer ldlc = Integer.parseInt(ldlCholesterol.getText());
 				Integer trig = Integer.parseInt(triglycerides.getText());
 				Integer gluc = Integer.parseInt(glucose.getText());
+				Integer ys = Integer.parseInt(yearsSmoked.getText());
+				Integer sn = Integer.parseInt(stressNumber.getText());
 				
 				//call method to create the form
-				if(db.createNewMemberCRForm(username, sys, dias, ibw, pa, tc, hdlr, hdlc, ldlc, trig, gluc)) {
+				if(db.createNewMemberCRForm(username, staffID, sys, dias, ys, ibw, pa, 
+											sn, tc, hdlr, hdlc, ldlc, trig, gluc)) {
 					JOptionPane.showMessageDialog(null, "Form added.");
 					closeFrame();
 				}

@@ -45,13 +45,14 @@ public class NewUserForm extends JFrame{
 	JTextField userName;
 	JTextField password;
 	JTextField confirm;
-    ButtonGroup group;
+    ButtonGroup group1;
+    ButtonGroup group2;
 	JButton saveUser;
 	JButton Cancel;
 	
-	int staffID;
+	String staffID;
 	
-	public NewUserForm(int staffID) {
+	public NewUserForm(String staffID) {
 		this.staffID = staffID;
 		
 		setTitle("New User");
@@ -65,7 +66,7 @@ public class NewUserForm extends JFrame{
 		add(background);
 		background.setLayout(null);
 		
-		JLabel form = new JLabel(new ImageIcon(NewUserForm.class.getResource("/StaffViewAssets/NewUserForm.png")));
+		JLabel form = new JLabel(new ImageIcon(NewUserForm.class.getResource("/StaffViewAssets/userForm.png")));
 		form.setBounds(22, 32, 472, 597);
 		form.setLayout(null);
 		fName = new JTextField(20);
@@ -84,6 +85,8 @@ public class NewUserForm extends JFrame{
 		lName.setEditable(true);
 		form.add(lName);
 		
+		
+		
 		bday = new JTextField(20);
 		bday.setBounds(120, 130, 278, 25);
 		bday.setOpaque(false);
@@ -92,16 +95,28 @@ public class NewUserForm extends JFrame{
 		bday.setEditable(true);
 		form.add(bday);
 		
+		group2 = new ButtonGroup();
+		JRadioButton male = new JRadioButton("M");
+		male.setBounds(170, 175, 25, 25);
+		male.setOpaque(false);
+		form.add(male);
+		
+		JRadioButton female = new JRadioButton("F");
+		female.setBounds(330, 175, 25, 25);
+		female.setOpaque(false);
+		form.add(female);
+		
+		group2.add(male);
+		group2.add(female);
+		
 		areaCode = new JTextField(3);
-		areaCode = new JTextField();
 		areaCode.addKeyListener(new KeyAdapter() {
 		    public void keyTyped(KeyEvent e) {
 		        if (areaCode.getText().length() >= 3 ) // limit textfield to 3 characters
 		            e.consume(); 
 		    }
 		});
-		
-		areaCode.setBounds(120, 170, 44, 25);
+		areaCode.setBounds(120, 200, 44, 25);
 		areaCode.setOpaque(false);
 		areaCode.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		areaCode.setFont(font1);
@@ -109,7 +124,7 @@ public class NewUserForm extends JFrame{
 		form.add(areaCode);
 		
 		phone = new JTextField(20);
-		phone.setBounds(170, 170, 250, 25);
+		phone.setBounds(170, 200, 250, 25);
 		phone.setOpaque(false);
 		phone.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		phone.setFont(font1);
@@ -117,7 +132,7 @@ public class NewUserForm extends JFrame{
 		form.add(phone);
 		
 		email = new JTextField(20);
-		email.setBounds(120, 210, 250, 25);
+		email.setBounds(120, 236, 250, 25);
 		email.setOpaque(false);
 		email.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		email.setFont(font1);
@@ -125,7 +140,7 @@ public class NewUserForm extends JFrame{
 		form.add(email);
 		
 		userName = new JTextField(20);
-		userName.setBounds(120, 248, 250, 25);
+		userName.setBounds(120, 273, 250, 25);
 		userName.setOpaque(false);
 		userName.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		userName.setFont(font1);
@@ -133,7 +148,7 @@ public class NewUserForm extends JFrame{
 		form.add(userName);
 		
 		password = new JTextField(20);
-		password.setBounds(120, 285, 250, 25);
+		password.setBounds(120, 313, 250, 25);
 		password.setOpaque(false);
 		password.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		password.setFont(font1);
@@ -141,38 +156,38 @@ public class NewUserForm extends JFrame{
 		form.add(password);
 		
 		confirm = new JTextField(20);
-		confirm.setBounds(120, 325, 250, 25);
+		confirm.setBounds(120, 353, 250, 25);
 		confirm.setOpaque(false);
 		confirm.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		confirm.setFont(font1);
 		confirm.setEditable(true);
 		form.add(confirm);
 		
-		group = new ButtonGroup();
+		group1 = new ButtonGroup();
 		JRadioButton member = new JRadioButton("Member");
-		member.setBounds(89, 393, 25, 25);
+		member.setBounds(89, 420, 25, 35);
 		member.setOpaque(false);
 		form.add(member);
 		
 		JRadioButton fStaff = new JRadioButton("Front Desk");
-		fStaff.setBounds(205, 393, 25, 25);
+		fStaff.setBounds(205, 420, 25, 35);
 		fStaff.setOpaque(false);
 		form.add(fStaff);
 		
 		JRadioButton Trainer = new JRadioButton("Trainer");
-		Trainer.setBounds(300, 393, 25, 25);
+		Trainer.setBounds(300, 420, 25, 35);
 		Trainer.setOpaque(false);
 		form.add(Trainer);
 		
 		JRadioButton Admin = new JRadioButton("Admin");
-		Admin.setBounds(390, 393, 25, 25);
+		Admin.setBounds(390, 420, 25, 35);
 		Admin.setOpaque(false);
 		form.add(Admin);
 		
-		group.add(member);
-		group.add(fStaff);
-		group.add(Trainer);
-		group.add(Admin);
+		group1.add(member);
+		group1.add(fStaff);
+		group1.add(Trainer);
+		group1.add(Admin);
 		
 		
 		saveUser = new JButton(new ImageIcon(NewUserForm.class.getResource("/StaffViewAssets/AddUserButton.png")));
@@ -202,36 +217,9 @@ public class NewUserForm extends JFrame{
 		this.dispose();
 	}
 	
-	//email validation
-	private boolean validateEmail(String email) {
-	      String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
-	      return email.matches(regex);
-	 }
-	
-	//birthday validation
-	final static String DATE_FORMAT = "MM-dd-yyyy";
-	private boolean dateValidation(String date) {
-        try {
-            DateFormat df = new SimpleDateFormat(DATE_FORMAT);
-            df.setLenient(false);
-            df.parse(date);
-            return true;
-        } catch (ParseException e) {
-        	e.printStackTrace();
-            return false;
-        }
-	}
-	
-	private boolean phoneValidation(String phone) {
-		if(Pattern.matches("[0-9]{7}", phone)) {
-			return true;
-		}
-		return false;
-	}
-	
 	//method to add a new user to the database
 	private void addUser() throws SQLException, ParseException {
-		
+		FieldValidation fv = new FieldValidation();
 		ArrayList<String> list = new ArrayList<String>();
 		list.add(fName.getText());
 		list.add(lName.getText());
@@ -253,13 +241,22 @@ public class NewUserForm extends JFrame{
 		try {
 			//check that a user type is selected
 			String status = null;
-			Enumeration<AbstractButton> buttons = group.getElements();
+			Enumeration<AbstractButton> buttons = group1.getElements();
 			
 			while(buttons.hasMoreElements()) {
 				AbstractButton button = buttons.nextElement();
 	            if (button.isSelected()) {
 	                status = button.getText().replaceAll(" ", "");//trim spaces
 	            }
+			}
+			
+			String gender = null;
+			Enumeration<AbstractButton> buttons2 = group2.getElements();
+			while(buttons2.hasMoreElements()) {
+				AbstractButton button2 = buttons2.nextElement();
+				if(button2.isSelected()) {
+					gender = button2.getText().replaceAll(" ", "");
+				}
 			}
 
 			DbManager db = new DbManager();
@@ -286,20 +283,21 @@ public class NewUserForm extends JFrame{
 			if(!password.getText().equals(confirm.getText())) {
 				throw new PasswordMismatchException();	
 			}
-			if(!validateEmail(emailAddress)) { 
+			if(!fv.validateEmail(emailAddress)) { 
 				throw new InvalidEmailException();
 			}
-			if(!dateValidation(birthday)) {
+			if(!fv.dateValidation(birthday)) {
 				throw new InvalidDateException();
 			}
-			if(!phoneValidation(phoneNumber)) {
+			if(!fv.phoneValidation(phoneNumber)) {
 				throw new InvalidPhoneException();
 			}
 			//FORM VALIDATION END
 			
-			if(db.createNewMember(username, firstName, lastName, emailAddress, birthday, userPassword, 
+			if(db.createNewMember(username, firstName, lastName, gender, emailAddress, birthday, userPassword, 
 								staffID, areacode, phoneNumber, status)) {
 				JOptionPane.showMessageDialog(null, "Member added.");
+				dispose();
 			} else {
 				JOptionPane.showMessageDialog(null, "A user with that username already exists.");
 			}
@@ -319,7 +317,7 @@ public class NewUserForm extends JFrame{
 		} catch(InvalidPhoneException e) {
 			JOptionPane.showMessageDialog(null, "Phone number must have 7 digits.");
 		} catch(InvalidDateException e) {
-        	JOptionPane.showMessageDialog(null, "Date must be in the form: mm-dd-yyyy");
+        	JOptionPane.showMessageDialog(null, "Date must be in the form: yyyy-mm-dd");
 		}
 	}
 	

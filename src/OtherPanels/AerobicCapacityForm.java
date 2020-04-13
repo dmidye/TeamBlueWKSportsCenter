@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 
@@ -13,6 +14,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+
+import com.mysql.cj.protocol.Resultset;
 
 import Database.DbManager;
 
@@ -27,7 +30,7 @@ public class AerobicCapacityForm  extends JFrame{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private String userID;
+	JFrame parentFrame;
 	JTextField heartRateMax;
 	JTextField restingHeartRate;
 	JTextField finalTestedHeartRate;
@@ -46,9 +49,13 @@ public class AerobicCapacityForm  extends JFrame{
 	JButton calculate;
 	JButton save;
 	JButton cancel;
-
-	public AerobicCapacityForm(String username, String userID) {
-		this.userID = userID;
+	ResultSet rs;
+	String staffID;
+	
+	public AerobicCapacityForm(String username, String staffID) throws SQLException, ParseException {
+		this.staffID = staffID;
+		DbManager db = new DbManager();
+		rs = db.lookupMember(username);
 		setTitle("Aerobic Capacity Form");
 		setSize(1200, 675);
 		setLocationRelativeTo(null);
@@ -64,7 +71,7 @@ public class AerobicCapacityForm  extends JFrame{
 		form.setBounds(50, 20, 1105, 641);
 		form.setLayout(null);
 		
-		name = new JLabel (username);
+		name = new JLabel (rs.getString("memberFirst") + " " + rs.getString("memberLast"));
 		name.setBounds(880, 40, 200, 25);
 		name.setFont(font1);
 		form.add(name);
@@ -206,9 +213,9 @@ public class AerobicCapacityForm  extends JFrame{
 				Integer tim = Integer.parseInt(timeInMinutes.getText());
 				//Double wt = Double.parseDouble(workTarget.getText());
 				Double mv02 = Double.parseDouble(calculateAC(heartRateMax.getText(), restingHeartRate.getText()));
-
+				
 				//call method to create the form
-				if(db.createNewMemberACForm(username, hrm, rhr, fthr, 0, 0, prot, tim, mv02)) {
+				if(db.createNewMemberACForm(username, staffID, hrm, rhr, fthr, prot, tim, mv02)) {
 					JOptionPane.showMessageDialog(null, "Form added.");
 					closeFrame();
 				}

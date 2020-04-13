@@ -19,6 +19,7 @@ import Database.DbManager;
 
 
 
+
 public class StrengthAndFlexForm  extends JFrame{
 	
 	
@@ -27,7 +28,7 @@ public class StrengthAndFlexForm  extends JFrame{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private String userID;
+	JFrame parentFrame;
 	JTextField pushups;
 	JTextField oneMinuteSitUps;
 	JTextField sitAndReach;
@@ -39,10 +40,11 @@ public class StrengthAndFlexForm  extends JFrame{
 	JButton calculate;
 	JButton save;
 	JButton cancel;
-
-	public StrengthAndFlexForm(String username, String userID) {
-		
-		this.userID = userID;
+	
+	String staffID;
+	
+	public StrengthAndFlexForm(String username, String staffID) {
+		this.staffID = staffID;
 		setTitle("Strength and Flex Form");
 		setSize(1200, 675);
 		setLocationRelativeTo(null);
@@ -143,7 +145,7 @@ public class StrengthAndFlexForm  extends JFrame{
 				Integer sar = Integer.parseInt(sitAndReach.getText());
 				
 				//call method to create the form
-				if(db.createNewMemberSFForm(username, pu, omsu, sar)) {
+				if(db.createNewMemberSFForm(username, staffID, pu, omsu, sar)) {
 					JOptionPane.showMessageDialog(null, "Form added.");
 					closeFrame();
 				}
