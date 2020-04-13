@@ -7,9 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.sql.SQLException;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
@@ -115,9 +113,8 @@ public class EditUserForm extends JFrame {
 		            e.consume(); 
 		    }
 		});
-    //
+    
 		areaCode.setBounds(120, 200, 44, 25);
-		
 		areaCode.setOpaque(false);
 		areaCode.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		areaCode.setFont(font1);
@@ -125,7 +122,6 @@ public class EditUserForm extends JFrame {
 		form.add(areaCode);
 		
 		phone = new JTextField(rs.getString("phone"), 20);
-    //
 		phone.setBounds(170, 200, 250, 25);
 		phone.setOpaque(false);
 		phone.setBorder(javax.swing.BorderFactory.createEmptyBorder());
@@ -134,9 +130,7 @@ public class EditUserForm extends JFrame {
 		form.add(phone);
 		
 		email = new JTextField(rs.getString("memberEmail"), 20);
-//
 		email.setBounds(120, 236, 250, 25);
-
 		email.setOpaque(false);
 		email.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		email.setFont(font1);
@@ -144,9 +138,7 @@ public class EditUserForm extends JFrame {
 		form.add(email);
 		
 		userName = new JTextField(rs.getString("username"), 20);
-//
 		userName.setBounds(120, 273, 250, 25);
-
 		userName.setOpaque(false);
 		userName.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		userName.setFont(font1);
@@ -154,9 +146,7 @@ public class EditUserForm extends JFrame {
 		form.add(userName);
 		
 		password = new JTextField(rs.getString("memberPswd"), 20);
-//
 		password.setBounds(120, 313, 250, 25);
-
 		password.setOpaque(false);
 		password.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		password.setFont(font1);
@@ -173,30 +163,22 @@ public class EditUserForm extends JFrame {
 		
 		group = new ButtonGroup();
 		JRadioButton member = new JRadioButton("Member");
-//
 		member.setBounds(89, 420, 25, 25);
-
 		member.setOpaque(false);
 		form.add(member);
 		
 		JRadioButton fStaff = new JRadioButton("FrontDesk");
-//
 		fStaff.setBounds(205, 420, 25, 25);
-
 		fStaff.setOpaque(false);
 		form.add(fStaff);
 		
 		JRadioButton Trainer = new JRadioButton("Trainer");
-///
 		Trainer.setBounds(300, 420, 25, 25);
-
 		Trainer.setOpaque(false);
 		form.add(Trainer);
 		
 		JRadioButton Admin = new JRadioButton("Admin");
-//
 		Admin.setBounds(390, 420, 25, 25);
-
 		Admin.setOpaque(false);
 		form.add(Admin);
 		
@@ -207,7 +189,6 @@ public class EditUserForm extends JFrame {
 		
 		//pre-select status radio button
 		String status = rs.getString("status");
-//
 		String gender = rs.getString("memberGender");
 
 		System.out.println("status: " + status);
@@ -227,7 +208,7 @@ public class EditUserForm extends JFrame {
 		if(gender.equals(male.getText())){
 			male.setSelected(true);
 		}
-		if(gender.contentEquals(female.getText())) {
+		if(gender.equals(female.getText())) {
 			female.setSelected(true);
 		}
 				
@@ -289,6 +270,7 @@ public class EditUserForm extends JFrame {
 				break;		
 			}
 		}
+		
 		try {
 			//check for user type
 			//check that a user type is selected
@@ -329,7 +311,7 @@ public class EditUserForm extends JFrame {
 			if(!fv.validateEmail(emailAddress)) {//wrong email pattern
 				throw new InvalidEmailException();
 			}
-			if(!fv.dateValidation(birthday)) {//wront date format
+			if(!fv.dateValidation(birthday)) {//wrong date format
 				throw new InvalidDateException();
 			}
 			if(!fv.phoneValidation(phoneNumber)) {//wrong phone format

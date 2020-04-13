@@ -26,7 +26,7 @@ public class StaffView extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public StaffView(int staffID) {
+	public StaffView(String staffID) {
 		setTitle("Staff View");
 		setSize(1200, 675);
 		setLocationRelativeTo(null);

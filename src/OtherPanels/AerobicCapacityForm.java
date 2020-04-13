@@ -19,13 +19,7 @@ import com.mysql.cj.protocol.Resultset;
 
 import Database.DbManager;
 
-
-
-
 public class AerobicCapacityForm  extends JFrame{
-	
-	
-	
 	/**
 	 * 
 	 */

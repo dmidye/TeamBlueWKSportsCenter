@@ -1,6 +1,6 @@
 package OtherPanels;
 
-public class calculations {
+public class Calculations {
 	
 	public String resultBMI(String bmiString) {
 		double bmi = Double.parseDouble(bmiString);

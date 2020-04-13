@@ -168,10 +168,7 @@ public class CoronaryRiskForm extends JFrame{
 		glucose.setEditable(true);
 		form.add(glucose);
 		
-		
-		
 		//save and cancel
-		
 		save = new JButton(new ImageIcon(StaffView.class.getResource("/StaffViewAssets/SaveButton.png")));
 		save.setBounds(600, 500, 156, 59);
 		save.setOpaque(false);

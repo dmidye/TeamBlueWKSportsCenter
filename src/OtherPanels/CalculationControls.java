@@ -16,9 +16,6 @@ import Panels.StaffView;
 
 
 public class CalculationControls  extends JFrame{
-	
-	
-	
 	/**
 	 * 
 	 */
@@ -29,8 +26,6 @@ public class CalculationControls  extends JFrame{
 	JButton cancel;
 	
 	Font font1 = new Font("Agency FB", Font.PLAIN, 25);
-	
-	
 
 	public CalculationControls() {
 		setTitle("Calculation Controls");

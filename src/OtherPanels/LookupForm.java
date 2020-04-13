@@ -54,21 +54,23 @@ public class LookupForm extends JFrame{
 			JLabel form = new JLabel(new ImageIcon(NewUserForm.class.getResource("/StaffViewAssets/Look-UpForm.png")));
 			form.setBounds(22, 32, 472, 597);
 			form.setLayout(null);
-			fName = new JTextField(20);
-			fName.setBounds(133, 185, 278, 25);
-			fName.setOpaque(false);
-			fName.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-			fName.setFont(font1);
-			fName.setEditable(true);
-			form.add(fName);
+
+			//do not need first name and last name for member lookup
+//			fName = new JTextField(20);
+//			fName.setBounds(133, 185, 278, 25);
+//			fName.setOpaque(false);
+//			fName.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+//			fName.setFont(font1);
+//			fName.setEditable(true);
+//			form.add(fName);
 			
-			lName = new JTextField(20);
-			lName.setBounds(133, 225, 278, 25);
-			lName.setOpaque(false);
-			lName.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-			lName.setFont(font1);
-			lName.setEditable(true);
-			form.add(lName);
+//			lName = new JTextField(20);
+//			lName.setBounds(133, 225, 278, 25);
+//			lName.setOpaque(false);
+//			lName.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+//			lName.setFont(font1);
+//			lName.setEditable(true);
+//			form.add(lName);
 						
 			userName = new JTextField(20);
 			userName.setBounds(133, 265, 250, 25);

@@ -16,14 +16,7 @@ import javax.swing.JTextField;
 
 import Database.DbManager;
 
-
-
-
-
 public class StrengthAndFlexForm  extends JFrame{
-	
-	
-	
 	/**
 	 * 
 	 */
@@ -90,8 +83,6 @@ public class StrengthAndFlexForm  extends JFrame{
 		sitAndReach.setEditable(true);
 		form.add(sitAndReach);
 		
-		
-		
 		//save and cancel
 		
 		save = new JButton(new ImageIcon(StaffView.class.getResource("/StaffViewAssets/SaveButton.png")));
@@ -121,8 +112,6 @@ public class StrengthAndFlexForm  extends JFrame{
 	private void closeFrame() {
 		dispose();
 	}
-	
-	
 	
 	//cancel button action listener than calls the closeFrame() method
 	//to close the frame.

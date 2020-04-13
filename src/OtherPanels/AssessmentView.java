@@ -40,8 +40,6 @@ public class AssessmentView extends JFrame {
 			setResizable(false);
 			setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);		
 			
-			
-			
 			setLayout(new BorderLayout());
 			JLabel background = new JLabel(new ImageIcon(StaffView.class.getResource("/StaffViewAssets/staffViewBackground2.png")));
 			add(background);
@@ -220,7 +218,7 @@ public class AssessmentView extends JFrame {
 
 		public void actionPerformed(ActionEvent e) {
 
-			new notesForm(staffID);
+			new NotesForm(staffID);
 		}
 	}
 

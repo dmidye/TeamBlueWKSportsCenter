@@ -21,7 +21,6 @@ public class StaffView extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 
-//
 	public StaffView(String userID) {
 
 		setTitle("Staff View");
@@ -29,8 +28,6 @@ public class StaffView extends JFrame {
 		setLocationRelativeTo(null);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
-		
-		
 		
 		setLayout(new BorderLayout());
 		JLabel background = new JLabel(new ImageIcon(StaffView.class.getResource("/StaffViewAssets/staffViewBackground2.png")));
@@ -53,9 +50,7 @@ public class StaffView extends JFrame {
 		background.add(newMember);
 		
 		//memberLookUp
-//
 		memberLookUp = new JButton(new ImageIcon(StaffView.class.getResource("/StaffViewAssets/Look-upMemberButton.png")));
-
 		memberLookUp.setBounds(360, 165, 483, 85);
 		memberLookUp.setOpaque(false);
 		memberLookUp.setContentAreaFilled(false);

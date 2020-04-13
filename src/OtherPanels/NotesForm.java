@@ -23,7 +23,7 @@ import Database.DbManager;
 
 
 
-public class notesForm extends JFrame {
+public class NotesForm extends JFrame {
 	
 	/**
 	 * 
@@ -41,7 +41,7 @@ public class notesForm extends JFrame {
 	JButton Cancel;
 	JButton remove;
 	
-	public notesForm(String userID) {
+	public NotesForm(String userID) {
 		
 		this.trainerID = userID;
 		//TODO: set each JTextField to display the information corresponding the user
@@ -53,11 +53,11 @@ public class notesForm extends JFrame {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	
 		
 		setLayout(new BorderLayout());
-		JLabel background = new JLabel(new ImageIcon(notesForm.class.getResource("/StaffViewAssets/NewUserFormBackground.png")));
+		JLabel background = new JLabel(new ImageIcon(NotesForm.class.getResource("/StaffViewAssets/NewUserFormBackground.png")));
 		add(background);
 		background.setLayout(null);
 		
-		JLabel form = new JLabel(new ImageIcon(notesForm.class.getResource("/StaffViewAssets/notesForm.png")));
+		JLabel form = new JLabel(new ImageIcon(NotesForm.class.getResource("/StaffViewAssets/notesForm.png")));
 		form.setBounds(22, 32, 472, 597);
 		form.setLayout(null);
 		userName = new JTextField(20);
@@ -78,7 +78,7 @@ public class notesForm extends JFrame {
 		notes.setEditable(true);
 		form.add(notes);		
 		
-		save = new JButton(new ImageIcon(notesForm.class.getResource("/StaffViewAssets/Look-upSaveButton.png")));
+		save = new JButton(new ImageIcon(NotesForm.class.getResource("/StaffViewAssets/Look-upSaveButton.png")));
 		save.setBounds(20, 468,142, 59);
 		save.setOpaque(false);
 		save.setContentAreaFilled(false);
@@ -87,9 +87,7 @@ public class notesForm extends JFrame {
 		save.addActionListener(new saveButton());
 		form.add(save);
 		
-		
-		
-		Cancel = new JButton(new ImageIcon(notesForm.class.getResource("/StaffViewAssets/CancelLookUpButton.png")));
+		Cancel = new JButton(new ImageIcon(NotesForm.class.getResource("/StaffViewAssets/CancelLookUpButton.png")));
 		Cancel.setBounds(280, 468,142, 59);
 		Cancel.setOpaque(false);
 		Cancel.setContentAreaFilled(false);
