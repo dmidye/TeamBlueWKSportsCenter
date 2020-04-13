@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import Database.DbManager;
-import Panels.StaffView;
+
 
 
 
@@ -41,9 +41,9 @@ public class StrengthAndFlexForm  extends JFrame{
 	JButton save;
 	JButton cancel;
 	
-	int staffID;
+	String staffID;
 	
-	public StrengthAndFlexForm(String username, int staffID) {
+	public StrengthAndFlexForm(String username, String staffID) {
 		this.staffID = staffID;
 		setTitle("Strength and Flex Form");
 		setSize(1200, 675);

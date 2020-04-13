@@ -46,6 +46,7 @@ public class EditUserForm extends JFrame {
 	JTextField userName;
 	JTextField password;
 	JTextField confirm;
+	ButtonGroup group2;
     ButtonGroup group;
 	JButton saveUser;
 	JButton Cancel;
@@ -66,7 +67,7 @@ public class EditUserForm extends JFrame {
 		add(background);
 		background.setLayout(null);
 		
-		JLabel form = new JLabel(new ImageIcon(NewUserForm.class.getResource("/StaffViewAssets/NewUserForm.png")));
+		JLabel form = new JLabel(new ImageIcon(NewUserForm.class.getResource("/StaffViewAssets/userForm.png")));
 		form.setBounds(22, 32, 472, 597);
 		form.setLayout(null);
 		fName = new JTextField(rs.getString("memberFirst"), 20);
@@ -93,6 +94,20 @@ public class EditUserForm extends JFrame {
 		bday.setEditable(true);
 		form.add(bday);
 		
+		group2 = new ButtonGroup();
+		JRadioButton male = new JRadioButton("M");
+		male.setBounds(170, 175, 25, 25);
+		male.setOpaque(false);
+		form.add(male);
+		
+		JRadioButton female = new JRadioButton("F");
+		female.setBounds(330, 175, 25, 25);
+		female.setOpaque(false);
+		form.add(female);
+		
+		group2.add(male);
+		group2.add(female);
+		
 		areaCode = new JTextField(rs.getString("areaCode"), 3);
 		areaCode.addKeyListener(new KeyAdapter() {
 		    public void keyTyped(KeyEvent e) {
@@ -100,7 +115,9 @@ public class EditUserForm extends JFrame {
 		            e.consume(); 
 		    }
 		});
-		areaCode.setBounds(120, 170, 44, 25);
+    //
+		areaCode.setBounds(120, 200, 44, 25);
+		
 		areaCode.setOpaque(false);
 		areaCode.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		areaCode.setFont(font1);
@@ -108,7 +125,8 @@ public class EditUserForm extends JFrame {
 		form.add(areaCode);
 		
 		phone = new JTextField(rs.getString("phone"), 20);
-		phone.setBounds(170, 170, 250, 25);
+    //
+		phone.setBounds(170, 200, 250, 25);
 		phone.setOpaque(false);
 		phone.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		phone.setFont(font1);
@@ -116,7 +134,9 @@ public class EditUserForm extends JFrame {
 		form.add(phone);
 		
 		email = new JTextField(rs.getString("memberEmail"), 20);
-		email.setBounds(120, 210, 250, 25);
+//
+		email.setBounds(120, 236, 250, 25);
+
 		email.setOpaque(false);
 		email.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		email.setFont(font1);
@@ -124,7 +144,9 @@ public class EditUserForm extends JFrame {
 		form.add(email);
 		
 		userName = new JTextField(rs.getString("username"), 20);
-		userName.setBounds(120, 248, 250, 25);
+//
+		userName.setBounds(120, 273, 250, 25);
+
 		userName.setOpaque(false);
 		userName.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		userName.setFont(font1);
@@ -132,7 +154,9 @@ public class EditUserForm extends JFrame {
 		form.add(userName);
 		
 		password = new JTextField(rs.getString("memberPswd"), 20);
-		password.setBounds(120, 285, 250, 25);
+//
+		password.setBounds(120, 313, 250, 25);
+
 		password.setOpaque(false);
 		password.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		password.setFont(font1);
@@ -140,7 +164,7 @@ public class EditUserForm extends JFrame {
 		form.add(password);
 		
 		confirm = new JTextField(20);
-		confirm.setBounds(120, 325, 250, 25);
+		confirm.setBounds(120, 353, 250, 25);
 		confirm.setOpaque(false);
 		confirm.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		confirm.setFont(font1);
@@ -149,22 +173,30 @@ public class EditUserForm extends JFrame {
 		
 		group = new ButtonGroup();
 		JRadioButton member = new JRadioButton("Member");
-		member.setBounds(89, 393, 25, 25);
+//
+		member.setBounds(89, 420, 25, 25);
+
 		member.setOpaque(false);
 		form.add(member);
 		
 		JRadioButton fStaff = new JRadioButton("FrontDesk");
-		fStaff.setBounds(205, 393, 25, 25);
+//
+		fStaff.setBounds(205, 420, 25, 25);
+
 		fStaff.setOpaque(false);
 		form.add(fStaff);
 		
 		JRadioButton Trainer = new JRadioButton("Trainer");
-		Trainer.setBounds(300, 393, 25, 25);
+///
+		Trainer.setBounds(300, 420, 25, 25);
+
 		Trainer.setOpaque(false);
 		form.add(Trainer);
 		
 		JRadioButton Admin = new JRadioButton("Admin");
-		Admin.setBounds(390, 393, 25, 25);
+//
+		Admin.setBounds(390, 420, 25, 25);
+
 		Admin.setOpaque(false);
 		form.add(Admin);
 		
@@ -175,6 +207,9 @@ public class EditUserForm extends JFrame {
 		
 		//pre-select status radio button
 		String status = rs.getString("status");
+//
+		String gender = rs.getString("memberGender");
+
 		System.out.println("status: " + status);
 		if(status.equals(member.getText())) {
 			member.setSelected(true);
@@ -188,7 +223,14 @@ public class EditUserForm extends JFrame {
 		if(status.equals(Admin.getText())) {
 			Admin.setSelected(true);
 		}
-		
+//
+		if(gender.equals(male.getText())){
+			male.setSelected(true);
+		}
+		if(gender.contentEquals(female.getText())) {
+			female.setSelected(true);
+		}
+				
 		saveUser = new JButton(new ImageIcon(NewUserForm.class.getResource("/StaffViewAssets/Look-upSaveButton.png")));
 		saveUser.setBounds(20, 468,142, 59);
 		saveUser.setOpaque(false);

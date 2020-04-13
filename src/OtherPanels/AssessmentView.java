@@ -14,7 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import Database.DbManager;
-import Panels.StaffView;
+
 
 public class AssessmentView extends JFrame {
 	
@@ -29,9 +29,9 @@ public class AssessmentView extends JFrame {
 	JButton coronaryRisk;
 	JButton addNote;
 	JButton back;
-	int staffID;
+	String staffID;
 	
-	public AssessmentView(int staffID) {
+	public AssessmentView(String staffID) {
 			this.staffID = staffID;
 		
 			setTitle("Assessment View");
@@ -98,6 +98,7 @@ public class AssessmentView extends JFrame {
 			addNote.setContentAreaFilled(false);
 			addNote.setBorderPainted(false);
 			addNote.setFocusPainted(false);
+			addNote.addActionListener(new notes());
 			background.add(addNote);
 			
 			//back button
@@ -214,6 +215,16 @@ public class AssessmentView extends JFrame {
 			}
 		}
 	}
+	
+	private class notes implements ActionListener{		
+
+		public void actionPerformed(ActionEvent e) {
+
+			new notesForm(staffID);
+		}
+	}
+
+
 }
 	
 	

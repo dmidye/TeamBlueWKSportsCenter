@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import Database.DbManager;
-import Panels.StaffView;
+
 
 
 
@@ -47,9 +47,9 @@ public class CoronaryRiskForm extends JFrame{
 	JButton save;
 	JButton cancel;
 	
-	int staffID;
+	String staffID;
 	
-	public CoronaryRiskForm(String username, int staffID) {
+	public CoronaryRiskForm(String username, String staffID) {
 		this.staffID = staffID;
 		
 		setTitle("Coronary Risk Form");

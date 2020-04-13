@@ -14,7 +14,9 @@ public class FieldValidation {
 	 }
 	
 	//birthday validation
-	final static String DATE_FORMAT = "MM-dd-yyyy";
+//
+	final static String DATE_FORMAT = "yyyy-MM-dd";
+
 	boolean dateValidation(String date) {
         try {
             DateFormat df = new SimpleDateFormat(DATE_FORMAT);

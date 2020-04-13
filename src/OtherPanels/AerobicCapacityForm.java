@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 
@@ -14,8 +15,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
+import com.mysql.cj.protocol.Resultset;
+
 import Database.DbManager;
-import Panels.StaffView;
 
 
 
@@ -47,11 +49,14 @@ public class AerobicCapacityForm  extends JFrame{
 	JButton calculate;
 	JButton save;
 	JButton cancel;
+	ResultSet rs;
+	String staffID;
 	
-	int staffID;
-	
-	public AerobicCapacityForm(String username, int staffID) {
+	public AerobicCapacityForm(String username, String staffID) throws SQLException, ParseException {
 		this.staffID = staffID;
+		DbManager db = new DbManager();
+		rs = db.lookupMember(username);
+
 		setTitle("Aerobic Capacity Form");
 		setSize(1200, 675);
 		setLocationRelativeTo(null);
@@ -67,7 +72,7 @@ public class AerobicCapacityForm  extends JFrame{
 		form.setBounds(50, 20, 1105, 641);
 		form.setLayout(null);
 		
-		name = new JLabel (username);
+		name = new JLabel (rs.getString("memberFirst") + " " + rs.getString("memberLast"));
 		name.setBounds(880, 40, 200, 25);
 		name.setFont(font1);
 		form.add(name);

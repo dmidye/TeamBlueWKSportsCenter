@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 
@@ -14,8 +15,10 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
+import com.mysql.cj.protocol.Resultset;
+
 import Database.DbManager;
-import Panels.StaffView;
+
 
 public class BodyCompForm extends JFrame{
 	
@@ -49,18 +52,27 @@ public class BodyCompForm extends JFrame{
 	JTextField bodyDensity;
 	JTextField percentBodyFat;
 	JTextField leanWeight;
+	JTextField fatWeight;
 	JTextField desiredBodyFat;
 	
+	JLabel waistToHipRatioResult;
 	JLabel name;
-	
+	ResultSet rs;
 	JButton calculate;
+	JButton calculate3;
 	JButton save;
 	JButton cancel;
-	int staffID;
-
-	public BodyCompForm(String username, int staffID) {
+	String staffID;
+	int dob;
+	String gender;
+	public BodyCompForm(String username, String staffID) throws SQLException, ParseException {
 		this.staffID = staffID;
-		
+
+		DbManager db = new DbManager();
+		dob = Integer.parseInt(db.getAge(username));
+	  rs = db.lookupMember(username);
+		gender = rs.getString("membergender");
+
 		setTitle("Body Compositions Form");
 		setSize(1200, 675);
 		setLocationRelativeTo(null);
@@ -76,7 +88,7 @@ public class BodyCompForm extends JFrame{
 		form.setBounds(50, 20, 1105, 641);
 		form.setLayout(null);
 		
-		name = new JLabel (username);
+		name = new JLabel (rs.getString("memberFirst") + " " + rs.getString("memberLast"));
 		name.setBounds(880, 40, 200, 25);
 		name.setFont(font1);
 		form.add(name);
@@ -179,6 +191,11 @@ public class BodyCompForm extends JFrame{
 		calculate2.addActionListener(new calculateButton2());
 		form.add(calculate2);
 		
+		waistToHipRatioResult = new JLabel();
+		waistToHipRatioResult.setBounds(502, 235, 80, 25);
+		waistToHipRatioResult.setFont(font1);
+		form.add(waistToHipRatioResult);
+		
 		//Select Assessment Type
 		
 		protocol = new JTextField(10);
@@ -246,6 +263,15 @@ public class BodyCompForm extends JFrame{
 		thighType.setEditable(true);
 		form.add(thighType);
 		
+		calculate3 = new JButton(new ImageIcon(StaffView.class.getResource("/StaffViewAssets/CalculateButton.png")));
+		calculate3.setBounds(810, 400, 153, 33);
+		calculate3.setOpaque(false);
+		calculate3.setContentAreaFilled(false);
+		calculate3.setBorderPainted(false);
+		calculate3.setFocusPainted(false);
+		calculate3.addActionListener(new calculateButton3());
+		form.add(calculate3);
+		
 		// body
 		
 		bodyDensity = new JTextField(10);
@@ -271,6 +297,14 @@ public class BodyCompForm extends JFrame{
 		leanWeight.setFont(font1);
 		leanWeight.setEditable(true);
 		form.add(leanWeight);
+		
+		fatWeight = new JTextField(10);
+		fatWeight.setBounds(365, 460, 80, 25);
+		fatWeight.setOpaque(false);
+		fatWeight.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		fatWeight.setFont(font1);
+		fatWeight.setEditable(true);
+		form.add(fatWeight);
 		
 		desiredBodyFat = new JTextField(10);
 		desiredBodyFat.setBounds(245, 486, 80, 25);
@@ -342,31 +376,32 @@ public class BodyCompForm extends JFrame{
 		public void actionPerformed(ActionEvent e) {
 			try {
 				DbManager db = new DbManager();
-				Double BMI = Double.parseDouble(bmi.getText());
-				Integer fa = Integer.parseInt(forearm.getText());
-				Integer a = Integer.parseInt(arm.getText());
-				Integer thi = Integer.parseInt(thigh.getText());
-				Integer abd = Integer.parseInt(abdomen.getText());
-				Integer ca = Integer.parseInt(calf.getText());
-				Integer wc = Integer.parseInt(waistCircumference.getText());
-				Integer hc = Integer.parseInt(hipCircumference.getText());
-				//Integer wthr = Integer.parseInt(waistToHipRatio.getText());
+				double BMI = Double.parseDouble(bmi.getText());
+				double fa = Double.parseDouble(forearm.getText());
+				double a = Double.parseDouble(arm.getText());
+				double thi = Double.parseDouble(thigh.getText());
+				double abd = Double.parseDouble(abdomen.getText());
+				double ca = Double.parseDouble(calf.getText());
+				double wc = Double.parseDouble(waistCircumference.getText());
+				double hc = Double.parseDouble(hipCircumference.getText());
+				double wthr = Double.parseDouble(waistToHipRatio.getText());
 				String prot = protocol.getText();
-				Integer ch = Integer.parseInt(chest.getText());
-				Integer ma = Integer.parseInt(midaxillary.getText());
-				Integer tri = Integer.parseInt(triceps.getText());
-				Integer sub = Integer.parseInt(subscapular.getText());
-				//Integer at = Integer.parseInt(abdomenType.getText());
-				Integer sup = Integer.parseInt(suprailiac.getText());
-				Integer tt = Integer.parseInt(thighType.getText());
-				Integer bd = Integer.parseInt(bodyDensity.getText());
-				Integer pbf = Integer.parseInt(percentBodyFat.getText());
-				Integer lw = Integer.parseInt(leanWeight.getText());
-				Integer dbf = Integer.parseInt(desiredBodyFat.getText());
+				double ch = Double.parseDouble(chest.getText());
+				double ma = Double.parseDouble(midaxillary.getText());
+				double tri = Double.parseDouble(triceps.getText());
+				double sub = Double.parseDouble(subscapular.getText());
+				double at = Double.parseDouble(abdomenType.getText());
+				double sup = Double.parseDouble(suprailiac.getText());
+				double tt = Double.parseDouble(thighType.getText());
+				double bd = Double.parseDouble(bodyDensity.getText());
+				double pbf = Double.parseDouble(percentBodyFat.getText());
+				double lw = Double.parseDouble(leanWeight.getText());
+				double fw = Double.parseDouble(fatWeight.getText());
+				double dbf = Double.parseDouble(desiredBodyFat.getText());
 				
 				//call method to create the form
-				if(db.createNewMemberBCForm(username, staffID, BMI, fa, a, thi, -1, ca, wc, hc, prot, ch, 
-											ma, tri, sub, abd, sup, tt, pbf, lw, bd, dbf)) {
+				if(db.createNewMemberBCForm(username, staffID, BMI, fa, a, thi, abd, ca, wc, hc, wthr, prot, ch, 
+											ma, tri, sub, at, sup, tt, pbf, lw, bd, fw, dbf)) {
 					JOptionPane.showMessageDialog(null, "Form added.");
 					closeFrame();
 				}
@@ -399,9 +434,20 @@ public class BodyCompForm extends JFrame{
 				
 				String bmiInches = JOptionPane.showInputDialog(inches);
 				
-				if(bmiInches != null) {					
+				if(bmiInches != null) {	
+					calculations calc = new calculations();
 					String calculatedBMI = calculateBMI(bmiWeight, bmiFeet, bmiInches);
+					String bfp = calc.bodyFatPercentage(gender, calculatedBMI, dob);
+					String fw = calc.calculateBodyFat(bfp, bmiWeight);
+					String lw = calc.calculateLeanWeight(fw, bmiWeight);
 					bmi.setText(calculatedBMI);
+					
+					percentBodyFat.setText(bfp);
+					fatWeight.setText(fw);
+					leanWeight.setText(lw);
+					
+				
+					
 				}				
 			}
 		}
@@ -415,6 +461,26 @@ public class BodyCompForm extends JFrame{
 			Double waist = Double.parseDouble(waistCircumference.getText());
 			String calculation = String.format("%.2f", result.waistToHipRatio(hip, waist));
 			waistToHipRatio.setText(calculation);
+			waistToHipRatioResult.setText(result.waistToHipRatioResult(calculation, gender));			
+		}
+	}
+	
+	public class calculateButton3 implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			
+			String ch = chest.getText();
+			String ma = midaxillary.getText();
+			String tri = triceps.getText();
+			String sub = subscapular.getText();
+			String at = abdomenType.getText();
+			String sup = suprailiac.getText();
+			String tt = thighType.getText();
+		
+			
+			calculations calc = new calculations();
+			String result = calc.calculateBodyDesnsity(dob, gender, ch, ma, tri, sub, at, sup, tt);
+			bodyDensity.setText(result);
+			
 		}
 	}
 }

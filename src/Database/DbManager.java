@@ -8,7 +8,11 @@ import java.sql.ResultSet;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import javax.swing.JButton;
 
@@ -40,6 +44,28 @@ public class DbManager {
  * 
  */
 
+
+public String getAge(String userName) throws SQLException {
+	Date dob = new Date();
+	
+	Statement stmt = conn.createStatement();
+	
+	ResultSet result = stmt.executeQuery("SELECT memberBday FROM user WHERE username = \'" + userName + "\'");
+	result.next();
+	dob = result.getDate(1);
+	
+	LocalDate today = LocalDate.now();
+	Calendar cal = new GregorianCalendar();
+	cal.setTime(dob);
+	LocalDate birthday = LocalDate.of(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+	int p = Period.between(birthday, today).getYears();
+	
+	String age = Integer.toString(p);
+	
+	conn.close();
+	
+	return age;
+}
  public boolean newTrainerNotes(String userName, String trainerid, String trainingNotes) throws SQLException, ParseException {
     	
     	// Create a connection to the database.
@@ -77,8 +103,8 @@ public class DbManager {
 	 * Debugged and integrated into GUI by - Erika Clark
 	 * 
 	 */
-	 public boolean createNewMember(String userName, String firstName, String lastName, String email, String birthday, String password, 
-			 int createdBy, String areaCode, String phone, String status) throws SQLException, ParseException {
+	 public boolean createNewMember(String userName, String firstName, String lastName, String gender, String email, String birthday, String password, 
+			 String createdBy, String areaCode, String phone, String status) throws SQLException, ParseException {
         	
         	// Create a connection to the database.
             conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
@@ -93,9 +119,9 @@ public class DbManager {
             
             try {
         	    stmt.executeUpdate("INSERT INTO wk_sports_center_db.user "
-        					+ "(username, memberFirst, memberLast, memberEmail, memberBday, memberPswd, "
+        					+ "(username, memberFirst, memberLast, memberGender, memberEmail, memberBday, memberPswd, "
         					+ "areaCode, phone, status, memberStart, createdBy)"
-        					+ "VALUES('" + userName + s + firstName + s + lastName + s + email + s + birthday + s + 
+        					+ "VALUES('" + userName + s + firstName + s + lastName + s + gender + s + email + s + birthday + s + 
         					password + s + areaCode + s + phone + s + status + s +currentDateString + s + createdBy +"')");
         			   	    
         	    conn.close();
@@ -170,7 +196,9 @@ public class DbManager {
 	  * Overloaded method to lookup member based on id
 	  * 
 	 */
-	 public ResultSet lookupMember(int id)  throws SQLException, ParseException {
+	 
+	 /* Don't need anymore - Erika Clark
+	 public ResultSet lookupMember(String id)  throws SQLException, ParseException {
 	    	
 		// Create a connection to the database.
 	    conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
@@ -180,7 +208,7 @@ public class DbManager {
 	 
 	    try {
 	    	PreparedStatement statement = conn.prepareStatement("SELECT * FROM wk_sports_center_db.user "
-														  + "WHERE memberID = " + id);
+														  + "WHERE username = " + id);
 		    ResultSet rs = statement.executeQuery(); 
 		    if(rs.next() == false) {
 		          return null;
@@ -191,7 +219,7 @@ public class DbManager {
 	    	e.printStackTrace();
 	    }
 	        return null;
-	 }
+	 } */
 	 
 	 /* Daniel Midyett
 	  * Delete member based on user name
@@ -393,7 +421,7 @@ public class DbManager {
 	 * Adds a a form to the aerobiccapacity table.
 	 * Generates the current date.
 	 */
-	public boolean createNewMemberACForm(String username, int trainerID, int heartRateMax, int restedHeartRate, int finalTestHeartRate, 
+	public boolean createNewMemberACForm(String username, String trainerID, int heartRateMax, int restedHeartRate, int finalTestHeartRate, 
 			String protocol, int timeInMin, double maxVO2) throws SQLException, ParseException {
 		
 		// Create a connection to the database.
@@ -421,7 +449,7 @@ public class DbManager {
         }
 	}
 		
-	public boolean createNewMemberSFForm(String username, int trainerID, int pushUps, int sitUps, int sitReach) throws SQLException, ParseException {
+	public boolean createNewMemberSFForm(String username, String trainerID, int pushUps, int sitUps, int sitReach) throws SQLException, ParseException {
 		
 		// Create a connection to the database.
 	    conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
@@ -449,9 +477,9 @@ public class DbManager {
 	}
 		
 		
-	public boolean createNewMemberBCForm(String username, int trainerID, double BMI, int domForearm, int domArm, int domThigh, int domAbdomen,
-			int domCalf, int waistCircumference, int hipCircumference, String bodyCompProtocol, int chest, int midAxillary, int triceps, int subscapular, int abdomen,
-			int supralliac, int thigh, int percentBodyFat, int leanWeight, int bodyDensity, int desiredWeight) throws SQLException, ParseException {
+	public boolean createNewMemberBCForm(String username, String trainerID, double BMI, double domForearm, double domArm, double domThigh, double domAbdomen,
+			double domCalf, double waistCircumference, double hipCircumference, double waistToHipRatio, String bodyCompProtocol, double chest, double midAxillary, double triceps, double subscapular, double abdomen,
+			double supralliac, double thigh, double percentBodyFat, double leanWeight,  double bodyDensity, double fatWeight, double desiredWeight) throws SQLException, ParseException {
 		
 		// Create a connection to the database.
 	    conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
@@ -467,12 +495,12 @@ public class DbManager {
         try {
 		    stmt.executeUpdate("INSERT INTO bodycomp"
     					+ "(username, date, trainerID, BMI, domForearm, domArm, domThigh, domAbdomen, domCalf, waistCircumference, "
-    					+ "hipCircumference, protocol, chest, midaxillary, triceps, subscapular, abdomen, suprailliac, thigh,"
-    					+ "bodyDensity, percentBodyFat, leanWeight, desiredWeight)"
+    					+ "hipCircumference, waistToHipRatio, protocol, chest, midaxillary, triceps, subscapular, abdomen, suprailliac, thigh,"
+    					+ "bodyDensity, percentBodyFat, leanWeight, fatWeight, desiredWeight)"
     					+ "VALUES('" + username + s + mysqlDateString + s + trainerID + s + BMI + s + domForearm + s + domArm + s + domThigh + s + domAbdomen
-    					+ s + domCalf + s + waistCircumference + s + hipCircumference + s + bodyCompProtocol + s + chest + s + midAxillary 
+    					+ s + domCalf + s + waistCircumference + s + hipCircumference + s + waistToHipRatio + s + bodyCompProtocol + s + chest + s + midAxillary 
     					+ s + triceps + s + subscapular + s + abdomen + s + supralliac + s + thigh + s + bodyDensity + s + percentBodyFat 
-    					+ s + leanWeight + s + desiredWeight + "')");
+    					+ s + leanWeight + s + fatWeight + s + desiredWeight + "')");
 		    conn.close();
 		    return true;
         } catch(Exception e) {
@@ -482,7 +510,7 @@ public class DbManager {
         }
 	}
 		
-	public boolean createNewMemberCRForm(String username, int trainerID, int systolicBP, int diastolicBP, 
+	public boolean createNewMemberCRForm(String username, String trainerID, int systolicBP, int diastolicBP, 
 			int yearsSmoked, int idealBodyWeight, String physicalActivity, int stressNumber,
 			int totalCholesterol, double hdlRatio, int hdlCholesterol, 
 			int ldlCholesterol, int triglycerides, int glucose) throws SQLException, ParseException {
