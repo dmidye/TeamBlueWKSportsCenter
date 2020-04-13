@@ -56,6 +56,7 @@ public class AerobicCapacityForm  extends JFrame{
 		this.staffID = staffID;
 		DbManager db = new DbManager();
 		rs = db.lookupMember(username);
+
 		setTitle("Aerobic Capacity Form");
 		setSize(1200, 675);
 		setLocationRelativeTo(null);

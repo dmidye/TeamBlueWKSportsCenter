@@ -109,11 +109,14 @@ public class StaffView extends JFrame {
 		logout.setContentAreaFilled(false);
 		logout.setBorderPainted(false);
 		logout.setFocusPainted(false);
+		logout.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
 		background.add(logout);
-		setVisible(true);
 		
+		setVisible(true);
 	}
-	
-	
-
 };

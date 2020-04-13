@@ -67,10 +67,12 @@ public class BodyCompForm extends JFrame{
 	String gender;
 	public BodyCompForm(String username, String staffID) throws SQLException, ParseException {
 		this.staffID = staffID;
+
 		DbManager db = new DbManager();
 		dob = Integer.parseInt(db.getAge(username));
-	    rs = db.lookupMember(username);
+	  rs = db.lookupMember(username);
 		gender = rs.getString("membergender");
+
 		setTitle("Body Compositions Form");
 		setSize(1200, 675);
 		setLocationRelativeTo(null);

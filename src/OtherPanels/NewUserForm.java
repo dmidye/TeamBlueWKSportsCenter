@@ -116,7 +116,9 @@ public class NewUserForm extends JFrame{
 		            e.consume(); 
 		    }
 		});
+//
 		areaCode.setBounds(120, 200, 44, 25);
+
 		areaCode.setOpaque(false);
 		areaCode.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		areaCode.setFont(font1);
