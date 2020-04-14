@@ -59,14 +59,14 @@ public class GoalObjectPanel extends JPanel {
 	public GoalObjectPanel(String username) {
 		this.username = username;
 		currentDescription = "Select a Goal";
-		ResultSet rs = database.sendStatement("SELECT `user`.`memberID` FROM `user` WHERE `user`.`Username` = \"" + username + "\"");
-		try {
-			while(rs.next()) {
-				memberID = rs.getInt(1);
-			}
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
+		//ResultSet rs = database.sendStatement("SELECT `user`.`memberID` FROM `user` WHERE username` = \"" + username + "\"");
+//		try {
+//			while(rs.next()) {
+//				memberID = rs.getInt(1);
+//			}
+//		} catch (SQLException e1) {
+//			e1.printStackTrace();
+//		}
 		setBackground(new Color(243,243,243));
 		setBorder(null);
 		setLayout(null);
@@ -394,7 +394,7 @@ public class GoalObjectPanel extends JPanel {
 							FinishGoalButton.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/SaveGoalButton.png")));
 							AddAGoalButton.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/AddAGoal.png")));
 							FinishGoalButton.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/MarkAsFinishedButton.png")));
-							database.sendUpdate("INSERT INTO `goals` (`username`,`memberID`,`description`, `currentValue`,`goalValue`) VALUES ('" + username + "'," + memberID + ",'" + subDescription.getText() + "'," + subCurrent.getText() + "," + subGoal.getText() + ")");
+							database.sendUpdate("INSERT INTO `goals` (`username`,`description`, `currentValue`,`goalValue`) VALUES ('" + username + ",'" + subDescription.getText() + "'," + subCurrent.getText() + "," + subGoal.getText() + ")");
 							
 							goalComboBox.setEnabled(true); //Setup buttons and fields
 							GoalValueButton.setEnabled(true);
@@ -421,7 +421,7 @@ public class GoalObjectPanel extends JPanel {
 					}
 				} //Handle is deleting goal
 				else {
-					database.sendUpdate("DELETE FROM `goals` WHERE `memberID` = " + memberID + " AND `description` = '" + subDescription.getText()+ "'");
+					database.sendUpdate("DELETE FROM `goals` WHERE `username` = " + username + " AND `description` = '" + subDescription.getText()+ "'");
 					updateComboBox();
 				}
 			}
@@ -521,7 +521,7 @@ public class GoalObjectPanel extends JPanel {
 		goalComboBox.removeAllItems();
 		goalComboBox.addItem("Select a Goal");
 		goalsCounter = 0;
-		ResultSet rs = database.sendStatement("SELECT `goals`.`description` FROM `goals` INNER JOIN `user` ON `goals`.`memberID` = `user`.`memberID` WHERE `user`.`Username` = \"" + username + "\"");
+		ResultSet rs = database.sendStatement("SELECT `goals`.`description` FROM `goals` INNER JOIN `user` ON `user`.`Username` = \"" + username + "\"");
 		try {
 			while(rs.next()) {
 				String nextGoal = rs.getString(1);
@@ -538,7 +538,7 @@ public class GoalObjectPanel extends JPanel {
 	//
 	public void updateSubGoalPanel(String description) {
 		
-		ResultSet rs = database.sendStatement("SELECT `goals`.`currentValue`, `goals`.`goalValue`, `user`.`memberID` FROM `goals` INNER JOIN `user` ON `goals`.`memberID` = `user`.`memberID` WHERE `user`.`Username` = \"" + username + "\" AND `goals`.`description` = \"" + description + "\"");
+		ResultSet rs = database.sendStatement("SELECT `goals`.`currentValue`, `goals`.`goalValue` FROM `goals` INNER JOIN `user` ON `user`.`Username` = \"" + username + "\" WHERE `goals`.`description` = \"" + description + "\"");
 		try {
 			while(rs.next()) {
 				currentDescription = description;
@@ -568,7 +568,7 @@ public class GoalObjectPanel extends JPanel {
 			button.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/EditButtonHovered.png")));
 			button.setText("Edit");
 			field.setEditable(false);
-			database.sendUpdate("UPDATE `goals` SET `" + attribute + "` = \"" + field.getText() + "\" WHERE memberID = \"" + memberID + "\" AND `description` = \"" + currentDescription + "\"");
+			database.sendUpdate("UPDATE `goals` SET `" + attribute + "` = \"" + field.getText() + "\" WHERE username = \"" + username + "\" AND `description` = \"" + currentDescription + "\"");
 			if(attribute.equals("description")) {
 				currentDescription = field.getText();
 			}
