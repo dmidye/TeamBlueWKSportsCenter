@@ -10,7 +10,6 @@ import javax.swing.border.LineBorder;
 import java.awt.Color;
 import javax.swing.border.MatteBorder;
 
-import Assets.fonts;
 import Data.AccountCreationTempStorage;
 
 import javax.swing.JLabel;
@@ -61,15 +60,16 @@ public class LoginPanel extends JPanel {
 	private JFrame owningFrame;
 	private databaseConnector databaseConnector;
 	private AccountCreationTempStorage tempAccountStorage = new AccountCreationTempStorage();
-	private fonts fontCatalog = new fonts();
 	
 	private JTextField newUsername;
 	private JTextField newPassword;
 	private JTextField newEmail;
-	private JTextField newFirstName;
+	private JTextField newFirstName; 
 	private JTextField newLastName;
 	private StaffView staffView;
 	private JPanel MainPanel;
+	
+	JLabel loginButton;
 
 	/**
 	 * This class encompasses the login screen, password recovery screen, and new account screens.
@@ -300,12 +300,12 @@ public class LoginPanel extends JPanel {
 		LoginPanel.add(lblSignUp);
 		lblSignUp.setIcon(new ImageIcon(LoginPanel.class.getResource("/Assets/Group 27.png")));
 		
-		JLabel loginButton = new JLabel("");
+		loginButton = new JLabel("");
 		loginButton.setIcon(new ImageIcon(LoginPanel.class.getResource("/Assets/SignInButton.png")));
 		loginButton.setBounds(221, 372, 157, 57);
 		LoginPanel.add(loginButton);
 		
-		JLabel label = new JLabel("");
+		JLabel label = new JLabel("notHovered");
 		label.setBounds(50, 183, 317, 67);
 		LoginPanel.add(label);
 		label.setIcon(new ImageIcon(LoginPanel.class.getResource("/Assets/PasswordBar.png")));
@@ -354,13 +354,16 @@ public class LoginPanel extends JPanel {
 			}
 			@Override
 			public void mouseReleased(MouseEvent e) {}
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				lblSignUp.setForeground(new Color(0,0,20));
-			}
 			
 			@Override
-			public void mouseExited(MouseEvent e) {}
+			public void mouseEntered(MouseEvent e) {
+				lblSignUp.setIcon(new ImageIcon(LoginPanel.class.getResource("/Assets/SignUpHovered.png")));
+			}
+					
+			@Override
+			public void mouseExited(MouseEvent e) {
+				lblSignUp.setIcon(new ImageIcon(LoginPanel.class.getResource("/Assets/SignUpButton.png")));
+			}
 			
 		});
 		
@@ -387,9 +390,11 @@ public class LoginPanel extends JPanel {
 			public void mouseReleased(MouseEvent e) {}
 			@Override
 			public void mouseEntered(MouseEvent e) {
+				lblForgotPassword.setForeground(new Color(0, 90, 0));
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
+				lblForgotPassword.setForeground(new Color(34, 139, 34));
 			}
 		});
 		
@@ -397,7 +402,6 @@ public class LoginPanel extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {}
 			
-			@Override
 			public void mousePressed(MouseEvent e) {
 				ResultSet rs;
 				String username = UsernameField.getText();
@@ -432,9 +436,15 @@ public class LoginPanel extends JPanel {
 			@Override
 			public void mouseReleased(MouseEvent e) {}
 			@Override
-			public void mouseEntered(MouseEvent e) {}
+			
+			public void mouseEntered(MouseEvent e) {
+				loginButton.setIcon(new ImageIcon(LoginPanel.class.getResource("/Assets/SignInHovered.png")));
+			}
+					
 			@Override
-			public void mouseExited(MouseEvent e) {}
+			public void mouseExited(MouseEvent e) {
+				loginButton.setIcon(new ImageIcon(LoginPanel.class.getResource("/Assets/SignInButton.png")));
+			}
 		});
 		
 		btnReturn.addActionListener(new ActionListener() {   //Return from Account Creation Button Layer 1
