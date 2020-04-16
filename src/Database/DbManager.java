@@ -28,7 +28,7 @@ public class DbManager {
 		private Connection conn;
 		
 		private final String DB_USER = "root";
-		private final String DB_PASS = "Nemichan5576!";
+		private final String DB_PASS = "";
 		private final String DB_URL = "jdbc:mysql://localhost:3306/wk_sports_center_db";
 		
 		private String s = "', '"; //abbreviation
