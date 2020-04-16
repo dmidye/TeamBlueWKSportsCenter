@@ -370,7 +370,7 @@ public class EditUserForm extends JFrame {
 	private class removeButton implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			int confirmed = JOptionPane.showConfirmDialog(null, 
-			        "Are you sure you want to exit the program?", "Exit Program Message Box",
+			        "Are you sure you want to delete this member?", "Exit Program Message Box",
 			        JOptionPane.YES_NO_OPTION);
 
 		    if (confirmed == JOptionPane.YES_OPTION) {

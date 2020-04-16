@@ -238,7 +238,7 @@ public class CoronaryRiskForm extends JFrame{
 	//displays blood pressure results
 	private class calculateButton1 implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			calculations calc = new calculations();
+			Calculations calc = new Calculations();
 			bloodPressure.setText(calc.bloodPressureCalc(systolic.getText(), diastolic.getText()));
 		}
 	}
@@ -246,7 +246,7 @@ public class CoronaryRiskForm extends JFrame{
 	//calcualte ldl and hdl ratio
 	private class calculateButton2 implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			calculations calc = new calculations();
+			Calculations calc = new Calculations();
 			ldlCholesterol.setText(calc.ldlCholesterolCalc(totalCholesterol.getText(), hdlCholesterol.getText(), triglycerides.getText()));
 			hdlRatio.setText(calc.hdlRatioCalc(totalCholesterol.getText(), hdlCholesterol.getText()));
 		}
@@ -275,6 +275,8 @@ public class CoronaryRiskForm extends JFrame{
 				Integer sn = Integer.parseInt(stressNumber.getText());
 				
 				//call method to create the form
+				System.out.println("Staff ID in CR form class: " + staffID);
+				System.out.println("Username in CR form class: " + username);
 				if(db.createNewMemberCRForm(username, staffID, sys, dias, ys, ibw, pa, 
 											sn, tc, hdlr, hdlc, ldlc, trig, gluc)) {
 					JOptionPane.showMessageDialog(null, "Form added.");

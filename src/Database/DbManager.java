@@ -66,15 +66,13 @@ public String getAge(String userName) throws SQLException {
 	
 	return age;
 }
- public boolean newTrainerNotes(String userName, String trainerid, String trainingNotes) throws SQLException, ParseException {
+ public boolean newTrainerNotes(String userName, String trainerID, String trainingNotes) throws SQLException, ParseException {
     	
     	// Create a connection to the database.
         conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
 
         // Create a Statement object for the query.
         Statement stmt = conn.createStatement();
-      
-     
 	    
         Date date = new Date();
         String pattern = "yyyy-MM-dd";
@@ -85,7 +83,7 @@ public String getAge(String userName) throws SQLException {
     	    stmt.executeUpdate("INSERT INTO wk_sports_center_db.trainingnotes"
     					+ "(username, date, trainerid, trainingNotes)"
     					+ "VALUES('" + userName +  s + mysqlDateString + s 
-    					+ trainerid + s + trainingNotes +"')");
+    					+ trainerID + s + trainingNotes +"')");
     			   	    
     	    conn.close();
     	   
@@ -128,7 +126,8 @@ public String getAge(String userName) throws SQLException {
         	   
         	    return true;
             } catch(Exception e) {
-            	e.printStackTrace();
+            	//e.printStackTrace();
+            	System.out.println("Error creating member.");
             	conn.close();
             	return false;
         	}
@@ -496,11 +495,11 @@ public String getAge(String userName) throws SQLException {
 		    stmt.executeUpdate("INSERT INTO bodycomp"
     					+ "(username, date, trainerID, BMI, domForearm, domArm, domThigh, domAbdomen, domCalf, waistCircumference, "
     					+ "hipCircumference, waistToHipRatio, protocol, chest, midaxillary, triceps, subscapular, abdomen, suprailliac, thigh,"
-    					+ "bodyDensity, percentBodyFat, leanWeight, fatWeight, desiredWeight)"
+    					+ "bodyDensity, percentBodyFat, leanWeight, desiredWeight)"
     					+ "VALUES('" + username + s + mysqlDateString + s + trainerID + s + BMI + s + domForearm + s + domArm + s + domThigh + s + domAbdomen
     					+ s + domCalf + s + waistCircumference + s + hipCircumference + s + waistToHipRatio + s + bodyCompProtocol + s + chest + s + midAxillary 
     					+ s + triceps + s + subscapular + s + abdomen + s + supralliac + s + thigh + s + bodyDensity + s + percentBodyFat 
-    					+ s + leanWeight + s + fatWeight + s + desiredWeight + "')");
+    					+ s + leanWeight + s + desiredWeight + "')");
 		    conn.close();
 		    return true;
         } catch(Exception e) {
@@ -525,7 +524,7 @@ public String getAge(String userName) throws SQLException {
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat formatter = new SimpleDateFormat(pattern);
         String mysqlDateString = formatter.format(date);
-        
+        System.out.println("Trainer ID in dbmanager: " + trainerID);
         try {
 		    stmt.executeUpdate("INSERT INTO coronaryrisk "
     					+ "(username, date, trainerID, systolicBloodPressure, diastolicBloodPressure, yearsSmoked, "

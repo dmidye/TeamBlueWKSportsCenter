@@ -27,7 +27,7 @@ public class BodyCompForm extends JFrame{
 	 */
 	
 	private static final long serialVersionUID = 1L;
-	calculations result = new calculations();
+	Calculations result = new Calculations();
 	JLabel bmiResult;
 	JButton calculate2;
 	Font font1 = new Font("Agency FB", Font.PLAIN, 25);
@@ -433,7 +433,7 @@ public class BodyCompForm extends JFrame{
 				String bmiInches = JOptionPane.showInputDialog(inches);
 				
 				if(bmiInches != null) {	
-					calculations calc = new calculations();
+					Calculations calc = new Calculations();
 					String calculatedBMI = calculateBMI(bmiWeight, bmiFeet, bmiInches);
 					String bfp = calc.bodyFatPercentage(gender, calculatedBMI, dob);
 					String fw = calc.calculateBodyFat(bfp, bmiWeight);
@@ -475,7 +475,7 @@ public class BodyCompForm extends JFrame{
 			String tt = thighType.getText();
 		
 			
-			calculations calc = new calculations();
+			Calculations calc = new Calculations();
 			String result = calc.calculateBodyDesnsity(dob, gender, ch, ma, tri, sub, at, sup, tt);
 			bodyDensity.setText(result);
 			
