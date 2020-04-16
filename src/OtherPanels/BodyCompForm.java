@@ -443,13 +443,15 @@ public class BodyCompForm extends JFrame{
 					percentBodyFat.setText(bfp);
 					fatWeight.setText(fw);
 					leanWeight.setText(lw);
-					
-				
-					
 				}				
 			}
 		}
-		bmiResult.setText(result.resultBMI(bmi.getText()));
+		try {
+			bmiResult.setText(result.resultBMI(bmi.getText()));
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		}
 	} // end CalculateButton()
 	
@@ -459,7 +461,11 @@ public class BodyCompForm extends JFrame{
 			Double waist = Double.parseDouble(waistCircumference.getText());
 			String calculation = String.format("%.2f", result.waistToHipRatio(hip, waist));
 			waistToHipRatio.setText(calculation);
-			waistToHipRatioResult.setText(result.waistToHipRatioResult(calculation, gender));			
+			try {
+				waistToHipRatioResult.setText(result.waistToHipRatioResult(calculation, gender));
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}			
 		}
 	}
 	
@@ -476,7 +482,7 @@ public class BodyCompForm extends JFrame{
 		
 			
 			Calculations calc = new Calculations();
-			String result = calc.calculateBodyDesnsity(dob, gender, ch, ma, tri, sub, at, sup, tt);
+			String result = calc.calculateBodyDensity(dob, gender, ch, ma, tri, sub, at, sup, tt);
 			bodyDensity.setText(result);
 			
 		}

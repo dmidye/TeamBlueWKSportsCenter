@@ -239,7 +239,12 @@ public class CoronaryRiskForm extends JFrame{
 	private class calculateButton1 implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			Calculations calc = new Calculations();
-			bloodPressure.setText(calc.bloodPressureCalc(systolic.getText(), diastolic.getText()));
+			try {
+				bloodPressure.setText(calc.bloodPressureCalc(systolic.getText(), diastolic.getText()));
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 	}
 	

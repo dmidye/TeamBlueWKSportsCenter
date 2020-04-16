@@ -1,17 +1,27 @@
 package OtherPanels;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import Database.DbManager;
+
 public class Calculations {
 	
-	public String resultBMI(String bmiString) {
+	public String resultBMI(String bmiString) throws SQLException {
 		double bmi = Double.parseDouble(bmiString);
-		
-		if(bmi < 18.5) {
+		DbManager db = new DbManager();
+		double[] limits = db.getBMIRanges();
+		double underweightUpperLimit = limits[0];
+		double goodUpperLimit = limits[1];
+		double overweightUpperLimit = limits[2];
+
+		if(bmi < underweightUpperLimit) {//18.5
 			return "Underweight";
 		}
-		else if(bmi >= 18.5 && bmi <= 24.9) {
+		else if(bmi <= goodUpperLimit) {//24.9
 			return "Good";			
 		}
-		else if(bmi >= 25 && bmi <= 29.9) {
+		else if(bmi <= overweightUpperLimit) {//29.9
 			return "Overweight";
 		}
 		else {
@@ -26,17 +36,20 @@ public class Calculations {
 	}
 	
 	
-	public String waistToHipRatioResult(String whratio, String gender) {
+	public String waistToHipRatioResult(String whratio, String gender) throws SQLException {
 		double ratio = Double.parseDouble(whratio);
-		if(gender.equals("M") && ratio < .9){
+		DbManager db = new DbManager();
+		double[] limits = db.getWaistToHipRanges();
+		double maleUpperLimit = limits[0];
+		double femaleUpperLimit = limits[1];
+
+		if(gender.equals("M") && ratio < maleUpperLimit){
 			return "Good";
 		}
-		if(gender.equals("F") && ratio < .85) {
+		if(gender.equals("F") && ratio < femaleUpperLimit) {
 			return "Good";
 		}
-		else {
-			return "Obese";
-		}
+		return "Obese";
 	}
 	
 	// calculation from https://www.gaiam.com/blogs/discover/how-to-calculate-your-ideal-body-fat-percentage
@@ -79,7 +92,7 @@ public class Calculations {
 	// equation from https://www.topendsports.com/testing/density-jackson-pollock.htm
 	// Skinfold
 	// Erika Clark
-	public String calculateBodyDesnsity(int age, String gender, String ch, String ax, String tri, String sub, String ab, String sup, String thi) {
+	public String calculateBodyDensity(int age, String gender, String ch, String ax, String tri, String sub, String ab, String sup, String thi) {
 		
 		double chest = Double.parseDouble(ch);
 		double midaxillary = Double.parseDouble(ax);
@@ -132,19 +145,24 @@ public class Calculations {
 	// Ranges taken from 
 	//https://www.heart.org/en/health-topics/high-blood-pressure/understanding-blood-pressure-readings
 	
-	public String bloodPressureCalc(String s, String d) {
+	public String bloodPressureCalc(String s, String d) throws SQLException {
 		String result = "";
 		int systolic = Integer.parseInt(s);
 		int diastolic = Integer.parseInt(d);
-		if(systolic < 120 && diastolic < 80) {
+		DbManager db = new DbManager();
+		double[] diasLimits = db.getDiastolicBPRanges();
+		double[] sysLimits = db.getSystolicBPRanges();
+		//Index: 0 for normal, 1 for elevated, 2 for stage one, 3 for stage two
+		
+		if(systolic < sysLimits[0] && diastolic < diasLimits[0]) {
 			result = "normal";
-		}else if(systolic >= 120 && systolic <= 129 && diastolic < 80) {
+		}else if(systolic <= sysLimits[1] && diastolic < diasLimits[1]) {
 			result = "elevated";
-		}else if((systolic >= 130 && systolic <= 139) || (diastolic >= 80 && diastolic <=89)) {
-			result = "HYPERTENTION Stage 1";
-		}else if((systolic >= 140 && systolic < 180) || (diastolic >= 90 && diastolic < 120)) {
-			result = "HYPERTENTION Stage 2";
-		}else if(systolic >= 180 || diastolic >= 120) {
+		}else if((systolic >= sysLimits[1]+1 && systolic <= sysLimits[2]) || (diastolic >= diasLimits[1] && diastolic <= diasLimits[2])) {
+			result = "HYPERTENSION Stage 1";
+		}else if((systolic >= sysLimits[2]+1 && systolic < sysLimits[3]) || (diastolic >= diasLimits[2]+1 && diastolic < diasLimits[3])) {
+			result = "HYPERTENSION Stage 2";
+		}else if(systolic >= sysLimits[3] || diastolic >= diasLimits[3]) {
 			result = "HYPERTENSIVE CRISIS";
 		}
 		return result;

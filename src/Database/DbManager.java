@@ -415,6 +415,88 @@ public String getAge(String userName) throws SQLException {
 	        	return false;
 	    	}
 	  }
+	 
+	public double[] getBMIRanges() throws SQLException {
+	    conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+	    Statement stmt = conn.createStatement();
+	    double[] limits = new double[3];
+	    try {
+		   ResultSet rs = stmt.executeQuery("SELECT * FROM bmi_ranges");
+		   int count = 0;
+		   rs.beforeFirst();
+		   while(rs.next()) {
+			   limits[count] = rs.getDouble(3);
+			   count++;
+		   }
+		   return limits;
+		   
+	    } catch(Exception e) {
+	    	e.printStackTrace();
+	    	return null;
+		}
+	}
+	
+	public double[] getWaistToHipRanges() throws SQLException {
+	    conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+	    Statement stmt = conn.createStatement();
+	    double[] limits = new double[2];
+	    try {
+		   ResultSet rs = stmt.executeQuery("SELECT * FROM waisttohipranges");
+		   int count = 0;
+		   rs.beforeFirst();
+		   while(rs.next()) {
+			   limits[count] = rs.getDouble(3);
+			   count++;
+		   }
+		   return limits;
+		   
+	    } catch(Exception e) {
+	    	e.printStackTrace();
+	    	return null;
+		}
+	}
+	
+	public double[] getDiastolicBPRanges() throws SQLException {
+	    conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+	    Statement stmt = conn.createStatement();
+	    double[] diasLimits = new double[4];
+	    try {
+		   ResultSet rs = stmt.executeQuery("SELECT * FROM bloodpressureranges");
+		   int count = 0;
+		   rs.beforeFirst();
+		   while(rs.next()) {
+			   diasLimits[count] = rs.getDouble(4);
+			   count++;
+		   }
+		   return diasLimits;
+		   
+	    } catch(Exception e) {
+	    	e.printStackTrace();
+	    	return null;
+		}
+	}
+	
+	public double[] getSystolicBPRanges() throws SQLException {
+	    conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+	    Statement stmt = conn.createStatement();
+	    double[] sysLimits = new double[4];
+	    try {
+		   ResultSet rs = stmt.executeQuery("SELECT * FROM bloodpressureranges");
+		   int count = 0;
+		   rs.beforeFirst();
+		   while(rs.next()) {
+			   sysLimits[count] = rs.getDouble(3);
+			   count++;
+		   }
+		   return sysLimits;
+		   
+	    } catch(Exception e) {
+	    	e.printStackTrace();
+	    	return null;
+		}
+	}
+	
+	
 		 
 	/*
 	 * Adds a a form to the aerobiccapacity table.
