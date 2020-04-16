@@ -1,6 +1,6 @@
 package OtherPanels;
 
-public class Calculations {
+public class calculations {
 	
 	public String resultBMI(String bmiString) {
 		double bmi = Double.parseDouble(bmiString);
@@ -27,7 +27,6 @@ public class Calculations {
 	
 	
 	public String waistToHipRatioResult(String whratio, String gender) {
-		
 		double ratio = Double.parseDouble(whratio);
 		if(gender.equals("M") && ratio < .9){
 			return "Good";
@@ -101,5 +100,76 @@ public class Calculations {
 		return result;
 	}
 	
-
+	//calculate target heart rate
+	
+	public String calculateMaxHeartRate(int age) {
+		String result;
+		int max = 220 - age;
+		result = String.valueOf(max);
+		return result;
+	}
+	
+	public String minHRPercentageCalc(String max, String minPercent) {
+		String result;
+		double maxHeartRate = Double.parseDouble(max);
+		double minHeartRatePercent = Double.parseDouble(minPercent);
+		double minRange = (minHeartRatePercent / 100) * maxHeartRate;
+		result = String.format("%.2f",  minRange);
+		
+		return result;
+	}
+	
+	public String maxHRPercentageCalc(String max, String maxPercent) {
+		String result;
+		double maxHeartRate = Double.parseDouble(max);
+		double maxHeartRatePercent = Double.parseDouble(maxPercent);
+		double maxRange = (maxHeartRatePercent / 100) * maxHeartRate;
+		result = String.format("%.2f",  maxRange);
+		
+		return result;
+	}
+	
+	// Ranges taken from 
+	//https://www.heart.org/en/health-topics/high-blood-pressure/understanding-blood-pressure-readings
+	
+	public String bloodPressureCalc(String s, String d) {
+		String result = "";
+		int systolic = Integer.parseInt(s);
+		int diastolic = Integer.parseInt(d);
+		if(systolic < 120 && diastolic < 80) {
+			result = "normal";
+		}else if(systolic >= 120 && systolic <= 129 && diastolic < 80) {
+			result = "elevated";
+		}else if((systolic >= 130 && systolic <= 139) || (diastolic >= 80 && diastolic <=89)) {
+			result = "HYPERTENTION Stage 1";
+		}else if((systolic >= 140 && systolic < 180) || (diastolic >= 90 && diastolic < 120)) {
+			result = "HYPERTENTION Stage 2";
+		}else if(systolic >= 180 || diastolic >= 120) {
+			result = "HYPERTENSIVE CRISIS";
+		}
+		return result;
+	}
+	
+	public String hdlRatioCalc(String tc, String hc) {
+		String result;
+		
+		double totalCholesterol = Double.parseDouble(tc);
+		double hdlCholesterol = Double.parseDouble(hc);
+		double hdlRatio = totalCholesterol / hdlCholesterol;
+		result = String.format("%.2f", hdlRatio);
+		
+		return result;
+	}
+	
+	public String ldlCholesterolCalc(String tc, String hc, String t) {
+		String result;
+		
+		double totalCholesterol = Double.parseDouble(tc);
+		double hdlCholesterol = Double.parseDouble(hc);
+		double triglycerides = Double.parseDouble(t);
+		double ldlCholesterol = totalCholesterol - hdlCholesterol - (triglycerides/5);
+		result = String.format("%.2f", ldlCholesterol);
+		
+		return result;
+	}
 }

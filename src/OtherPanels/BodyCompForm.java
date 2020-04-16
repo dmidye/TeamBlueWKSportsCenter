@@ -27,7 +27,7 @@ public class BodyCompForm extends JFrame{
 	 */
 	
 	private static final long serialVersionUID = 1L;
-	Calculations result = new Calculations();
+	calculations result = new calculations();
 	JLabel bmiResult;
 	JButton calculate2;
 	Font font1 = new Font("Agency FB", Font.PLAIN, 25);
@@ -67,12 +67,10 @@ public class BodyCompForm extends JFrame{
 	String gender;
 	public BodyCompForm(String username, String staffID) throws SQLException, ParseException {
 		this.staffID = staffID;
-
 		DbManager db = new DbManager();
 		dob = Integer.parseInt(db.getAge(username));
-	  rs = db.lookupMember(username);
+	    rs = db.lookupMember(username);
 		gender = rs.getString("membergender");
-
 		setTitle("Body Compositions Form");
 		setSize(1200, 675);
 		setLocationRelativeTo(null);
@@ -435,7 +433,7 @@ public class BodyCompForm extends JFrame{
 				String bmiInches = JOptionPane.showInputDialog(inches);
 				
 				if(bmiInches != null) {	
-					Calculations calc = new Calculations();
+					calculations calc = new calculations();
 					String calculatedBMI = calculateBMI(bmiWeight, bmiFeet, bmiInches);
 					String bfp = calc.bodyFatPercentage(gender, calculatedBMI, dob);
 					String fw = calc.calculateBodyFat(bfp, bmiWeight);
@@ -477,7 +475,7 @@ public class BodyCompForm extends JFrame{
 			String tt = thighType.getText();
 		
 			
-			Calculations calc = new Calculations();
+			calculations calc = new calculations();
 			String result = calc.calculateBodyDesnsity(dob, gender, ch, ma, tri, sub, at, sup, tt);
 			bodyDensity.setText(result);
 			

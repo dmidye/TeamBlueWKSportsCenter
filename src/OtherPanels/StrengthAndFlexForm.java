@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 
@@ -33,11 +34,14 @@ public class StrengthAndFlexForm  extends JFrame{
 	JButton calculate;
 	JButton save;
 	JButton cancel;
-	
+	ResultSet rs;
 	String staffID;
 	
-	public StrengthAndFlexForm(String username, String staffID) {
+	public StrengthAndFlexForm(String username, String staffID) throws SQLException, ParseException {
 		this.staffID = staffID;
+		DbManager db = new DbManager();
+		rs = db.lookupMember(username);
+		
 		setTitle("Strength and Flex Form");
 		setSize(1200, 675);
 		setLocationRelativeTo(null);
@@ -54,7 +58,7 @@ public class StrengthAndFlexForm  extends JFrame{
 		form.setLayout(null);
 		
 		
-		name = new JLabel (username);
+		name = new JLabel (rs.getString("memberFirst") + " " + rs.getString("memberLast"));
 		name.setBounds(880, 50, 200, 25);
 		name.setFont(font1);
 		form.add(name);

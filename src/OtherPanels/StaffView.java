@@ -22,12 +22,11 @@ public class StaffView extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	public StaffView(String userID) {
-
 		setTitle("Staff View");
 		setSize(1200, 675);
 		setLocationRelativeTo(null);
 		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);		
 		
 		setLayout(new BorderLayout());
 		JLabel background = new JLabel(new ImageIcon(StaffView.class.getResource("/StaffViewAssets/staffViewBackground2.png")));
@@ -103,8 +102,17 @@ public class StaffView extends JFrame {
 		logout.setContentAreaFilled(false);
 		logout.setBorderPainted(false);
 		logout.setFocusPainted(false);
+		logout.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
 		background.add(logout);
 
-		//setVisible(true)
-  }
+		
+	}
+	
+	
+
 };
