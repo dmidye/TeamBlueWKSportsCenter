@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 
@@ -15,6 +16,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import Database.DbManager;
+import OtherPanels.BodyCompForm.calculateButton;
 
 
 
@@ -39,19 +41,21 @@ public class CoronaryRiskForm extends JFrame{
 	JTextField hdlRatio;
 	JTextField triglycerides;
 	JTextField glucose;
-	
+	JLabel bloodPressure;
 	JLabel name;
 	Font font1 = new Font("Agency FB", Font.PLAIN, 25);
 	
 	JButton calculate;
+	JButton calculate2;
 	JButton save;
 	JButton cancel;
-	
+	ResultSet rs;
 	String staffID;
 	
-	public CoronaryRiskForm(String username, String staffID) {
+	public CoronaryRiskForm(String username, String staffID) throws SQLException, ParseException {
 		this.staffID = staffID;
-		
+		DbManager db = new DbManager();
+		rs = db.lookupMember(username);
 		setTitle("Coronary Risk Form");
 		setSize(1200, 675);
 		setLocationRelativeTo(null);
@@ -67,7 +71,7 @@ public class CoronaryRiskForm extends JFrame{
 		form.setBounds(50, 20, 1105, 641);
 		form.setLayout(null);
 		
-		name = new JLabel (username);
+		name = new JLabel (rs.getString("memberFirst") + " " + rs.getString("memberLast"));
 		name.setBounds(880, 40, 200, 25);
 		name.setFont(font1);
 		form.add(name);
@@ -87,6 +91,20 @@ public class CoronaryRiskForm extends JFrame{
 		diastolic.setFont(font1);
 		diastolic.setEditable(true);
 		form.add(diastolic);
+		
+		calculate = new JButton(new ImageIcon(StaffView.class.getResource("/StaffViewAssets/CalculateButton.png")));
+		calculate.setBounds(250, 153, 153, 33);
+		calculate.setOpaque(false);
+		calculate.setContentAreaFilled(false);
+		calculate.setBorderPainted(false);
+		calculate.setFocusPainted(false);
+		calculate.addActionListener(new calculateButton1());
+		form.add(calculate);
+		
+		bloodPressure = new JLabel("Results");
+		bloodPressure.setBounds(250, 110, 220, 35);
+		bloodPressure.setFont(font1);
+		form.add(bloodPressure);
 				
 		yearsSmoked = new JTextField(10);
 		yearsSmoked.setBounds(192, 225, 80, 25);
@@ -136,32 +154,44 @@ public class CoronaryRiskForm extends JFrame{
 		hdlCholesterol.setEditable(true);
 		form.add(hdlCholesterol);
 		
-		ldlCholesterol = new JTextField(10);
-		ldlCholesterol.setBounds(640, 195, 80, 25);
-		ldlCholesterol.setOpaque(false);
-		ldlCholesterol.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-		ldlCholesterol.setFont(font1);
-		ldlCholesterol.setEditable(true);
-		form.add(ldlCholesterol);
-		
-		hdlRatio = new JTextField(10);
-		hdlRatio.setBounds(640, 230, 80, 25);
-		hdlRatio.setOpaque(false);
-		hdlRatio.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-		hdlRatio.setFont(font1);
-		hdlRatio.setEditable(true);
-		form.add(hdlRatio);
-		
 		triglycerides = new JTextField(10);
-		triglycerides.setBounds(640, 268, 80, 25);
+		triglycerides.setBounds(640, 195, 80, 25);
 		triglycerides.setOpaque(false);
 		triglycerides.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		triglycerides.setFont(font1);
 		triglycerides.setEditable(true);
 		form.add(triglycerides);
 		
+		ldlCholesterol = new JTextField(10);
+		ldlCholesterol.setBounds(640, 230, 80, 25);
+		ldlCholesterol.setOpaque(false);
+		ldlCholesterol.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		ldlCholesterol.setFont(font1);
+		ldlCholesterol.setEditable(true);
+		form.add(ldlCholesterol);
+		
+		calculate2 = new JButton(new ImageIcon(StaffView.class.getResource("/StaffViewAssets/CalculateButton.png")));
+		calculate2.setBounds(730, 230, 153, 33);
+		calculate2.setOpaque(false);
+		calculate2.setContentAreaFilled(false);
+		calculate2.setBorderPainted(false);
+		calculate2.setFocusPainted(false);
+		calculate2.addActionListener(new calculateButton2());
+		form.add(calculate2);
+		
+		
+		hdlRatio = new JTextField(10);
+		hdlRatio.setBounds(640, 265, 80, 25);
+		hdlRatio.setOpaque(false);
+		hdlRatio.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		hdlRatio.setFont(font1);
+		hdlRatio.setEditable(true);
+		form.add(hdlRatio);
+		
+		
+		
 		glucose = new JTextField(10);
-		glucose.setBounds(640, 300, 80, 25);
+		glucose.setBounds(643, 293, 80, 25);
 		glucose.setOpaque(false);
 		glucose.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		glucose.setFont(font1);
@@ -208,6 +238,22 @@ public class CoronaryRiskForm extends JFrame{
 		}
 	}
 	
+	//displays blood pressure results
+	private class calculateButton1 implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			calculations calc = new calculations();
+			bloodPressure.setText(calc.bloodPressureCalc(systolic.getText(), diastolic.getText()));
+		}
+	}
+	
+	//calcualte ldl and hdl ratio
+	private class calculateButton2 implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			calculations calc = new calculations();
+			ldlCholesterol.setText(calc.ldlCholesterolCalc(totalCholesterol.getText(), hdlCholesterol.getText(), triglycerides.getText()));
+			hdlRatio.setText(calc.hdlRatioCalc(totalCholesterol.getText(), hdlCholesterol.getText()));
+		}
+	}
 	private class saveButton implements ActionListener{
 		private String username;
 		public saveButton(String username) {
@@ -225,7 +271,7 @@ public class CoronaryRiskForm extends JFrame{
 				Integer tc = Integer.parseInt(totalCholesterol.getText());
 				Double hdlr = Double.parseDouble(hdlRatio.getText());
 				Integer hdlc = Integer.parseInt(hdlCholesterol.getText());
-				Integer ldlc = Integer.parseInt(ldlCholesterol.getText());
+				Double ldlc = Double.parseDouble(ldlCholesterol.getText());
 				Integer trig = Integer.parseInt(triglycerides.getText());
 				Integer gluc = Integer.parseInt(glucose.getText());
 				Integer ys = Integer.parseInt(yearsSmoked.getText());
