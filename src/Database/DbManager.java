@@ -28,7 +28,7 @@ public class DbManager {
 		private Connection conn;
 		
 		private final String DB_USER = "root";
-		private final String DB_PASS = "";
+		private final String DB_PASS = "Nemichan5576!";
 		private final String DB_URL = "jdbc:mysql://localhost:3306/wk_sports_center_db";
 		
 		private String s = "', '"; //abbreviation
@@ -122,7 +122,7 @@ public String getAge(String userName) throws SQLException {
         					+ "(username, memberFirst, memberLast, memberGender, memberEmail, memberBday, memberPswd, "
         					+ "areaCode, phone, status, memberStart, createdBy)"
         					+ "VALUES('" + userName + s + firstName + s + lastName + s + gender + s + email + s + birthday + s + 
-        					password + s + areaCode + s + phone + s + status + s +currentDateString + s + createdBy +"')");
+        					password + s + areaCode + s + phone + s + status + s + currentDateString + s + createdBy +"')");
         			   	    
         	    conn.close();
         	   
@@ -513,7 +513,7 @@ public String getAge(String userName) throws SQLException {
 	public boolean createNewMemberCRForm(String username, String trainerID, int systolicBP, int diastolicBP, 
 			int yearsSmoked, int idealBodyWeight, String physicalActivity, int stressNumber,
 			int totalCholesterol, double hdlRatio, int hdlCholesterol, 
-			int ldlCholesterol, int triglycerides, int glucose) throws SQLException, ParseException {
+			double ldlCholesterol, int triglycerides, int glucose) throws SQLException, ParseException {
 		
 		// Create a connection to the database.
 	    conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
