@@ -127,91 +127,183 @@ public class AssessmentView extends JFrame {
 	private class bodyCompAssessment implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			String userName;
+			Object[] options = {"New", "Look-up", "Cancel"};
+			int n = JOptionPane.showOptionDialog(null,"Choose Option", "Form", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
 			EnterMemberInfo member = new EnterMemberInfo();
-			int result = JOptionPane.showConfirmDialog(null, member, "Enter Member Information", JOptionPane.OK_CANCEL_OPTION );
-			if (result == JOptionPane.OK_OPTION) {
-				userName = member.uName.getText();
-				
-				// check to make sure username exists
-				try {
-					DbManager db = new DbManager();
-					if(db.lookupMember(userName) != null) {
-						new BodyCompForm(userName, staffID);	
-					} else {
-						JOptionPane.showMessageDialog(null, "Username doesn't exist.");
-					}
-				} catch (SQLException | HeadlessException | ParseException e1) {
-					e1.printStackTrace();
+			
+			
+			if(n == JOptionPane.YES_OPTION) {
+				int result = JOptionPane.showConfirmDialog(null, member, "Enter Member Information", JOptionPane.OK_CANCEL_OPTION );
+				if (result == JOptionPane.OK_OPTION) {
+					userName = member.uName.getText();
+					
+					// check to make sure username exists
+					try {
+						DbManager db = new DbManager();
+						if(db.lookupMember(userName) != null) {
+							new BodyCompForm(userName, staffID);	
+						} else {
+							JOptionPane.showMessageDialog(null, "Username doesn't exist.");
+						}
+					} catch (SQLException | HeadlessException | ParseException e1) {
+						e1.printStackTrace();
+					}				
 				}
-				
-				
 			}
+			if(n == JOptionPane.NO_OPTION) {
+				int result = JOptionPane.showConfirmDialog(null, member, "Enter Member Information", JOptionPane.OK_CANCEL_OPTION );
+				if (result == JOptionPane.OK_OPTION) {
+					userName = member.uName.getText();
+					
+					// check to make sure username exists
+					try {
+						DbManager db = new DbManager();
+						if(db.lookupMember(userName) != null) {
+							new startForm(userName, staffID, "bodycomp");	
+						} else {
+							JOptionPane.showMessageDialog(null, "Username doesn't exist.");
+						}
+					} catch (SQLException | HeadlessException | ParseException e1) {
+						e1.printStackTrace();					}				
+				}				
+			}			
 		}
 	}
 	
 	private class AerobicCapacityAssessment implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			String userName;
+			Object[] options = {"New", "Look-up", "Cancel"};
+			int n = JOptionPane.showOptionDialog(null,"Choose Option", "Form", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
 			EnterMemberInfo member = new EnterMemberInfo();
-			int result = JOptionPane.showConfirmDialog(null, member, "Enter Member Information", JOptionPane.OK_CANCEL_OPTION );
-			if (result == JOptionPane.OK_OPTION) {
-				userName = member.uName.getText();
-				// check to make sure username exists
-				try {
-					DbManager db = new DbManager();
-					if(db.lookupMember(userName) != null) {
-						new AerobicCapacityForm(userName, staffID);	
-					} else {
-						JOptionPane.showMessageDialog(null, "Username doesn't exist.");
-					}
-				} catch (SQLException | HeadlessException | ParseException e1) {
-					e1.printStackTrace();
+			
+			
+			if(n == JOptionPane.YES_OPTION) {
+				int result = JOptionPane.showConfirmDialog(null, member, "Enter Member Information", JOptionPane.OK_CANCEL_OPTION );
+				if (result == JOptionPane.OK_OPTION) {
+					userName = member.uName.getText();
+					
+					// check to make sure username exists
+					try {
+						DbManager db = new DbManager();
+						if(db.lookupMember(userName) != null) {
+							new AerobicCapacityForm(userName, staffID);	
+						} else {
+							JOptionPane.showMessageDialog(null, "Username doesn't exist.");
+						}
+					} catch (SQLException | HeadlessException | ParseException e1) {
+						e1.printStackTrace();
+					}				
 				}
 			}
+			if(n == JOptionPane.NO_OPTION) {
+				int result = JOptionPane.showConfirmDialog(null, member, "Enter Member Information", JOptionPane.OK_CANCEL_OPTION );
+				if (result == JOptionPane.OK_OPTION) {
+					userName = member.uName.getText();
+					
+					// check to make sure username exists
+					try {
+						DbManager db = new DbManager();
+						if(db.lookupMember(userName) != null) {
+							new startForm(userName, staffID, "aerobiccapacity");	
+						} else {
+							JOptionPane.showMessageDialog(null, "Username doesn't exist.");
+						}
+					} catch (SQLException | HeadlessException | ParseException e1) {
+						e1.printStackTrace();					}				
+				}				
+			}			
 		}
 	}
 	
 	private class strengthAndFlexAssessment implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			String userName;
+			Object[] options = {"New", "Look-up", "Cancel"};
+			int n = JOptionPane.showOptionDialog(null,"Choose Option", "Form", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
 			EnterMemberInfo member = new EnterMemberInfo();
-			int result = JOptionPane.showConfirmDialog(null, member, "Enter Member Information", JOptionPane.OK_CANCEL_OPTION );
-			if (result == JOptionPane.OK_OPTION) {
-				userName = member.uName.getText();
-				// check to make sure username exists
-				try {
-					DbManager db = new DbManager();
-					if(db.lookupMember(userName) != null) {
-						new StrengthAndFlexForm(userName, staffID);
-					} else {
-						JOptionPane.showMessageDialog(null, "Username doesn't exist.");
-					}
-				} catch (SQLException | HeadlessException | ParseException e1) {
-					e1.printStackTrace();
-				}
 			
+			
+			if(n == JOptionPane.YES_OPTION) {
+				int result = JOptionPane.showConfirmDialog(null, member, "Enter Member Information", JOptionPane.OK_CANCEL_OPTION );
+				if (result == JOptionPane.OK_OPTION) {
+					userName = member.uName.getText();
+					
+					// check to make sure username exists
+					try {
+						DbManager db = new DbManager();
+						if(db.lookupMember(userName) != null) {
+							new StrengthAndFlexForm(userName, staffID);	
+						} else {
+							JOptionPane.showMessageDialog(null, "Username doesn't exist.");
+						}
+					} catch (SQLException | HeadlessException | ParseException e1) {
+						e1.printStackTrace();
+					}				
+				}
 			}
+			if(n == JOptionPane.NO_OPTION) {
+				int result = JOptionPane.showConfirmDialog(null, member, "Enter Member Information", JOptionPane.OK_CANCEL_OPTION );
+				if (result == JOptionPane.OK_OPTION) {
+					userName = member.uName.getText();
+					
+					// check to make sure username exists
+					try {
+						DbManager db = new DbManager();
+						if(db.lookupMember(userName) != null) {
+							new startForm(userName, staffID, "strengthflexibility");	
+						} else {
+							JOptionPane.showMessageDialog(null, "Username doesn't exist.");
+						}
+					} catch (SQLException | HeadlessException | ParseException e1) {
+						e1.printStackTrace();					}				
+				}				
+			}			
 		}
 	}
 	
 	private class coronaryRiskAssessment implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			String userName;
+			Object[] options = {"New", "Look-up", "Cancel"};
+			int n = JOptionPane.showOptionDialog(null,"Choose Option", "Form", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
 			EnterMemberInfo member = new EnterMemberInfo();
-			int result = JOptionPane.showConfirmDialog(null, member, "Enter Member Information", JOptionPane.OK_CANCEL_OPTION );
-			if (result == JOptionPane.OK_OPTION) {
-				userName = member.uName.getText();
-				// check to make sure username exists
-				try {
-					DbManager db = new DbManager();
-					if(db.lookupMember(userName) != null) {
-						new CoronaryRiskForm(userName, staffID);	
-					} else {
-						JOptionPane.showMessageDialog(null, "Username doesn't exist.");
-					}
-				} catch (SQLException | HeadlessException | ParseException e1) {
-					e1.printStackTrace();
+			
+			
+			if(n == JOptionPane.YES_OPTION) {
+				int result = JOptionPane.showConfirmDialog(null, member, "Enter Member Information", JOptionPane.OK_CANCEL_OPTION );
+				if (result == JOptionPane.OK_OPTION) {
+					userName = member.uName.getText();
+					
+					// check to make sure username exists
+					try {
+						DbManager db = new DbManager();
+						if(db.lookupMember(userName) != null) {
+							new CoronaryRiskForm(userName, staffID);	
+						} else {
+							JOptionPane.showMessageDialog(null, "Username doesn't exist.");
+						}
+					} catch (SQLException | HeadlessException | ParseException e1) {
+						e1.printStackTrace();
+					}				
 				}
+			}
+			if(n == JOptionPane.NO_OPTION) {
+				int result = JOptionPane.showConfirmDialog(null, member, "Enter Member Information", JOptionPane.OK_CANCEL_OPTION );
+				if (result == JOptionPane.OK_OPTION) {
+					userName = member.uName.getText();
+					
+					// check to make sure username exists
+					try {
+						DbManager db = new DbManager();
+						if(db.lookupMember(userName) != null) {
+							new startForm(userName, staffID, "coronaryrisk");	
+						} else {
+							JOptionPane.showMessageDialog(null, "Username doesn't exist.");
+						}
+					} catch (SQLException | HeadlessException | ParseException e1) {
+						e1.printStackTrace();					}				
+				}				
 			}
 		}
 	}
