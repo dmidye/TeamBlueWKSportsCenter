@@ -190,6 +190,65 @@ public String getAge(String userName) throws SQLException {
 	        }
 	        return null;
 	 }
+	 
+	 public ResultSet populateForm(String userName, String form, String date)  throws SQLException, ParseException {
+	    	
+	    	// Create a connection to the database.
+	            conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+	  
+	            // Create a Statement object for the query.
+	        Statement stmt = conn.createStatement();
+	     
+	        try {
+	        	PreparedStatement statement = conn.prepareStatement("SELECT * FROM wk_sports_center_db." + form + " "
+						  + "WHERE username = " + "'" + userName + "' AND date = '" + date + "' " 
+						  + "ORDER BY 'date" + "'");
+	        	
+	            ResultSet rs = statement.executeQuery(); 
+	            if(rs.next() == false) {
+	            	return null;
+	            } else {
+	            	return rs;
+	            }
+	        } catch(Exception e) {
+	        	e.printStackTrace();
+	        }
+	        return null;
+	 }
+	 
+	 
+	 
+	 
+	 public String[] lookupForm(String userName, String form)  throws SQLException, ParseException {
+	    	
+	    	// Create a connection to the database.
+	            conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+	  
+	            // Create a Statement object for the query.
+	        //Statement stmt = conn.createStatement();
+	     
+	        
+	        	PreparedStatement statement = conn.prepareStatement("SELECT * FROM wk_sports_center_db." + form + " "
+	        													  + "WHERE username = " + "'" + userName + "' "
+	        													  + "ORDER BY 'date" + "'");
+	            ResultSet rs = statement.executeQuery(); 
+	            rs.last();
+	            int numRows = rs.getRow();
+	            rs.first();
+	            
+	            String[] listForm = new String[numRows];
+	            
+	            for(int index = 0; index < numRows; index++) {
+	            	listForm[index] = rs.getString("date");
+	            	rs.next();
+	            }
+	            conn.close();
+	            statement.close();
+	            
+	            return listForm;	          
+	 }
+	 
+	 
 					 
 	 /* Daniel Midyett
 	  * Overloaded method to lookup member based on id
@@ -219,6 +278,38 @@ public String getAge(String userName) throws SQLException {
 	    }
 	        return null;
 	 } */
+	 
+	 public boolean deleteForm(String userName, String date, String form)  throws SQLException, ParseException {
+	    	
+	    	// Create a connection to the database.
+	            conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+	  
+	            // Create a Statement object for the query.
+	        Statement stmt = conn.createStatement();
+	       
+	        //see if the record exists. If not, return false
+	        try {
+	        	PreparedStatement statement = conn.prepareStatement("SELECT * FROM wk_sports_center_db." + form + " "
+						  											+ "WHERE username = " + "'" + userName + "' "
+						  											+ "ORDER BY 'date" + "'");
+	            ResultSet rs = statement.executeQuery(); 
+	            if(rs.next() == false) {
+	            	return false;
+	            }
+	        } catch(Exception e) {
+	        	e.printStackTrace();
+	        }
+	        try {
+	    	    stmt.executeUpdate("DELETE FROM wk_sports_center_db." + form + " "
+	    	    		         + "WHERE username = " + "'" + userName + "' AND date = '" + date + "'");
+	    	    conn.close();
+	    	    return true;
+	        } catch(Exception e) {
+	        	e.printStackTrace();
+	        	conn.close();
+	        	return false;
+	    	}
+	    }
 	 
 	 /* Daniel Midyett
 	  * Delete member based on user name
