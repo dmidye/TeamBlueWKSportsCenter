@@ -150,19 +150,19 @@ public class Calculations {
 		int systolic = Integer.parseInt(s);
 		int diastolic = Integer.parseInt(d);
 		DbManager db = new DbManager();
-		double[] diasLimits = db.getDiastolicBPRanges();
-		double[] sysLimits = db.getSystolicBPRanges();
+		int[] diasLimits = db.getDiastolicBPRanges();
+		int[] sysLimits = db.getSystolicBPRanges();
 		//Index: 0 for normal, 1 for elevated, 2 for stage one, 3 for stage two
 		
 		if(systolic < sysLimits[0] && diastolic < diasLimits[0]) {
 			result = "normal";
-		}else if(systolic <= sysLimits[1] && diastolic < diasLimits[1]) {
+		} else if(systolic <= sysLimits[1] && diastolic < diasLimits[1]) {
 			result = "elevated";
-		}else if((systolic >= sysLimits[1]+1 && systolic <= sysLimits[2]) || (diastolic >= diasLimits[1] && diastolic <= diasLimits[2])) {
+		} else if((systolic >= sysLimits[1]+1 && systolic <= sysLimits[2]) || (diastolic >= diasLimits[1] && diastolic <= diasLimits[2])) {
 			result = "HYPERTENSION Stage 1";
-		}else if((systolic >= sysLimits[2]+1 && systolic < sysLimits[3]) || (diastolic >= diasLimits[2]+1 && diastolic < diasLimits[3])) {
+		} else if((systolic >= sysLimits[2]+1 && systolic < sysLimits[3]) || (diastolic >= diasLimits[2]+1 && diastolic < diasLimits[3])) {
 			result = "HYPERTENSION Stage 2";
-		}else if(systolic >= sysLimits[3] || diastolic >= diasLimits[3]) {
+		} else if(systolic >= sysLimits[3] || diastolic >= diasLimits[3]) {
 			result = "HYPERTENSIVE CRISIS";
 		}
 		return result;

@@ -2,6 +2,7 @@ package OtherPanels;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -55,7 +56,11 @@ public class AdminView extends JFrame {
 		calculationControls.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new CalculationControls();				
+				try {
+					new CalculationControls();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}				
 			}
 		});
 		background.add(calculationControls);

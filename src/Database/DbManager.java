@@ -15,63 +15,48 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import javax.swing.JButton;
-
-
-
-
 /*
  * DbManager helps to keep the GUI classes less cluttered and keeps most or all database operations in one place.
  * 
  */
 public class DbManager {
-	//get connection to database
-		private Connection conn;
+	private Connection conn;
+	
+	private final String DB_USER = "root";
+	private final String DB_PASS = "";
+	private final String DB_URL = "jdbc:mysql://localhost:3306/wk_sports_center_db";
+	
+	private String s = "', '"; //abbreviation
+	
+	public DbManager() throws SQLException {
 		
-		private final String DB_USER = "root";
-		private final String DB_PASS = "";
-		private final String DB_URL = "jdbc:mysql://localhost:3306/wk_sports_center_db";
+	      conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+	}
+	
+	public String getAge(String userName) throws SQLException {
+		Date dob = new Date();
 		
-		private String s = "', '"; //abbreviation
+		Statement stmt = conn.createStatement();
 		
-		public DbManager() throws SQLException {
-			
-		      conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-		}
+		ResultSet result = stmt.executeQuery("SELECT memberBday FROM user WHERE username = \'" + userName + "\'");
+		result.next();
+		dob = result.getDate(1);
 		
-/*
- * Insert a trainer note into the database - Erika Clark
- *  used Daniel's model
- * 
- */
-
-
-public String getAge(String userName) throws SQLException {
-	Date dob = new Date();
+		LocalDate today = LocalDate.now();
+		Calendar cal = new GregorianCalendar();
+		cal.setTime(dob);
+		LocalDate birthday = LocalDate.of(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+		int p = Period.between(birthday, today).getYears();
+		
+		String age = Integer.toString(p);
+		
+		conn.close();
+		
+		return age;
+	}
 	
-	Statement stmt = conn.createStatement();
-	
-	ResultSet result = stmt.executeQuery("SELECT memberBday FROM user WHERE username = \'" + userName + "\'");
-	result.next();
-	dob = result.getDate(1);
-	
-	LocalDate today = LocalDate.now();
-	Calendar cal = new GregorianCalendar();
-	cal.setTime(dob);
-	LocalDate birthday = LocalDate.of(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
-	int p = Period.between(birthday, today).getYears();
-	
-	String age = Integer.toString(p);
-	
-	conn.close();
-	
-	return age;
-}
- public boolean newTrainerNotes(String userName, String trainerID, String trainingNotes) throws SQLException, ParseException {
-    	
-    	// Create a connection to the database.
+	public boolean newTrainerNotes(String userName, String trainerID, String trainingNotes) throws SQLException, ParseException {
         conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-
-        // Create a Statement object for the query.
         Statement stmt = conn.createStatement();
 	    
         Date date = new Date();
@@ -95,55 +80,38 @@ public String getAge(String userName) throws SQLException {
     	}
     }
 		
-	/*
-	 * new member to the database - Renella Martin
-	 * used Daniel's model
-	 * Debugged and integrated into GUI by - Erika Clark
-	 * 
-	 */
-	 public boolean createNewMember(String userName, String firstName, String lastName, String gender, String email, String birthday, String password, 
-			 String createdBy, String areaCode, String phone, String status) throws SQLException, ParseException {
-        	
-        	// Create a connection to the database.
-            conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+	public boolean createNewMember(String userName, String firstName, String lastName, String gender, String email, String birthday, String password, 
+		 String createdBy, String areaCode, String phone, String status) throws SQLException, ParseException {
+        conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+        Statement stmt = conn.createStatement();
+      
+        Date date = new Date();
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat formatter = new SimpleDateFormat(pattern);
+        String currentDateString = formatter.format(date);
+        
+        try {
+    	    stmt.executeUpdate("INSERT INTO wk_sports_center_db.user "
+    					+ "(username, memberFirst, memberLast, memberGender, memberEmail, memberBday, memberPswd, "
+    					+ "areaCode, phone, status, memberStart, createdBy)"
+    					+ "VALUES('" + userName + s + firstName + s + lastName + s + gender + s + email + s + birthday + s + 
+    					password + s + areaCode + s + phone + s + status + s + currentDateString + s + createdBy +"')");
+    			   	    
+    	    conn.close();
+    	   
+    	    return true;
+        } catch(Exception e) {
+        	//e.printStackTrace();
+        	System.out.println("Error creating member.");
+        	conn.close();
+        	return false;
+    	}
+    }
 
-            // Create a Statement object for the query.
-            Statement stmt = conn.createStatement();
-          
-            Date date = new Date();
-            String pattern = "yyyy-MM-dd";
-            SimpleDateFormat formatter = new SimpleDateFormat(pattern);
-            String currentDateString = formatter.format(date);
-            
-            try {
-        	    stmt.executeUpdate("INSERT INTO wk_sports_center_db.user "
-        					+ "(username, memberFirst, memberLast, memberGender, memberEmail, memberBday, memberPswd, "
-        					+ "areaCode, phone, status, memberStart, createdBy)"
-        					+ "VALUES('" + userName + s + firstName + s + lastName + s + gender + s + email + s + birthday + s + 
-        					password + s + areaCode + s + phone + s + status + s + currentDateString + s + createdBy +"')");
-        			   	    
-        	    conn.close();
-        	   
-        	    return true;
-            } catch(Exception e) {
-            	//e.printStackTrace();
-            	System.out.println("Error creating member.");
-            	conn.close();
-            	return false;
-        	}
-        }
-	 /*	Daniel Midyett
-	 * Update member
-	 * 
-	 */
-	 public boolean updateMember(String userName, String firstName, String lastName, 
+	public boolean updateMember(String userName, String firstName, String lastName, 
 			 					String email, String birthday, String password, 
 			 					String phone, String areaCode, String status) throws SQLException, ParseException {
-	    	
-	    	// Create a connection to the database.
 	    conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-	
-	    // Create a Statement object for the query.
 	    Statement stmt = conn.createStatement();
 	    
 	    try {
@@ -155,7 +123,6 @@ public String getAge(String userName) throws SQLException {
 					   + "WHERE username = '" + userName + "'");
 				   	    
 		    conn.close();
-		   
 		    return true;
 	    } catch(Exception e) {
 	    	e.printStackTrace();
@@ -164,195 +131,125 @@ public String getAge(String userName) throws SQLException {
 		}
 	}
 			 
-	 /* Daniel Midyett
-	  * Lookup member based on user name
-	  * 
-	 */
-	 public ResultSet lookupMember(String userName)  throws SQLException, ParseException {
-	    	
-	    	// Create a connection to the database.
-	            conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-	  
-	            // Create a Statement object for the query.
-	        Statement stmt = conn.createStatement();
-	     
-	        try {
-	        	PreparedStatement statement = conn.prepareStatement("SELECT * FROM wk_sports_center_db.user "
-	        													  + "WHERE username LIKE " + "'" + userName + "'");
-	            ResultSet rs = statement.executeQuery(); 
-	            if(rs.next() == false) {
-	            	return null;
-	            } else {
-	            	return rs;
-	            }
-	        } catch(Exception e) {
-	        	e.printStackTrace();
-	        }
-	        return null;
+	public ResultSet lookupMember(String userName)  throws SQLException, ParseException {
+        conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+        Statement stmt = conn.createStatement();
+     
+        try {
+        	PreparedStatement statement = conn.prepareStatement("SELECT * FROM wk_sports_center_db.user "
+        													  + "WHERE username LIKE " + "'" + userName + "'");
+            ResultSet rs = statement.executeQuery(); 
+            if(rs.next() == false) {
+            	return null;
+            } else {
+            	return rs;
+            }
+        } catch(Exception e) {
+        	e.printStackTrace();
+        }
+        return null;
 	 }
 	 
 	 public ResultSet populateForm(String userName, String form, String date)  throws SQLException, ParseException {
-	    	
-	    	// Create a connection to the database.
-	            conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-	  
-	            // Create a Statement object for the query.
-	        Statement stmt = conn.createStatement();
-	     
-	        try {
-	        	PreparedStatement statement = conn.prepareStatement("SELECT * FROM wk_sports_center_db." + form + " "
-						  + "WHERE username = " + "'" + userName + "' AND date = '" + date + "' " 
-						  + "ORDER BY 'date" + "'");
-	        	
-	            ResultSet rs = statement.executeQuery(); 
-	            if(rs.next() == false) {
-	            	return null;
-	            } else {
-	            	return rs;
-	            }
-	        } catch(Exception e) {
-	        	e.printStackTrace();
-	        }
-	        return null;
+        conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+        Statement stmt = conn.createStatement();
+     
+        try {
+        	PreparedStatement statement = conn.prepareStatement("SELECT * FROM wk_sports_center_db." + form + " "
+					  + "WHERE username = " + "'" + userName + "' AND date = '" + date + "' " 
+					  + "ORDER BY 'date" + "'");
+        	
+            ResultSet rs = statement.executeQuery(); 
+            if(rs.next() == false) {
+            	return null;
+            } else {
+            	return rs;
+            }
+        } catch(Exception e) {
+        	e.printStackTrace();
+        }
+        return null;
 	 }
-	 
-	 
-	 
 	 
 	 public String[] lookupForm(String userName, String form)  throws SQLException, ParseException {
-	    	
-	    	// Create a connection to the database.
-	            conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-	  
-	            // Create a Statement object for the query.
-	        //Statement stmt = conn.createStatement();
-	     
-	        
-	        	PreparedStatement statement = conn.prepareStatement("SELECT * FROM wk_sports_center_db." + form + " "
-	        													  + "WHERE username = " + "'" + userName + "' "
-	        													  + "ORDER BY 'date" + "'");
-	            ResultSet rs = statement.executeQuery(); 
-	            rs.last();
-	            int numRows = rs.getRow();
-	            rs.first();
-	            
-	            String[] listForm = new String[numRows];
-	            
-	            for(int index = 0; index < numRows; index++) {
-	            	listForm[index] = rs.getString("date");
-	            	rs.next();
-	            }
-	            conn.close();
-	            statement.close();
-	            
-	            return listForm;	          
-	 }
-	 
-	 
-					 
-	 /* Daniel Midyett
-	  * Overloaded method to lookup member based on id
-	  * 
-	 */
-	 
-	 /* Don't need anymore - Erika Clark
-	 public ResultSet lookupMember(String id)  throws SQLException, ParseException {
-	    	
-		// Create a connection to the database.
 	    conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-	  
-	    // Create a Statement object for the query.
-	    Statement stmt = conn.createStatement();
-	 
-	    try {
-	    	PreparedStatement statement = conn.prepareStatement("SELECT * FROM wk_sports_center_db.user "
-														  + "WHERE username = " + id);
-		    ResultSet rs = statement.executeQuery(); 
-		    if(rs.next() == false) {
-		          return null;
-		    } else {
-		          return rs;
-		    }
-	    } catch(Exception e) {
-	    	e.printStackTrace();
-	    }
-	        return null;
-	 } */
-	 
+	        //Statement stmt = conn.createStatement();
+    	PreparedStatement statement = conn.prepareStatement("SELECT * FROM wk_sports_center_db." + form + " "
+    													  + "WHERE username = " + "'" + userName + "' "
+    													  + "ORDER BY 'date" + "'");
+        ResultSet rs = statement.executeQuery(); 
+        rs.last();
+        int numRows = rs.getRow();
+        rs.first();
+        
+        String[] listForm = new String[numRows];
+        
+        for(int index = 0; index < numRows; index++) {
+        	listForm[index] = rs.getString("date");
+        	rs.next();
+        }
+        conn.close();
+        statement.close();
+        
+        return listForm;	          
+	 }
+ 
 	 public boolean deleteForm(String userName, String date, String form)  throws SQLException, ParseException {
-	    	
-	    	// Create a connection to the database.
-	            conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-	  
-	            // Create a Statement object for the query.
-	        Statement stmt = conn.createStatement();
-	       
-	        //see if the record exists. If not, return false
-	        try {
-	        	PreparedStatement statement = conn.prepareStatement("SELECT * FROM wk_sports_center_db." + form + " "
-						  											+ "WHERE username = " + "'" + userName + "' "
-						  											+ "ORDER BY 'date" + "'");
-	            ResultSet rs = statement.executeQuery(); 
-	            if(rs.next() == false) {
-	            	return false;
-	            }
-	        } catch(Exception e) {
-	        	e.printStackTrace();
-	        }
-	        try {
-	    	    stmt.executeUpdate("DELETE FROM wk_sports_center_db." + form + " "
-	    	    		         + "WHERE username = " + "'" + userName + "' AND date = '" + date + "'");
-	    	    conn.close();
-	    	    return true;
-	        } catch(Exception e) {
-	        	e.printStackTrace();
-	        	conn.close();
-	        	return false;
-	    	}
-	    }
+        conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+        Statement stmt = conn.createStatement();
+        try {
+        	PreparedStatement statement = conn.prepareStatement("SELECT * FROM wk_sports_center_db." + form + " "
+					  											+ "WHERE username = " + "'" + userName + "' "
+					  											+ "ORDER BY 'date" + "'");
+            ResultSet rs = statement.executeQuery(); 
+            if(rs.next() == false) {
+            	return false;
+            }
+        } catch(Exception e) {
+        	e.printStackTrace();
+        }
+        try {
+    	    stmt.executeUpdate("DELETE FROM wk_sports_center_db." + form + " "
+    	    		         + "WHERE username = " + "'" + userName + "' AND date = '" + date + "'");
+    	    conn.close();
+    	    return true;
+        } catch(Exception e) {
+        	e.printStackTrace();
+        	conn.close();
+        	return false;
+    	}
+    }
 	 
-	 /* Daniel Midyett
-	  * Delete member based on user name
-	  * 
-	 */
-	 public boolean deleteMember(String userName)  throws SQLException, ParseException {
-	    	
-	    	// Create a connection to the database.
-	            conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-	  
-	            // Create a Statement object for the query.
-	        Statement stmt = conn.createStatement();
-	       
-	        //see if the record exists. If not, return false
-	        try {
-	        	PreparedStatement statement = conn.prepareStatement("SELECT * FROM wk_sports_center_db.user "
-	        			                                          + "WHERE username LIKE " + "'" + userName + "'");
-	            ResultSet rs = statement.executeQuery(); 
-	            if(rs.next() == false) {
-	            	return false;
-	            }
-	        } catch(Exception e) {
-	        	e.printStackTrace();
-	        }
-	        try {
-	    	    stmt.executeUpdate("DELETE FROM wk_sports_center_db.user "
-	    	    		         + "WHERE username LIKE " + "'" + userName + "'");
-	    	    conn.close();
-	    	    return true;
-	        } catch(Exception e) {
-	        	e.printStackTrace();
-	        	conn.close();
-	        	return false;
-	    	}
-	    }
+	public boolean deleteMember(String userName)  throws SQLException, ParseException {
+        conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+        Statement stmt = conn.createStatement();
+       
+        //see if the record exists. If not, return false
+        try {
+        	PreparedStatement statement = conn.prepareStatement("SELECT * FROM wk_sports_center_db.user "
+        			                                          + "WHERE username LIKE " + "'" + userName + "'");
+            ResultSet rs = statement.executeQuery(); 
+            if(rs.next() == false) {
+            	return false;
+            }
+        } catch(Exception e) {
+        	e.printStackTrace();
+        }
+        try {
+    	    stmt.executeUpdate("DELETE FROM wk_sports_center_db.user "
+    	    		         + "WHERE username LIKE " + "'" + userName + "'");
+    	    conn.close();
+    	    return true;
+        } catch(Exception e) {
+        	e.printStackTrace();
+        	conn.close();
+        	return false;
+    	}
+    }
 	 
-	 /*
-	  * START OF FEEDBACK OPERATIONS
-	  */
+/* START OF FEEDBACK OPERATIONS*/
  	public void deleteFeedBack(int id) throws SQLException { 
  		conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
- 		
- 	    // Create a Statement object for the query.
  	    Statement stmt = conn.createStatement();
  	    
  	    try {
@@ -364,10 +261,7 @@ public String getAge(String userName) throws SQLException {
  	}
  
  	public void markFeedBackClosed(int id) throws SQLException {
- 	// Create a connection to the database.
 	    conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-	
-	    // Create a Statement object for the query.
 	    Statement stmt = conn.createStatement();
 	    
 	    try {
@@ -379,10 +273,7 @@ public String getAge(String userName) throws SQLException {
 		}
  	}
  	public Object[][] getOpenFeedback() throws SQLException {
- 	 	// Create a connection to the database.
 	    conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-	
-	    // Create a Statement object for the query.
 	    Statement stmt = conn.createStatement();
 	    Statement stmt2 = conn.createStatement();
 	    
@@ -416,10 +307,7 @@ public String getAge(String userName) throws SQLException {
  	}
  	
  	public Object[][] getClosedFeedback() throws SQLException {
- 	 	// Create a connection to the database.
 	    conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-	
-	    // Create a Statement object for the query.
 	    Statement stmt = conn.createStatement();
 	    Statement stmt2 = conn.createStatement();
 	    
@@ -453,24 +341,15 @@ public String getAge(String userName) throws SQLException {
  	}
  	/* END FEEDBACK OPERATIONS */
  	
- 	
- 	/*	Daniel Midyett
-	 * Update BMI calculation
-	 * 
-	 */
-	 public boolean updateBMI(int id, double bmi) throws SQLException, ParseException {
-	    	
-	    	// Create a connection to the database.
+ 	/* START UPDATE RANGE OPERATIONS */ 
+	public boolean updateBMIRanges(double[] limits) throws SQLException, ParseException {
 	    conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-	
-	    // Create a Statement object for the query.
 	    Statement stmt = conn.createStatement();
 	    
 	    try {
-		    stmt.executeUpdate("UPDATE wk_sports_center_db.bodycomp "
-							 + "SET BMI = '" + bmi + "' "
-							 + "WHERE memberID = '" + id + "'" );
-				  	    
+		    stmt.executeUpdate("UPDATE bmiranges SET upper_limit = '" + limits[0] + "' WHERE id = 1");
+		    stmt.executeUpdate("UPDATE bmiranges SET upper_limit = '" + limits[1] + "' WHERE id = 2");
+		    stmt.executeUpdate("UPDATE bmiranges SET upper_limit = '" + limits[2] + "' WHERE id = 3");
 		    conn.close();
 		   
 		    return true;
@@ -480,39 +359,69 @@ public String getAge(String userName) throws SQLException {
 	    	return false;
 		}
 	}
-	 /*	Daniel Midyett
-	 * Update V02 calculation
-	 * 
-	 */
-	 public boolean updateVO2(int id, double maxVO2) throws SQLException, ParseException {
-	    	
-	    	// Create a connection to the database.
-	        conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-	
-	        // Create a Statement object for the query.
-	        Statement stmt = conn.createStatement();
-	        
-	        try {
-	    	    stmt.executeUpdate("UPDATE wk_sports_center_db.aerobiccapacity "
-	    						 + "SET maxVO2 = '" + maxVO2 + "' "
-	    						 + "WHERE memberID = '" + id + "'" );
-	    			  	    
-	    	    conn.close();
-	    	   
-	    	    return true;
-	        } catch(Exception e) {
-	        	e.printStackTrace();
-	        	conn.close();
-	        	return false;
-	    	}
-	  }
+	 
+	public boolean updateWTHRanges(double[] limits) throws SQLException, ParseException {
+	    conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+	    Statement stmt = conn.createStatement();
+	    
+	    try {
+		    stmt.executeUpdate("UPDATE waisttohipranges SET upper_limit = '" + limits[0] + "' WHERE id = 1");
+			stmt.executeUpdate("UPDATE waisttohipranges SET upper_limit = '" + limits[1] + "' WHERE id = 2");				 					  	    
+		    conn.close();
+		   
+		    return true;
+	    } catch(Exception e) {
+	    	e.printStackTrace();
+	    	conn.close();
+	    	return false;
+		}
+	}
+	 
+	public boolean updateSystolicRanges(int[] limits) throws SQLException, ParseException {
+	    conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+	    Statement stmt = conn.createStatement();
+	    
+	    try {
+		    stmt.executeUpdate("UPDATE bloodpressureranges SET systolic_upper_limit = '" + limits[0] + "' WHERE id = 1");
+			stmt.executeUpdate("UPDATE bloodpressureranges SET systolic_upper_limit = '" + limits[1] + "' WHERE id = 2");
+			stmt.executeUpdate("UPDATE bloodpressureranges SET systolic_upper_limit = '" + limits[2] + "' WHERE id = 3");
+			stmt.executeUpdate("UPDATE bloodpressureranges SET systolic_upper_limit = '" + limits[3] + "' WHERE id = 4");
+		    conn.close();
+		   
+		    return true;
+	    } catch(Exception e) {
+	    	e.printStackTrace();
+	    	conn.close();
+	    	return false;
+		}
+	}
+	 
+	public boolean updateDiastolicRanges(int[] limits) throws SQLException, ParseException {
+	    conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+	    Statement stmt = conn.createStatement();
+	    
+	    try {
+		    stmt.executeUpdate("UPDATE bloodpressureranges SET diastolic_upper_limit = '" + limits[0] + "' WHERE id = 1");
+		    stmt.executeUpdate("UPDATE bloodpressureranges SET diastolic_upper_limit = '" + limits[1] + "' WHERE id = 2");
+		    stmt.executeUpdate("UPDATE bloodpressureranges SET diastolic_upper_limit = '" + limits[2] + "' WHERE id = 3");
+		    stmt.executeUpdate("UPDATE bloodpressureranges SET diastolic_upper_limit = '" + limits[3] + "' WHERE id = 4");
+		    conn.close();
+		   
+		    return true;
+	    } catch(Exception e) {
+	    	e.printStackTrace();
+	    	conn.close();
+	    	return false;
+		}
+	}
+	/* END UPDATE RANGE OPERATIONS */  
 	 
 	public double[] getBMIRanges() throws SQLException {
 	    conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
 	    Statement stmt = conn.createStatement();
 	    double[] limits = new double[3];
 	    try {
-		   ResultSet rs = stmt.executeQuery("SELECT * FROM bmi_ranges");
+		   ResultSet rs = stmt.executeQuery("SELECT * FROM bmiranges");
 		   int count = 0;
 		   rs.beforeFirst();
 		   while(rs.next()) {
@@ -547,16 +456,16 @@ public String getAge(String userName) throws SQLException {
 		}
 	}
 	
-	public double[] getDiastolicBPRanges() throws SQLException {
+	public int[] getDiastolicBPRanges() throws SQLException {
 	    conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
 	    Statement stmt = conn.createStatement();
-	    double[] diasLimits = new double[4];
+	    int[] diasLimits = new int[4];
 	    try {
 		   ResultSet rs = stmt.executeQuery("SELECT * FROM bloodpressureranges");
 		   int count = 0;
 		   rs.beforeFirst();
 		   while(rs.next()) {
-			   diasLimits[count] = rs.getDouble(4);
+			   diasLimits[count] = rs.getInt(4);
 			   count++;
 		   }
 		   return diasLimits;
@@ -567,16 +476,16 @@ public String getAge(String userName) throws SQLException {
 		}
 	}
 	
-	public double[] getSystolicBPRanges() throws SQLException {
+	public int[] getSystolicBPRanges() throws SQLException {
 	    conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
 	    Statement stmt = conn.createStatement();
-	    double[] sysLimits = new double[4];
+	    int[] sysLimits = new int[4];
 	    try {
 		   ResultSet rs = stmt.executeQuery("SELECT * FROM bloodpressureranges");
 		   int count = 0;
 		   rs.beforeFirst();
 		   while(rs.next()) {
-			   sysLimits[count] = rs.getDouble(3);
+			   sysLimits[count] = rs.getInt(3);
 			   count++;
 		   }
 		   return sysLimits;
@@ -587,19 +496,10 @@ public String getAge(String userName) throws SQLException {
 		}
 	}
 	
-	
-		 
-	/*
-	 * Adds a a form to the aerobiccapacity table.
-	 * Generates the current date.
-	 */
+	/* START CREATE FORM OPERATIONS */ 
 	public boolean createNewMemberACForm(String username, String trainerID, int heartRateMax, int restedHeartRate, int finalTestHeartRate, 
 			String protocol, int timeInMin, double maxVO2) throws SQLException, ParseException {
-		
-		// Create a connection to the database.
 	    conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-
-	    // Create a Statement object for the query.
 	    Statement stmt = conn.createStatement();
 
 	    Date date = new Date();
@@ -622,11 +522,7 @@ public String getAge(String userName) throws SQLException {
 	}
 		
 	public boolean createNewMemberSFForm(String username, String trainerID, int pushUps, int sitUps, int sitReach) throws SQLException, ParseException {
-		
-		// Create a connection to the database.
 	    conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-
-	    // Create a Statement object for the query.
 	    Statement stmt = conn.createStatement();
 	    
 	    Date date = new Date();
@@ -652,11 +548,7 @@ public String getAge(String userName) throws SQLException {
 	public boolean createNewMemberBCForm(String username, String trainerID, double BMI, double domForearm, double domArm, double domThigh, double domAbdomen,
 			double domCalf, double waistCircumference, double hipCircumference, double waistToHipRatio, String bodyCompProtocol, double chest, double midAxillary, double triceps, double subscapular, double abdomen,
 			double supralliac, double thigh, double percentBodyFat, double leanWeight,  double bodyDensity, double fatWeight, double desiredWeight) throws SQLException, ParseException {
-		
-		// Create a connection to the database.
 	    conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-	    
-	    // Create a Statement object for the query.
 	    Statement stmt = conn.createStatement();
 	    
 	    Date date = new Date();
@@ -686,11 +578,7 @@ public String getAge(String userName) throws SQLException {
 			int yearsSmoked, int idealBodyWeight, String physicalActivity, int stressNumber,
 			int totalCholesterol, double hdlRatio, int hdlCholesterol, 
 			double ldlCholesterol, int triglycerides, int glucose) throws SQLException, ParseException {
-		
-		// Create a connection to the database.
 	    conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-
-	    // Create a Statement object for the query.
 	    Statement stmt = conn.createStatement();
 
 	    Date date = new Date();
@@ -715,4 +603,5 @@ public String getAge(String userName) throws SQLException {
         	return false;
         }
 	}
+	/* END CREATE FORMS OPERATIONS */ 
 }
