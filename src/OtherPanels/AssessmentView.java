@@ -157,7 +157,7 @@ public class AssessmentView extends JFrame {
 					try {
 						DbManager db = new DbManager();
 						if(db.lookupMember(userName) != null) {
-							new startForm(userName, staffID, "bodycomp");	
+							new StartForm(userName, staffID, "bodycomp");	
 						} else {
 							JOptionPane.showMessageDialog(null, "Username doesn't exist.");
 						}
@@ -203,7 +203,7 @@ public class AssessmentView extends JFrame {
 					try {
 						DbManager db = new DbManager();
 						if(db.lookupMember(userName) != null) {
-							new startForm(userName, staffID, "aerobiccapacity");	
+							new StartForm(userName, staffID, "aerobiccapacity");	
 						} else {
 							JOptionPane.showMessageDialog(null, "Username doesn't exist.");
 						}
@@ -249,7 +249,7 @@ public class AssessmentView extends JFrame {
 					try {
 						DbManager db = new DbManager();
 						if(db.lookupMember(userName) != null) {
-							new startForm(userName, staffID, "strengthflexibility");	
+							new StartForm(userName, staffID, "strengthflexibility");	
 						} else {
 							JOptionPane.showMessageDialog(null, "Username doesn't exist.");
 						}
@@ -295,7 +295,7 @@ public class AssessmentView extends JFrame {
 					try {
 						DbManager db = new DbManager();
 						if(db.lookupMember(userName) != null) {
-							new startForm(userName, staffID, "coronaryrisk");	
+							new StartForm(userName, staffID, "coronaryrisk");	
 						} else {
 							JOptionPane.showMessageDialog(null, "Username doesn't exist.");
 						}

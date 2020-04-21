@@ -66,7 +66,7 @@ public class CalculationControls  extends JFrame{
 		JLabel form = new JLabel(new ImageIcon(NewUserForm.class.getResource("/StaffViewAssets/calculationsControls.png")));
 		form.setBounds(50, 20, 1105, 641);
 		form.setLayout(null);		
-		
+
 		double[] bmiRanges = db.getBMIRanges();
 		BMIunderweight = new JTextField();
 		BMIunderweight.setBounds(188, 107, 100, 25);

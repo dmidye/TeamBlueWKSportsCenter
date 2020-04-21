@@ -17,7 +17,6 @@ import java.util.GregorianCalendar;
 import javax.swing.JButton;
 /*
  * DbManager helps to keep the GUI classes less cluttered and keeps most or all database operations in one place.
- * 
  */
 public class DbManager {
 	private Connection conn;
