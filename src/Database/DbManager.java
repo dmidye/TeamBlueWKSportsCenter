@@ -265,7 +265,7 @@ public class DbManager {
 	    
 	    try {
 		    stmt.executeUpdate("UPDATE wk_sports_center_db.feedback "
-						+ "SET closed = 0 "
+						+ "SET closed = 1 "
 						+ "WHERE id = " + id);
 	    } catch(Exception e) {
 			e.printStackTrace();
