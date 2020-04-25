@@ -43,6 +43,7 @@ import java.awt.event.ActionEvent;
 
 import Database.DbManager;
 import Database.databaseConnector;
+import OtherPanels.StaffView;
 
 import java.awt.CardLayout;
 import javax.swing.JSeparator;
@@ -66,7 +67,7 @@ public class LoginPanel extends JPanel {
 	private JTextField newEmail;
 	private JTextField newFirstName; 
 	private JTextField newLastName;
-	private StaffView staffView;
+	StaffView staffView;
 	private JPanel MainPanel;
 	
 	JLabel loginButton;
@@ -414,16 +415,32 @@ public class LoginPanel extends JPanel {
 					System.out.println(memberType);
 					switch (memberType) { //Sign in based on member type
 						case ("Admin"):
-							new StaffView(staffID);
+
+						  staffView = new StaffView(staffID, "Admin");	
+						  staffView.setVisible(true);
+						  UsernameField.setText("");
+						  PasswordField.setText("");
+
 							break;
 						case ("Member"):
 							changePanel(new HomeScreen(owningFrame, username));
 							break;
 						case("FrontDesk"):
-							new StaffView(staffID);
+
+							staffView = new StaffView(staffID, "FrontDesk");	
+							staffView.setVisible(true);
+							staffView.assessment.setEnabled(false);
+							staffView.adminControls.setEnabled(false);
+							UsernameField.setText("");
+							PasswordField.setText("");					
 							break;
+              
 						case("Trainer"):
-							new StaffView(staffID);
+							staffView = new StaffView(staffID, "Trainer");	
+							staffView.setVisible(true);
+							staffView.adminControls.setEnabled(false);
+							UsernameField.setText("");
+							PasswordField.setText("");
 							break;
 					}
 					

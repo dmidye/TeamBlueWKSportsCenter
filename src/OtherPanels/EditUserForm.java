@@ -50,7 +50,7 @@ public class EditUserForm extends JFrame {
 	JButton Cancel;
 	JButton remove;
 	ResultSet rs;
-	public EditUserForm(ResultSet rs) throws SQLException {
+	public EditUserForm(ResultSet rs, String memberType) throws SQLException {
 		this.rs = rs;
 		//TODO: set each JTextField to display the information corresponding the user
 		
@@ -190,6 +190,12 @@ public class EditUserForm extends JFrame {
 		//pre-select status radio button
 		String status = rs.getString("status");
 		String gender = rs.getString("memberGender");
+		
+		if(memberType == "FrontDesk" || memberType == "Trainer") {
+			Admin.setEnabled(false);
+			Trainer.setEnabled(false);
+			fStaff.setEnabled(false);
+		}
 
 		System.out.println("status: " + status);
 		if(status.equals(member.getText())) {

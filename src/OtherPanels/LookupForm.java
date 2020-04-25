@@ -35,10 +35,11 @@ public class LookupForm extends JFrame{
 	
 	JButton lookUpUser;
 	JButton Cancel;
+	String memberType;
 	
-	public LookupForm() {
+	public LookupForm(String memberType) {
 		
-		
+			this.memberType = memberType;
 			
 			setTitle("Look-Up User");
 			setSize(500, 675);
@@ -124,12 +125,27 @@ public class LookupForm extends JFrame{
 				try {
 					DbManager db = new DbManager();
 					ResultSet rs = db.lookupMember(username);
-					if(rs != null) {
-						new EditUserForm(rs);	
-					} else {
+					String userType = rs.getString("status");
+					System.out.println(userType);
+						if(rs != null) {
+								if(userType.equals("Member")) {
+									new EditUserForm(rs, memberType); 
+								}
+								else if(memberType == "Trainer" && userType != "Member") {
+									JOptionPane.showMessageDialog(null, "You do not have permission to view this user");
+								}
+								else if(memberType == "FrontDesk" && userType != "Member") {
+									JOptionPane.showMessageDialog(null, "You do not have permission to view this user");
+								}
+								else if(memberType == "Admin" && userType != "Member") {
+									new EditUserForm(rs, memberType); 
+								}
+						 else {
 						JOptionPane.showMessageDialog(null, "Username does not exist.");
-
+						}
 					}
+					
+					
 				} catch (SQLException | ParseException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
