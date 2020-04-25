@@ -89,7 +89,7 @@ public class GoalObjectPanel extends JPanel {
 		subCurrent.setEditable(false);
 		subCurrent.setBackground(Color.white);
 		subCurrent.setBorder(null);
-		subCurrent.setBounds(184, 378, 82, 23);
+		subCurrent.setBounds(184, 318, 82, 23);
 		subPanel.add(subCurrent);
 		subCurrent.setColumns(10);
 		
@@ -142,7 +142,7 @@ public class GoalObjectPanel extends JPanel {
 		subGoal = new JTextField();
 		subGoal.setEditable(false);
 		subGoal.setBorder(null);
-		subGoal.setBounds(184, 318, 82, 23);
+		subGoal.setBounds(184, 378, 82, 23);
 		subGoal.setBackground(Color.white);
 		subPanel.add(subGoal);
 		subGoal.setColumns(10);
@@ -394,7 +394,7 @@ public class GoalObjectPanel extends JPanel {
 							FinishGoalButton.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/SaveGoalButton.png")));
 							AddAGoalButton.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/AddAGoal.png")));
 							FinishGoalButton.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/MarkAsFinishedButton.png")));
-							database.sendUpdate("INSERT INTO `goals` (`username`,`description`, `currentValue`,`goalValue`) VALUES ('" + username + ",'" + subDescription.getText() + "'," + subCurrent.getText() + "," + subGoal.getText() + ")");
+							database.sendUpdate("INSERT INTO `goals` (`username`,`description`, `currentValue`,`goalValue`) VALUES ('" + username + "', '" + subDescription.getText() + "','" + subCurrent.getText() + "', '" + subGoal.getText() + "')");
 							
 							goalComboBox.setEnabled(true); //Setup buttons and fields
 							GoalValueButton.setEnabled(true);
@@ -546,7 +546,7 @@ public class GoalObjectPanel extends JPanel {
 				subCurrent.setText(Integer.toString(rs.getInt(1)));
 				subGoal.setText(Integer.toString(rs.getInt(2)));
 				subToGo.setText(Integer.toString(Math.abs(rs.getInt(1) - rs.getInt(2))));
-				memberID = rs.getInt(3);
+				//memberID = rs.getInt(3);
 			}
 		} catch (SQLException e1) {
 			e1.printStackTrace();
