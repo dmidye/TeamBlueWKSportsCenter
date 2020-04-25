@@ -11,24 +11,37 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class StaffView extends JFrame {
-	JButton newMember;
-	JButton memberLookUp;
-	JButton assessment;
-	JButton adminControls;
-	JButton logout;
+	public JButton newMember;
+	public JButton memberLookUp;
+	public JButton assessment;
+	public JButton adminControls;
+	public JButton logout;
+	
+	String enabledAdminControls = "AdminControls.png";
+	String adminButton;
+	String assessmentButton;
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public StaffView(String userID) {
+	public StaffView(String userID, String memberType) {
+		if(memberType == "Trainer") {
+			adminButton = "AdminControlsButtonPressed.png";
+		}
+		if(memberType == "FrontDesk") {
+			adminButton = "AdminControlsButtonPressed.png";
+			assessmentButton = "AssessmentsButtonPessed.png"; 
+		}
+		else {
+			adminButton = "AdminControls.png";
+			assessmentButton = "AssessmentsButton.png";
+		}
 		setTitle("Staff View");
 		setSize(1200, 675);
 		setLocationRelativeTo(null);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);		
-		
-		
 		
 		setLayout(new BorderLayout());
 		JLabel background = new JLabel(new ImageIcon(StaffView.class.getResource("/StaffViewAssets/staffViewBackground2.png")));
@@ -45,7 +58,7 @@ public class StaffView extends JFrame {
 		newMember.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new NewUserForm(userID);				
+				new NewUserForm(userID, memberType);				
 			}
 		});
 		background.add(newMember);
@@ -60,14 +73,14 @@ public class StaffView extends JFrame {
 		memberLookUp.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new LookupForm();				
+				new LookupForm(memberType);				
 			}
 		});
 		background.add(memberLookUp);
 		
 		//Assessment Button
 		//TODO: Finish assessments
-		assessment = new JButton(new ImageIcon(StaffView.class.getResource("/StaffViewAssets/AssessmentsButton.png")));
+		assessment = new JButton(new ImageIcon(StaffView.class.getResource("/StaffViewAssets/" + assessmentButton)));
 		assessment.setBounds(360, 285, 483, 85);
 		assessment.setOpaque(false);
 		assessment.setContentAreaFilled(false);
@@ -83,7 +96,10 @@ public class StaffView extends JFrame {
 	
 		//Admin Controls
 		//TODO: admin controls
-		adminControls = new JButton(new ImageIcon(StaffView.class.getResource("/StaffViewAssets/AdminControls.png")));
+	
+		adminControls = new JButton(new ImageIcon(StaffView.class.getResource("/StaffViewAssets/" + adminButton))); 
+		
+		
 		adminControls.setBounds(360, 405, 483, 85);
 		adminControls.setOpaque(false);
 		adminControls.setContentAreaFilled(false);

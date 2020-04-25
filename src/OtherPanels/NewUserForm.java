@@ -52,7 +52,7 @@ public class NewUserForm extends JFrame{
 	
 	String staffID;
 	
-	public NewUserForm(String staffID) {
+	public NewUserForm(String staffID, String memberType) {
 		this.staffID = staffID;
 		
 		setTitle("New User");
@@ -85,8 +85,6 @@ public class NewUserForm extends JFrame{
 		lName.setEditable(true);
 		form.add(lName);
 		
-		
-		
 		bday = new JTextField(20);
 		bday.setBounds(120, 130, 278, 25);
 		bday.setOpaque(false);
@@ -116,9 +114,8 @@ public class NewUserForm extends JFrame{
 		            e.consume(); 
 		    }
 		});
-//
-		areaCode.setBounds(120, 200, 44, 25);
 
+		areaCode.setBounds(120, 200, 44, 25);
 		areaCode.setOpaque(false);
 		areaCode.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		areaCode.setFont(font1);
@@ -190,6 +187,12 @@ public class NewUserForm extends JFrame{
 		group1.add(fStaff);
 		group1.add(Trainer);
 		group1.add(Admin);
+		
+		if(memberType == "FrontDesk" || memberType == "Trainer") {
+			Admin.setEnabled(false);
+			Trainer.setEnabled(false);
+			fStaff.setEnabled(false);
+		}
 		
 		
 		saveUser = new JButton(new ImageIcon(NewUserForm.class.getResource("/StaffViewAssets/AddUserButton.png")));

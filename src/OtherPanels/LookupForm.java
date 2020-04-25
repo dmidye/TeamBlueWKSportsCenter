@@ -35,10 +35,11 @@ public class LookupForm extends JFrame{
 	
 	JButton lookUpUser;
 	JButton Cancel;
+	String memberType;
 	
-	public LookupForm() {
+	public LookupForm(String memberType) {
 		
-		
+			this.memberType = memberType;
 			
 			setTitle("Look-Up User");
 			setSize(500, 675);
@@ -54,21 +55,23 @@ public class LookupForm extends JFrame{
 			JLabel form = new JLabel(new ImageIcon(NewUserForm.class.getResource("/StaffViewAssets/Look-UpForm.png")));
 			form.setBounds(22, 32, 472, 597);
 			form.setLayout(null);
-			fName = new JTextField(20);
-			fName.setBounds(133, 185, 278, 25);
-			fName.setOpaque(false);
-			fName.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-			fName.setFont(font1);
-			fName.setEditable(true);
-			form.add(fName);
+
+			//do not need first name and last name for member lookup
+//			fName = new JTextField(20);
+//			fName.setBounds(133, 185, 278, 25);
+//			fName.setOpaque(false);
+//			fName.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+//			fName.setFont(font1);
+//			fName.setEditable(true);
+//			form.add(fName);
 			
-			lName = new JTextField(20);
-			lName.setBounds(133, 225, 278, 25);
-			lName.setOpaque(false);
-			lName.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-			lName.setFont(font1);
-			lName.setEditable(true);
-			form.add(lName);
+//			lName = new JTextField(20);
+//			lName.setBounds(133, 225, 278, 25);
+//			lName.setOpaque(false);
+//			lName.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+//			lName.setFont(font1);
+//			lName.setEditable(true);
+//			form.add(lName);
 						
 			userName = new JTextField(20);
 			userName.setBounds(133, 265, 250, 25);
@@ -122,12 +125,27 @@ public class LookupForm extends JFrame{
 				try {
 					DbManager db = new DbManager();
 					ResultSet rs = db.lookupMember(username);
-					if(rs != null) {
-						new EditUserForm(rs);	
-					} else {
+					String userType = rs.getString("status");
+					System.out.println(userType);
+						if(rs != null) {
+								if(userType.equals("Member")) {
+									new EditUserForm(rs, memberType); 
+								}
+								else if(memberType == "Trainer" && userType != "Member") {
+									JOptionPane.showMessageDialog(null, "You do not have permission to view this user");
+								}
+								else if(memberType == "FrontDesk" && userType != "Member") {
+									JOptionPane.showMessageDialog(null, "You do not have permission to view this user");
+								}
+								else if(memberType == "Admin" && userType != "Member") {
+									new EditUserForm(rs, memberType); 
+								}
+						 else {
 						JOptionPane.showMessageDialog(null, "Username does not exist.");
-
+						}
 					}
+					
+					
 				} catch (SQLException | ParseException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
