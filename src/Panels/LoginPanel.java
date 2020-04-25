@@ -415,31 +415,32 @@ public class LoginPanel extends JPanel {
 					System.out.println(memberType);
 					switch (memberType) { //Sign in based on member type
 						case ("Admin"):
-							staffView = new StaffView(staffID, "Admin");	
-						staffView.setVisible(true);
-						UsernameField.setText("");
-						PasswordField.setText("");
+
+						  staffView = new StaffView(staffID, "Admin");	
+						  staffView.setVisible(true);
+						  UsernameField.setText("");
+						  PasswordField.setText("");
+
 							break;
 						case ("Member"):
 							changePanel(new HomeScreen(owningFrame, username));
 							break;
 						case("FrontDesk"):
+
 							staffView = new StaffView(staffID, "FrontDesk");	
 							staffView.setVisible(true);
 							staffView.assessment.setEnabled(false);
 							staffView.adminControls.setEnabled(false);
 							UsernameField.setText("");
-							PasswordField.setText("");
-							
-						
+							PasswordField.setText("");					
 							break;
+              
 						case("Trainer"):
 							staffView = new StaffView(staffID, "Trainer");	
 							staffView.setVisible(true);
 							staffView.adminControls.setEnabled(false);
 							UsernameField.setText("");
 							PasswordField.setText("");
-							
 							break;
 					}
 					

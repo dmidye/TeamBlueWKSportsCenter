@@ -44,17 +44,29 @@ public class GoalObjectPanel extends JPanel {
 	private JLabel QuoteLabel;
 	private final JTextField requestItem = new JTextField();
 	
+	private boolean isDescActive = false;
+	private boolean isCurrActive = false;
+	private boolean isGoalActive = false;
+	
+	//buttons
+	private JLabel editDescriptionButton;
+	private JLabel CurrentValueButton;
+	private JLabel GoalValueButton;
+	
+	//Are goals being Created?
+	public boolean creatingGoals = false;
+	
 	public GoalObjectPanel(String username) {
 		this.username = username;
 		currentDescription = "Select a Goal";
-		ResultSet rs = database.sendStatement("SELECT `user`.`memberID` FROM `user` WHERE `user`.`Username` = \"" + username + "\"");
-		try {
-			while(rs.next()) {
-				memberID = rs.getInt(1);
-			}
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
+		//ResultSet rs = database.sendStatement("SELECT `user`.`memberID` FROM `user` WHERE username` = \"" + username + "\"");
+//		try {
+//			while(rs.next()) {
+//				memberID = rs.getInt(1);
+//			}
+//		} catch (SQLException e1) {
+//			e1.printStackTrace();
+//		}
 		setBackground(new Color(243,243,243));
 		setBorder(null);
 		setLayout(null);
@@ -65,8 +77,6 @@ public class GoalObjectPanel extends JPanel {
 		panel.setBounds(477, 28, 696, 653);
 		add(panel);
 		panel.setLayout(null);
-		
-		updateMainGoalPanel();
 		
 		JPanel subPanel = new JPanel();
 		subPanel.setBorder(null);
@@ -114,7 +124,7 @@ public class GoalObjectPanel extends JPanel {
 		lblAmountToGo.setBounds(487, 316, 114, 26);
 		subPanel.add(lblAmountToGo);
 		
-		subToGo = new JLabel("\"\"");
+		subToGo = new JLabel("");
 		subToGo.setForeground(Color.BLACK);
 		subToGo.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		subToGo.setBounds(609, 318, 60, 22);
@@ -155,22 +165,22 @@ public class GoalObjectPanel extends JPanel {
 		progressBar.setBounds(34, 471, 562, 17);
 		subPanel.add(progressBar);
 		
-		JLabel editDescriptionButton = new JLabel("Edit");
+		editDescriptionButton = new JLabel("Edit");
 		editDescriptionButton.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/EditButton.png")));
 		editDescriptionButton.setBounds(493, 252, 122, 63);		
 		subPanel.add(editDescriptionButton);
 		
-		JLabel lblNewLabel_3 = new JLabel("New label");
-		lblNewLabel_3.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/MarkAsFinishedButton.png")));
-		lblNewLabel_3.setBounds(190, 533, 295, 67);
-		subPanel.add(lblNewLabel_3);
+		JLabel FinishGoalButton = new JLabel("New label");
+		FinishGoalButton.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/MarkAsFinishedButton.png")));
+		FinishGoalButton.setBounds(190, 533, 295, 67);
+		subPanel.add(FinishGoalButton);
 		
-		JLabel CurrentValueButton = new JLabel("Edit");
+		CurrentValueButton = new JLabel("Edit");
 		CurrentValueButton.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/EditButton.png")));
 		CurrentValueButton.setBounds(313, 302, 122, 63);
 		subPanel.add(CurrentValueButton);
 		
-		JLabel GoalValueButton = new JLabel("Edit");
+		GoalValueButton = new JLabel("Edit");
 		GoalValueButton.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/EditButton.png")));
 		GoalValueButton.setBounds(313, 363, 122, 63);
 		subPanel.add(GoalValueButton);
@@ -193,18 +203,6 @@ public class GoalObjectPanel extends JPanel {
 		subPanel.add(requestItem);
 		requestItem.setColumns(10);
 		
-		goalComboBox.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.println();
-				if(!goalComboBox.getSelectedItem().equals("Select a Goal")) {
-					updateSubGoalPanel(goalComboBox.getSelectedItem().toString());
-				}
-				else {
-					currentDescription = "Select a Goal";
-				}
-			}
-		});
 		setLayout(null);
 		
 		JPanel goalsLeftPanel = new JPanel();
@@ -225,10 +223,10 @@ public class GoalObjectPanel extends JPanel {
 		goalsLeftPanel.add(GoalsLeftCounter);
 		GoalsLeftCounter.setFont(new Font("Tahoma", Font.PLAIN, 80));
 		
-		JLabel label_1 = new JLabel("");
-		label_1.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/AddAGoal.png")));
-		label_1.setBounds(71, 217, 165, 65);
-		goalsLeftPanel.add(label_1);
+		JLabel AddAGoalButton = new JLabel("");
+		AddAGoalButton.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/AddAGoal.png")));
+		AddAGoalButton.setBounds(71, 217, 165, 65);
+		goalsLeftPanel.add(AddAGoalButton);
 		
 		JLabel label = new JLabel("");
 		label.setBounds(-10, -15, 327, 337);
@@ -266,6 +264,8 @@ public class GoalObjectPanel extends JPanel {
 
 		retriveInspiration();
 		
+		updateComboBox();
+		
 		
 		//Start of Button Functionality Addition ///////////////////////////////////////////////////////////////////////////////////
 		
@@ -278,16 +278,26 @@ public class GoalObjectPanel extends JPanel {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				editValue(editDescriptionButton, subDescription, "description");
+				if(isDescActive) {
+					isDescActive = false;
+				}
+				else {
+					isDescActive = true;
+				}
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {}
 
 			@Override
-			public void mouseEntered(MouseEvent e) {}
+			public void mouseEntered(MouseEvent e) {
+				changeGoalButton(editDescriptionButton, isDescActive, true);
+			}
 
 			@Override
-			public void mouseExited(MouseEvent e) {}	
+			public void mouseExited(MouseEvent e) {
+				changeGoalButton(editDescriptionButton, isDescActive, false);
+			}	
 		});
 		
 		GoalValueButton.addMouseListener(new MouseListener() {  //Enable / Disable Goal Value and Save Change Button
@@ -299,16 +309,26 @@ public class GoalObjectPanel extends JPanel {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				editValue(GoalValueButton, subCurrent, "currentValue");
+				if(isGoalActive) {
+					isGoalActive = false;
+				}
+				else {
+					isGoalActive = true;
+				}
 			}
 			
 			@Override
 			public void mouseReleased(MouseEvent e) {}
 
 			@Override
-			public void mouseEntered(MouseEvent e) {}
+			public void mouseEntered(MouseEvent e) {
+				changeGoalButton(GoalValueButton, isGoalActive, true);
+			}
 
 			@Override
-			public void mouseExited(MouseEvent e) {}
+			public void mouseExited(MouseEvent e) {
+				changeGoalButton(GoalValueButton, isGoalActive, false);
+			}
 		});
 		
 		CurrentValueButton.addMouseListener(new MouseListener() {  // Enable / Disable Current Value and Save Change Button
@@ -320,16 +340,175 @@ public class GoalObjectPanel extends JPanel {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				editValue(CurrentValueButton, subGoal, "goalValue");
+				if(isCurrActive) {
+					isCurrActive = false;
+				}
+				else {
+					isCurrActive = true;
+				}
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {}
 
 			@Override
-			public void mouseEntered(MouseEvent e) {}
+			public void mouseEntered(MouseEvent e) {
+				changeGoalButton(CurrentValueButton, isCurrActive, true);
+			}
 
 			@Override
-			public void mouseExited(MouseEvent e) {}
+			public void mouseExited(MouseEvent e) {
+				changeGoalButton(CurrentValueButton, isCurrActive, false);
+			}
+		});
+		
+		
+		goalComboBox.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println();
+				System.out.println("GGG");
+				if(goalComboBox.getSelectedItem() != null && !goalComboBox.getSelectedItem().equals("Select a Goal")) {
+					updateSubGoalPanel(goalComboBox.getSelectedItem().toString());
+					System.out.println("NotSelectGoal");
+				}
+				else {
+					System.out.println("Select Goal");
+					currentDescription = "Select a Goal";
+				}
+			}
+		});
+		
+		FinishGoalButton.addMouseListener(new MouseListener() {  //Button that deletes goals 
+
+			@Override
+			public void mouseClicked(MouseEvent e) {}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				if(creatingGoals) {  //Handle if saving new goal
+					if(!subDescription.getText().equals("")){
+						try {  
+							Integer.parseInt(subGoal.getText());
+							Integer.parseInt(subCurrent.getText());
+							FinishGoalButton.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/SaveGoalButton.png")));
+							AddAGoalButton.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/AddAGoal.png")));
+							FinishGoalButton.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/MarkAsFinishedButton.png")));
+							database.sendUpdate("INSERT INTO `goals` (`username`,`description`, `currentValue`,`goalValue`) VALUES ('" + username + ",'" + subDescription.getText() + "'," + subCurrent.getText() + "," + subGoal.getText() + ")");
+							
+							goalComboBox.setEnabled(true); //Setup buttons and fields
+							GoalValueButton.setEnabled(true);
+							CurrentValueButton.setEnabled(true);
+							editDescriptionButton.setEnabled(true);
+							subDescription.setEditable(false);
+							subGoal.setEditable(false);
+							subCurrent.setEditable(false);
+							creatingGoals = false;
+							
+							updateComboBox();  //Fix combo box
+							
+							subCurrent.setText("");//Clear fields
+							subGoal.setText("");
+							subDescription.setText("");
+							
+						} catch (Exception e1) { // Handle if goal and current fields are empty
+							FinishGoalButton.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/SaveGoalButtonFailed.png")));
+							e1.printStackTrace();
+						}
+					}
+					else {  //Handle if description field is empty 
+						FinishGoalButton.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/SaveGoalButtonFailed.png")));
+					}
+				} //Handle is deleting goal
+				else {
+					database.sendUpdate("DELETE FROM `goals` WHERE `username` = " + username + " AND `description` = '" + subDescription.getText()+ "'");
+					updateComboBox();
+				}
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				if(!creatingGoals) {
+					FinishGoalButton.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/MarkAsFinishedButtonHovered.png")));
+				}
+				else {
+					FinishGoalButton.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/SaveGoalButtonHovered.png")));
+				}
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				if(!creatingGoals) {
+					FinishGoalButton.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/MarkAsFinishedButton.png")));
+				}
+				else {
+					FinishGoalButton.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/SaveGoalButton.png")));
+				}
+			}
+		});
+		
+		AddAGoalButton.addMouseListener(new MouseListener() {     //Changes the main panel to create a new goal.
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(!creatingGoals) {
+					AddAGoalButton.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/QuitNewGoalButton.png")));
+					FinishGoalButton.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/SaveGoalButton.png")));
+					goalComboBox.setEnabled(false);
+					GoalValueButton.setEnabled(false);
+					CurrentValueButton.setEnabled(false);
+					editDescriptionButton.setEnabled(false);
+					subDescription.setEditable(true);
+					subGoal.setEditable(true);
+					subCurrent.setEditable(true);
+					creatingGoals = true;
+				}
+				else {
+					AddAGoalButton.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/AddAGoal.png")));
+					FinishGoalButton.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/MarkAsFinishedButton.png")));
+					goalComboBox.setEnabled(true);
+					GoalValueButton.setEnabled(true);
+					CurrentValueButton.setEnabled(true);
+					editDescriptionButton.setEnabled(true);
+					subDescription.setEditable(false);
+					subGoal.setEditable(false);
+					subCurrent.setEditable(false);
+					subCurrent.setText("");
+					subGoal.setText("");
+					subDescription.setText("");
+					creatingGoals = false;
+				}
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				if(!creatingGoals) {
+					AddAGoalButton.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/AddAGoalHovered.png")));	
+				}
+				else {
+					
+				}
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				if(!creatingGoals) {
+					AddAGoalButton.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/AddAGoal.png")));
+				}
+				else {
+					
+				}
+			}
+			
 		});
 	}
 	
@@ -338,14 +517,15 @@ public class GoalObjectPanel extends JPanel {
 	//Description: Update the goal combo box and counter
 	//
 	//
-	public void updateMainGoalPanel() {
-		goals.clear();
+	public void updateComboBox() {
+		goalComboBox.removeAllItems();
+		goalComboBox.addItem("Select a Goal");
 		goalsCounter = 0;
-		ResultSet rs = database.sendStatement("SELECT `goals`.`description` FROM `goals` INNER JOIN `user` ON `goals`.`memberID` = `user`.`memberID` WHERE `user`.`Username` = \"" + username + "\"");
+		ResultSet rs = database.sendStatement("SELECT `goals`.`description` FROM `goals` INNER JOIN `user` ON `user`.`Username` = \"" + username + "\"");
 		try {
-			goals.add("Select a Goal");
 			while(rs.next()) {
-				goals.add(rs.getString(1));
+				String nextGoal = rs.getString(1);
+				goalComboBox.addItem(nextGoal);
 				goalsCounter++;
 			}
 		} catch (SQLException e1) {
@@ -358,7 +538,7 @@ public class GoalObjectPanel extends JPanel {
 	//
 	public void updateSubGoalPanel(String description) {
 		
-		ResultSet rs = database.sendStatement("SELECT `goals`.`currentValue`, `goals`.`goalValue`, `user`.`memberID` FROM `goals` INNER JOIN `user` ON `goals`.`memberID` = `user`.`memberID` WHERE `member`.`Username` = \"" + username + "\" AND `goals`.`description` = \"" + description + "\"");
+		ResultSet rs = database.sendStatement("SELECT `goals`.`currentValue`, `goals`.`goalValue` FROM `goals` INNER JOIN `user` ON `user`.`Username` = \"" + username + "\" WHERE `goals`.`description` = \"" + description + "\"");
 		try {
 			while(rs.next()) {
 				currentDescription = description;
@@ -377,24 +557,22 @@ public class GoalObjectPanel extends JPanel {
 	//
 	//
 	public void editValue(JLabel button, JTextField field, String attribute) {
-		if(button.getText().equals("Edit")) {
+		if(button.getText().equals("Edit")) {  //If editing value
 			field.setEditable(true);
 			field.requestFocus();
-			button.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/SaveButton.png")));
+			button.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/SaveButtonHovered.png")));
 			button.setText("Save");
 		}
-		else {
+		else {                                 //If saving value
 			requestItem.requestFocus();
-			button.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/EditButton.png")));
+			button.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/EditButtonHovered.png")));
 			button.setText("Edit");
 			field.setEditable(false);
-			database.sendUpdate("UPDATE `goals` SET `" + attribute + "` = \"" + field.getText() + "\" WHERE memberID = \"" + memberID + "\" AND `description` = \"" + currentDescription + "\"");
+			database.sendUpdate("UPDATE `goals` SET `" + attribute + "` = \"" + field.getText() + "\" WHERE username = \"" + username + "\" AND `description` = \"" + currentDescription + "\"");
 			if(attribute.equals("description")) {
 				currentDescription = field.getText();
 			}
 			goalComboBox.setEditable(true);
-			updateMainGoalPanel();
-			goalComboBox.setModel(new DefaultComboBoxModel(goals.toArray()));  //Leads to updateSubGoalPanel() being called by action Listener
 			goalComboBox.setSelectedItem(currentDescription);
 			goalComboBox.setEditable(false);
 		}
@@ -418,5 +596,24 @@ public class GoalObjectPanel extends JPanel {
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
+	}
+	
+	private void changeGoalButton(JLabel button, boolean mode, boolean entered) {
+		if(!entered) {
+			if(mode) {
+				button.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/SaveButton.png")));
+			}
+			else {
+				button.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/EditButton.png")));
+			}
+		}
+		else {
+			if(mode) {
+				button.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/SaveButtonHovered.png")));
+			}
+			else {
+				button.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/EditButtonHovered.png")));
+			}
+		}	
 	}
 }

@@ -40,8 +40,6 @@ public class AssessmentView extends JFrame {
 			setResizable(false);
 			setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);		
 			
-			
-			
 			setLayout(new BorderLayout());
 			JLabel background = new JLabel(new ImageIcon(StaffView.class.getResource("/StaffViewAssets/staffViewBackground2.png")));
 			add(background);
@@ -159,7 +157,7 @@ public class AssessmentView extends JFrame {
 					try {
 						DbManager db = new DbManager();
 						if(db.lookupMember(userName) != null) {
-							new startForm(userName, staffID, "bodycomp");	
+							new StartForm(userName, staffID, "bodycomp");	
 						} else {
 							JOptionPane.showMessageDialog(null, "Username doesn't exist.");
 						}
@@ -205,7 +203,7 @@ public class AssessmentView extends JFrame {
 					try {
 						DbManager db = new DbManager();
 						if(db.lookupMember(userName) != null) {
-							new startForm(userName, staffID, "aerobiccapacity");	
+							new StartForm(userName, staffID, "aerobiccapacity");	
 						} else {
 							JOptionPane.showMessageDialog(null, "Username doesn't exist.");
 						}
@@ -251,7 +249,7 @@ public class AssessmentView extends JFrame {
 					try {
 						DbManager db = new DbManager();
 						if(db.lookupMember(userName) != null) {
-							new startForm(userName, staffID, "strengthflexibility");	
+							new StartForm(userName, staffID, "strengthflexibility");	
 						} else {
 							JOptionPane.showMessageDialog(null, "Username doesn't exist.");
 						}
@@ -297,7 +295,7 @@ public class AssessmentView extends JFrame {
 					try {
 						DbManager db = new DbManager();
 						if(db.lookupMember(userName) != null) {
-							new startForm(userName, staffID, "coronaryrisk");	
+							new StartForm(userName, staffID, "coronaryrisk");	
 						} else {
 							JOptionPane.showMessageDialog(null, "Username doesn't exist.");
 						}
@@ -312,7 +310,7 @@ public class AssessmentView extends JFrame {
 
 		public void actionPerformed(ActionEvent e) {
 
-			new notesForm(staffID);
+			new NotesForm(staffID);
 		}
 	}
 

@@ -14,7 +14,6 @@ public class FieldValidation {
 	 }
 	
 	//birthday validation
-//
 	final static String DATE_FORMAT = "yyyy-MM-dd";
 
 	boolean dateValidation(String date) {
@@ -24,7 +23,8 @@ public class FieldValidation {
             df.parse(date);
             return true;
         } catch (ParseException e) {
-        	e.printStackTrace();
+        	System.out.println("Couldn't parse date.");
+        	//e.printStackTrace();
             return false;
         }
 	}

@@ -19,13 +19,7 @@ import com.mysql.cj.protocol.Resultset;
 
 import Database.DbManager;
 
-
-
-
 public class AerobicCapacityForm  extends JFrame{
-	
-	
-	
 	/**
 	 * 
 	 */
@@ -249,10 +243,10 @@ public class AerobicCapacityForm  extends JFrame{
 	
 	private class calculateButton2 implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			calculations calc = new calculations();
+			Calculations calc = new Calculations();
 			String hm = calc.calculateMaxHeartRate(dob);
 			heartRateMax.setText(hm);
-			heartRateRange.setText("Your target heart rate is betwee " + calc.minHRPercentageCalc(hm, minHRPercent.getText()) + " and " + calc.maxHRPercentageCalc(hm, maxHRPercent.getText()) + " BPM");
+			heartRateRange.setText("Your target heart rate is between " + calc.minHRPercentageCalc(hm, minHRPercent.getText()) + " and " + calc.maxHRPercentageCalc(hm, maxHRPercent.getText()) + " BPM");
 			saveNote.setVisible(true);
 			
  		}
@@ -290,7 +284,6 @@ public class AerobicCapacityForm  extends JFrame{
 		
 	private class saveNoteButton2 implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			//TODO:
 			try {
 				DbManager db = new DbManager();
 				if(db.newTrainerNotes(username, staffID, MaxVO2.getText())) {

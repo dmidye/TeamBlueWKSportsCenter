@@ -3,40 +3,25 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.Color;
 import javax.swing.JLabel;
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import java.awt.GridBagLayout;
-import java.awt.Image;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.time.LocalDate;
 import java.awt.Font;
 import java.awt.FontFormatException;
 
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
-import Assets.fonts;
 import Components.GymEventPanel;
-import Components.LeaveThanksPanel;
 import Panels.HomeScreenMember.AccountPanel;
 import Panels.HomeScreenMember.GoalObjectPanel;
 import Panels.HomeScreenMember.ReportsPanelFull;
-import Panels.HomeScreenMember.reportsPanel;
 
 import java.awt.CardLayout;
-import javax.swing.JTextPane;
-import javax.swing.JButton;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import java.awt.FlowLayout;
-import java.awt.BorderLayout;
 import java.awt.GridLayout;
 
 public class HomeScreen extends JPanel {
@@ -44,18 +29,32 @@ public class HomeScreen extends JPanel {
 	private JLabel currentLabel = new JLabel();
 	private String username;
 	private JFrame owningFrame;
-	private fonts fontCatalog = new fonts();
 	private AccountPanel accountPanel;
 	private JPanel CardPanel;
 	private Database.databaseConnector databaseConnector;
 	private JPanel eventsPanel;
-
+	
+	private Color hoveringColor = new Color(221,151,255);
+	private Color clickedColor = new Color(42,240,255);
+	private String currentMainPage = "Home";
+	
+	//Menu Buttons
+	private JLabel lblHome_1;
+	private JLabel lblAccount;
+	private JLabel lblGoals;
+	private JLabel lblReports;
+	
+	
+	//Calendar
+	private JLabel lblDay;
+	private JLabel lblMonth;
+	private JLabel lblNumberDay;
+	
 	/**
 	 * Create the panel.
 	 */
 	
 	CardLayout cardLayout;
-	private JTextField CommentTitleInputArea;
 	
 	public HomeScreen(JFrame owningFrame,String username) throws IOException {
 		setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -79,35 +78,35 @@ public class HomeScreen extends JPanel {
 		label.setBounds(521, 56, 46, 14);
 		TopPanel.add(label);
 		
-		JLabel lblHome_1 = new JLabel("Home");
-		lblHome_1.setForeground(Color.WHITE);
-		lblHome_1.setBounds(705, 18, 51, 34);
+		lblHome_1 = new JLabel("Home");
+		lblHome_1.setForeground(clickedColor);
+		lblHome_1.setBounds(702, 11, 51, 34);
 		TopPanel.add(lblHome_1);
 		lblHome_1.setFont(new Font("Arial", Font.PLAIN, 20));
 		
-		JLabel lblAccount = new JLabel("Account");
+		lblAccount = new JLabel("Account");
 		lblAccount.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblAccount.setForeground(Color.WHITE);
-		lblAccount.setBounds(766, 23, 76, 23);
+		lblAccount.setBounds(770, 16, 76, 23);
 		TopPanel.add(lblAccount);
 		
-		JLabel lblGoals = new JLabel("Goals");
+		lblGoals = new JLabel("Goals");
 		lblGoals.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblGoals.setForeground(Color.WHITE);
-		lblGoals.setBounds(852, 23, 51, 23);
+		lblGoals.setBounds(859, 16, 51, 23);
 		
 		TopPanel.add(lblGoals);
 		
-		JLabel lblReports = new JLabel("Reports");
+		lblReports = new JLabel("Reports");
 		lblReports.setForeground(Color.WHITE);
 		lblReports.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblReports.setBounds(913, 21, 76, 27);
+		lblReports.setBounds(924, 14, 76, 27);
 		TopPanel.add(lblReports);
 		
 		JLabel lblSignOut = new JLabel("Sign Out");
 		lblSignOut.setForeground(Color.WHITE);
 		lblSignOut.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblSignOut.setBounds(999, 17, 108, 34);
+		lblSignOut.setBounds(1010, 10, 108, 34);
 		
 		TopPanel.add(lblSignOut);
 		
@@ -127,28 +126,29 @@ public class HomeScreen extends JPanel {
 		HomePanel.add(CalanderPanel);
 		CalanderPanel.setLayout(null);
 		
-		JLabel label_1 = new JLabel("9");
-		label_1.setFont(new Font("Tahoma", Font.PLAIN, 99));
-		label_1.setBounds(123, 178, 54, 91);
-		CalanderPanel.add(label_1);
+		lblNumberDay = new JLabel("9");
+		lblNumberDay.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNumberDay.setFont(new Font("Tahoma", Font.PLAIN, 99));
+		lblNumberDay.setBounds(0, 125, 300, 180);
+		CalanderPanel.add(lblNumberDay);
 		
 		JPanel topOfCalanderPanel = new JPanel();
 		topOfCalanderPanel.setBounds(0, 0, 300, 126);
 		CalanderPanel.add(topOfCalanderPanel);
 		topOfCalanderPanel.setLayout(null);
 		
-		JLabel lblDay = new JLabel("Day");
+		lblDay = new JLabel("Day");
 		lblDay.setForeground(Color.WHITE);
 		lblDay.setHorizontalAlignment(SwingConstants.CENTER);
 		lblDay.setFont(new Font("Tahoma", Font.PLAIN, 40));
-		lblDay.setBounds(68, 26, 164, 47);
+		lblDay.setBounds(0, 26, 300, 47);
 		topOfCalanderPanel.add(lblDay);
 		
-		JLabel lblMonth = new JLabel("Month");
+		lblMonth = new JLabel("Month");
 		lblMonth.setForeground(Color.WHITE);
 		lblMonth.setHorizontalAlignment(SwingConstants.CENTER);
 		lblMonth.setFont(new Font("Tahoma", Font.PLAIN, 30));
-		lblMonth.setBounds(64, 69, 172, 47);
+		lblMonth.setBounds(0, 69, 300, 47);
 		topOfCalanderPanel.add(lblMonth);
 		
 		JLabel TopOfCalander = new JLabel("New label");
@@ -200,11 +200,11 @@ public class HomeScreen extends JPanel {
 		JLabel lblTodaysSchedule = new JLabel("Today's Schedule");
 		lblTodaysSchedule.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTodaysSchedule.setFont(new Font("Tahoma", Font.PLAIN, 50));
-		lblTodaysSchedule.setBounds(107, 70, 455, 61);
+		lblTodaysSchedule.setBounds(107, 53, 455, 61);
 		SchedulePanel.add(lblTodaysSchedule);
 		
 		eventsPanel = new JPanel();
-		eventsPanel.setBounds(10, 144, 654, 441);
+		eventsPanel.setBounds(44, 144, 622, 441);
 		SchedulePanel.add(eventsPanel);
 		eventsPanel.setLayout(new GridLayout(0, 1, 0, 0));		
 		fillEventsList();                                                               //Fills up Event Panel
@@ -230,53 +230,11 @@ public class HomeScreen extends JPanel {
 		accountPanel = new AccountPanel(username);
 		CardPanel.add(accountPanel);
 		
-		JPanel FeedbackPanel = new JPanel();
+		JPanel FeedbackPanel = new FeedbackPanel(databaseConnector, CardPanel, HomePanel);                    //Create Feedback Panel
 		CardPanel.add(FeedbackPanel, "name_3691353706700");
 		FeedbackPanel.setLayout(null);
 		
-		JLabel returnFromCommentsButton = new JLabel("");
-		returnFromCommentsButton.setIcon(new ImageIcon(HomeScreen.class.getResource("/Assets/Return.png")));
-		returnFromCommentsButton.setBounds(319, 565, 182, 63);
-		FeedbackPanel.add(returnFromCommentsButton);
-		
-		JLabel SendCommentButton = new JLabel("");
-		SendCommentButton.setIcon(new ImageIcon(HomeScreen.class.getResource("/Assets/Send.png")));
-		SendCommentButton.setBounds(708, 564, 182, 63);
-		FeedbackPanel.add(SendCommentButton);
-		
-		JLabel FeelingsTextArea = new JLabel("");
-		FeelingsTextArea.setIcon(new ImageIcon(HomeScreen.class.getResource("/Assets/FeelingsDescription.png")));
-		FeelingsTextArea.setBounds(319, 284, 599, 267);
-		FeedbackPanel.add(FeelingsTextArea);
-		
-		JLabel CommentTitleTextArea = new JLabel("");
-		CommentTitleTextArea.setIcon(new ImageIcon(HomeScreen.class.getResource("/Assets/TitleBar.png")));
-		CommentTitleTextArea.setBounds(420, 191, 486, 70);
-		FeedbackPanel.add(CommentTitleTextArea);
-		
-		JLabel FeelingsDescription = new JLabel("");
-		FeelingsDescription.setIcon(new ImageIcon(HomeScreen.class.getResource("/Assets/FeelingsPanel.png")));
-		FeelingsDescription.setBounds(267, 20, 696, 653);
-		FeedbackPanel.add(FeelingsDescription);
-		
-		CommentTitleInputArea = new JTextField();
-		CommentTitleInputArea.setBorder(null);
-		CommentTitleInputArea.setBounds(443, 203, 430, 28);
-		FeedbackPanel.add(CommentTitleInputArea);
-		CommentTitleInputArea.setColumns(10);
-		
-		JTextArea CommentInputArea = new JTextArea();
-		CommentInputArea.setBounds(348, 315, 525, 195);
-		FeedbackPanel.add(CommentInputArea);
-		
-		JPanel ThanksPanel = new JPanel();
-		CardPanel.add(ThanksPanel, "name_7718352610600");
-		ThanksPanel.setLayout(null);
-		
-		JLabel label_6 = new JLabel("");
-		label_6.setIcon(new ImageIcon(HomeScreen.class.getResource("/Assets/ThanksPanel.png")));
-		label_6.setBounds(267, 20, 696, 653);
-		ThanksPanel.add(label_6);
+		setUpCalendar(); //Setup Calendar
 		
 		///////Start of Button Functionality Addition  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		
@@ -287,20 +245,28 @@ public class HomeScreen extends JPanel {
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
+				currentMainPage = "Home";
 				CardPanel.removeAll();
 				CardPanel.add(HomePanel);
+				reWhiteMenuLabel();
 				CardPanel.repaint();
 				CardPanel.revalidate();	
+				lblHome_1.setForeground(clickedColor);
 			}
 			
 			@Override
 			public void mouseReleased(MouseEvent e) {}
 
 			@Override
-			public void mouseEntered(MouseEvent e) {}
+			public void mouseEntered(MouseEvent e) {
+				changeHoveredColor("Home", lblHome_1, hoveringColor);
+				
+			}
 
 			@Override
-			public void mouseExited(MouseEvent e) {}
+			public void mouseExited(MouseEvent e) {
+				changeHoveredColor("Home", lblHome_1, Color.white);
+			}
 			
 		});
 		
@@ -310,6 +276,8 @@ public class HomeScreen extends JPanel {
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
+				currentMainPage = "Account";
+				reWhiteMenuLabel();
 				CardPanel.removeAll();
 				CardPanel.add(accountPanel);
 				CardPanel.repaint();
@@ -320,10 +288,14 @@ public class HomeScreen extends JPanel {
 			public void mouseReleased(MouseEvent e) {}
 
 			@Override
-			public void mouseEntered(MouseEvent e) {}
+			public void mouseEntered(MouseEvent e) {
+				changeHoveredColor("Account", lblAccount, hoveringColor);
+			}
 
 			@Override
-			public void mouseExited(MouseEvent e) {}
+			public void mouseExited(MouseEvent e) {
+				changeHoveredColor("Account", lblAccount, Color.white);
+			}
 		});
 		
 		lblGoals.addMouseListener(new MouseListener() {  //Navigation Bar Goals Button
@@ -332,7 +304,9 @@ public class HomeScreen extends JPanel {
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
+				currentMainPage = "Goals";
 				CardPanel.removeAll();
+				reWhiteMenuLabel();
 				CardPanel.add(GoalPanel);
 				CardPanel.repaint();
 				CardPanel.revalidate();
@@ -341,10 +315,14 @@ public class HomeScreen extends JPanel {
 			public void mouseReleased(MouseEvent e) {}
 
 			@Override
-			public void mouseEntered(MouseEvent e) {}
+			public void mouseEntered(MouseEvent e) {
+				changeHoveredColor("Goals", lblGoals, hoveringColor);
+			}
 
 			@Override
-			public void mouseExited(MouseEvent e) {}
+			public void mouseExited(MouseEvent e) {
+				changeHoveredColor("Goals", lblGoals, Color.white);
+			}
 		});
 		
 		lblReports.addMouseListener(new MouseListener() { //Navigation Bar Reports Button
@@ -353,7 +331,9 @@ public class HomeScreen extends JPanel {
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
+				currentMainPage = "Reports";
 				CardPanel.removeAll();
+				reWhiteMenuLabel();
 				CardPanel.add(ReportsPanel);
 				CardPanel.repaint();
 				CardPanel.revalidate();
@@ -363,10 +343,14 @@ public class HomeScreen extends JPanel {
 			public void mouseReleased(MouseEvent e) {}
 
 			@Override
-			public void mouseEntered(MouseEvent e) {}
+			public void mouseEntered(MouseEvent e) {
+				changeHoveredColor("Reports", lblReports, hoveringColor);
+			}
 
 			@Override
-			public void mouseExited(MouseEvent e) {}
+			public void mouseExited(MouseEvent e) {
+				changeHoveredColor("Reports", lblReports, Color.white);
+			}
 		});
 		
 		lblSignOut.addMouseListener(new MouseListener() {  //Navigation Bar Sign Out Button
@@ -389,10 +373,14 @@ public class HomeScreen extends JPanel {
 			public void mouseReleased(MouseEvent e) {}
 
 			@Override
-			public void mouseEntered(MouseEvent e) {}
+			public void mouseEntered(MouseEvent e) {
+				lblSignOut.setForeground(hoveringColor);
+			}
 			
 			@Override
-			public void mouseExited(MouseEvent e) {}
+			public void mouseExited(MouseEvent e) {
+				lblSignOut.setForeground(Color.white);
+			}
 		});
 		
 		lblLeaveAComment.addMouseListener(new MouseListener() {     //Button to Comment Panel
@@ -405,73 +393,22 @@ public class HomeScreen extends JPanel {
 				CardPanel.removeAll();
 				CardPanel.add(FeedbackPanel);
 				CardPanel.repaint();
+				lblLeaveAComment.setIcon(new ImageIcon(LoginPanel.class.getResource("/Assets/Comment Button.png")));
 				CardPanel.revalidate();	
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {}
 
+			public void mouseEntered(MouseEvent e) {
+				lblLeaveAComment.setIcon(new ImageIcon(LoginPanel.class.getResource("/Assets/LeaveCommentHovered.png")));
+			}
+					
 			@Override
-			public void mouseEntered(MouseEvent e) {}
-
-			@Override
-			public void mouseExited(MouseEvent e) {}
+			public void mouseExited(MouseEvent e) {
+				lblLeaveAComment.setIcon(new ImageIcon(LoginPanel.class.getResource("/Assets/Comment Button.png")));
+			}
 			
-		});
-		
-		returnFromCommentsButton.addMouseListener(new MouseListener() { //Return From Comments Panel to Home Panel Button
-
-			@Override
-			public void mouseClicked(MouseEvent e) {}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				CardPanel.removeAll();
-				CardPanel.add(HomePanel);
-				CardPanel.repaint();
-				CardPanel.revalidate();	
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {}
-
-			@Override
-			public void mouseExited(MouseEvent e) {}
-		});
-		
-		SendCommentButton.addMouseListener(new MouseListener() {        //Send Comment Button
-
-			@Override
-			public void mouseClicked(MouseEvent e) {}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				String title = CommentTitleInputArea.getText();
-				String description = CommentInputArea.getText();
-				
-				databaseConnector.sendUpdate("INSERT INTO `feedback`(`Title`, `Description`, `Closed`) VALUES (\"" + title + "\", \"" + description + "\" , \"" + 1 + "\")");
-				
-				CardPanel.removeAll();
-				CardPanel.add(ThanksPanel);
-				CardPanel.repaint();
-				CardPanel.revalidate();
-				
-				Timer leaveThanksPanel = new Timer();
-				TimerTask task = new LeaveThanksPanel(HomePanel,CardPanel);
-				leaveThanksPanel.schedule(task,800);
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {}
-
-			@Override
-			public void mouseExited(MouseEvent e) {}
 		});
 
 	}
@@ -503,5 +440,47 @@ public class HomeScreen extends JPanel {
 		catch(SQLException e) {
 			System.out.println(e);
 		}
+	}
+	
+	public void reWhiteMenuLabel() {
+		switch (currentMainPage) {
+			case "Home":
+				lblAccount.setForeground(Color.white);
+				lblReports.setForeground(Color.white);
+				lblGoals.setForeground(Color.white);
+				lblHome_1.setForeground(clickedColor);
+				break;
+			case "Account":
+				lblHome_1.setForeground(Color.white);
+				lblReports.setForeground(Color.white);
+				lblGoals.setForeground(Color.white);
+				lblAccount.setForeground(clickedColor);
+				break;
+			case "Reports":
+				lblAccount.setForeground(Color.white);
+				lblHome_1.setForeground(Color.white);
+				lblGoals.setForeground(Color.white);
+				lblReports.setForeground(clickedColor);
+				break;
+			case "Goals":
+				lblAccount.setForeground(Color.white);
+				lblReports.setForeground(Color.white);
+				lblHome_1.setForeground(Color.white);
+				lblGoals.setForeground(clickedColor);
+				break;
+		}
+	}
+	
+	private void changeHoveredColor(String string, JLabel hoveredButton, Color hoveringColor) {
+		if (!currentMainPage.equals(string)) {
+			hoveredButton.setForeground(hoveringColor);
+		}
+	}
+	
+	private void setUpCalendar() {
+		LocalDate now = LocalDate.now();
+		lblDay.setText(now.getDayOfWeek().toString());
+		lblMonth.setText(now.getMonth().toString());
+		lblNumberDay.setText(Integer.toString(now.getDayOfMonth()));
 	}
 }

@@ -1,27 +1,21 @@
 package OtherPanels;
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.ResultSet;
-import java.util.Date;
+import java.sql.SQLException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
-import Database.DbManager;
 import Panels.StaffView;
 
 public class AdminView extends JFrame {
 	JButton calculationControls;
 	JButton memberComments;
 	JButton back;
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 
 	public AdminView() {
@@ -30,9 +24,7 @@ public class AdminView extends JFrame {
 		setLocationRelativeTo(null);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);		
-		
-		
-		
+			
 		setLayout(new BorderLayout());
 		JLabel background = new JLabel(new ImageIcon(StaffView.class.getResource("/StaffViewAssets/staffViewBackground2.png")));
 		add(background);
@@ -64,7 +56,11 @@ public class AdminView extends JFrame {
 		calculationControls.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new CalculationControls();				
+				try {
+					new CalculationControls();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}				
 			}
 		});
 		background.add(calculationControls);
@@ -94,8 +90,4 @@ public class AdminView extends JFrame {
 			closeFrame();
 		}
 	}
-	
-	
-	
-
 };
