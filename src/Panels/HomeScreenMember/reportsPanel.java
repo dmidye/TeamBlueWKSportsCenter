@@ -145,43 +145,43 @@ public class reportsPanel extends JPanel {
 		
 		btnSitups.addActionListener(new ActionListener() {           /////////////////////////////////////////////////TODO Hook this up to the current buttons
 			public void actionPerformed(ActionEvent e) {
-				rs = connector.sendStatement("SELECT `date`,`situps` FROM `strengthflexibility` WHERE `username` = " + username);
+				rs = connector.sendStatement("SELECT `date`,`situps` FROM `strengthflexibility` WHERE `username` = \"" + username + "\"");
 			    graphFactory.createGraph(rs, "Situps Performed Over Time", "Dates", "Situps Performed");
 			}
 		});
 		btnPushups.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				rs = connector.sendStatement("SELECT `date`,`pushups` FROM `strengthflexibility` WHERE `username` = " + username);
+				rs = connector.sendStatement("SELECT `date`,`pushups` FROM `strengthflexibility` WHERE `username` = \"" + username + "\"");
 			    graphFactory.createGraph(rs, "Pushups Performed Over Time", "Dates", "Pushups Performed");
 			}
 		});
 		btnSitAndReach.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				rs = connector.sendStatement("SELECT `date`,`sitReach` FROM `strengthflexibility` WHERE `username` = " + username);
+				rs = connector.sendStatement("SELECT `date`,`sitReach` FROM `strengthflexibility` WHERE `username` = \"" + username + "\"");
 			    graphFactory.createGraph(rs, "Distance Reached Over Time", "Dates", "Distance Reached");
 			}
 		});
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				rs = connector.sendStatement("SELECT `date`,`systolicBloodPressure` FROM `coronaryrisk` WHERE `username` = " + username);
+				rs = connector.sendStatement("SELECT `date`,`systolicBloodPressure` FROM `coronaryrisk` WHERE `username` = \"" + username + "\"");
 			   graphFactory.createGraph(rs, "Systolic Blood Pressure Over Time", "Dates", "Systolic Blood Pressure");
 			}
 		});
 		btnNewButton_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				rs = connector.sendStatement("SELECT `date`,`diastolicBloodPressure` FROM `coronaryrisk` WHERE `username` = " + username);
+				rs = connector.sendStatement("SELECT `date`,`diastolicBloodPressure` FROM `coronaryrisk` WHERE `username` = \"" + username + "\"");
 			    graphFactory.createGraph(rs, "Diastolic Blood Pressure Over Time", "Dates", "Diastolic Blood Pressure");
 			}
 		});
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				rs = connector.sendStatement("SELECT `date`,`restedHeartRate` FROM `aerobiccapacity` WHERE `username` = " + username);
+				rs = connector.sendStatement("SELECT `date`,`restedHeartRate` FROM `aerobiccapacity` WHERE `username` = \"" + username + "\"");
 			    graphFactory.createGraph(rs, "Resting Heart Rate Over Time", "Dates", "Resting Heart Rate");
 			}
 		});
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				rs = connector.sendStatement("SELECT `date`,`percentBodyFat` FROM `bodycomp` WHERE `username` = " + username);
+				rs = connector.sendStatement("SELECT `date`,`percentBodyFat` FROM `bodycomp` WHERE `username` = \"" + username + "\"");
 			    graphFactory.createGraph(rs, "Percent Body Fat Over Time", "Dates", "Percent Body Fat");
 			}
 		});
@@ -193,7 +193,7 @@ public class reportsPanel extends JPanel {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				displayNewGraph(CholesterolButton);
-				rs = connector.sendStatement("SELECT `date`,`totalCholesterol` FROM `coronaryrisk` WHERE `username` = " + username);
+				rs = connector.sendStatement("SELECT `date`,`totalCholesterol` FROM `coronaryrisk` WHERE `username` = \"" + username + "\"");
 				chartPanel.removeAll();
 			    chartPanel.add(graphFactory.createGraph(rs, "Cholesterol Over Time", "Dates", "Cholesterol"));
 			    chartPanel.repaint();
@@ -212,7 +212,7 @@ public class reportsPanel extends JPanel {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				displayNewGraph(BMILabel);
-				rs = connector.sendStatement("SELECT `date`,`BMI` FROM `bodycomp` WHERE `username` = " + username);
+				rs = connector.sendStatement("SELECT `date`,`BMI` FROM `bodycomp` WHERE `username` = \"" + username + "\"");
 				chartPanel.removeAll();
 			    chartPanel.add(graphFactory.createGraph(rs, "BMI Over Time", "Dates", "BMI"));
 			    chartPanel.repaint();
@@ -231,7 +231,7 @@ public class reportsPanel extends JPanel {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				displayNewGraph(WeightLabel);
-				rs = connector.sendStatement("SELECT `date`,`fatWeight` FROM `bodycomp` WHERE `username` = " + username);
+				rs = connector.sendStatement("SELECT `date`,`fatWeight` FROM `bodycomp` WHERE `username` = \"" + username + "\"");
 				chartPanel.removeAll();
 			    chartPanel.add(graphFactory.createGraph(rs, "Weight Over Time", "Dates", "Weight"));
 			    chartPanel.repaint();
@@ -250,7 +250,7 @@ public class reportsPanel extends JPanel {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				displayNewGraph(BloodPressureLabel);
-				rs = connector.sendStatement("SELECT `date`,`systolicBloodPressure` FROM `coronaryrisk` WHERE `username` = " + username);
+				rs = connector.sendStatement("SELECT `date`,`systolicBloodPressure` FROM `coronaryrisk` WHERE `username` = \"" + username + "\"");
 				chartPanel.removeAll();
 			    chartPanel.add(graphFactory.createGraph(rs, "Blood Pressure Over Time", "Dates", "Blood Pressure"));
 			    chartPanel.repaint();
