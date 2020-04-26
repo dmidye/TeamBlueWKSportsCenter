@@ -155,16 +155,6 @@ public class GoalObjectPanel extends JPanel {
 		goalComboBox.setFont(new Font("Tahoma", Font.PLAIN, 26));
 		goalComboBox.setModel(new DefaultComboBoxModel(goals.toArray()));
 		
-		JLabel lblNewLabel = new JLabel("Your Progress:");
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblNewLabel.setBounds(29, 426, 162, 26);
-		subPanel.add(lblNewLabel);
-		
-		JProgressBar progressBar = new JProgressBar();
-		progressBar.setBackground(Color.WHITE);
-		progressBar.setBounds(34, 471, 562, 17);
-		subPanel.add(progressBar);
-		
 		editDescriptionButton = new JLabel("Edit");
 		editDescriptionButton.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/EditButton.png")));
 		editDescriptionButton.setBounds(493, 252, 122, 63);		
@@ -265,6 +255,7 @@ public class GoalObjectPanel extends JPanel {
 		retriveInspiration();
 		
 		updateComboBox();
+		updateGoalsLeft();
 		
 		
 		//Start of Button Functionality Addition ///////////////////////////////////////////////////////////////////////////////////
@@ -379,7 +370,7 @@ public class GoalObjectPanel extends JPanel {
 			}
 		});
 		
-		FinishGoalButton.addMouseListener(new MouseListener() {  //Button that deletes goals 
+		FinishGoalButton.addMouseListener(new MouseListener() {  //Button that deletes goals or saves goals
 
 			@Override
 			public void mouseClicked(MouseEvent e) {}
@@ -394,7 +385,11 @@ public class GoalObjectPanel extends JPanel {
 							FinishGoalButton.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/SaveGoalButton.png")));
 							AddAGoalButton.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/AddAGoal.png")));
 							FinishGoalButton.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/MarkAsFinishedButton.png")));
-							database.sendUpdate("INSERT INTO `goals` (`username`,`description`, `currentValue`,`goalValue`) VALUES ('" + username + "', '" + subDescription.getText() + "','" + subCurrent.getText() + "', '" + subGoal.getText() + "')");
+
+							database.sendUpdate("INSERT INTO `goals` (`memberID`, `username`,`description`, `currentValue`,`goalValue`) VALUES ('" + memberID + "','" + username + "','" + subDescription.getText() + "'," + subCurrent.getText() + "," + subGoal.getText() + ")");
+
+							//database.sendUpdate("INSERT INTO `goals` (`username`,`description`, `currentValue`,`goalValue`) VALUES ('" + username + "', '" + subDescription.getText() + "','" + subCurrent.getText() + "', '" + subGoal.getText() + "')");
+
 							
 							goalComboBox.setEnabled(true); //Setup buttons and fields
 							GoalValueButton.setEnabled(true);
@@ -421,9 +416,13 @@ public class GoalObjectPanel extends JPanel {
 					}
 				} //Handle is deleting goal
 				else {
-					database.sendUpdate("DELETE FROM `goals` WHERE `username` = " + username + " AND `description` = '" + subDescription.getText()+ "'");
+					database.sendUpdate("DELETE FROM `goals` WHERE `username` = \"" + username + "\" AND `description` = '" + subDescription.getText()+ "'");
+					subCurrent.setText("");
+					subGoal.setText("");
+					subDescription.setText("");
 					updateComboBox();
 				}
+				updateGoalsLeft();
 			}
 
 			@Override
@@ -521,7 +520,7 @@ public class GoalObjectPanel extends JPanel {
 		goalComboBox.removeAllItems();
 		goalComboBox.addItem("Select a Goal");
 		goalsCounter = 0;
-		ResultSet rs = database.sendStatement("SELECT `goals`.`description` FROM `goals` INNER JOIN `user` ON `user`.`Username` = \"" + username + "\"");
+		ResultSet rs = database.sendStatement("SELECT `goals`.`description` FROM `goals` WHERE `username` = \"" + username + "\"");
 		try {
 			while(rs.next()) {
 				String nextGoal = rs.getString(1);
@@ -538,7 +537,7 @@ public class GoalObjectPanel extends JPanel {
 	//
 	public void updateSubGoalPanel(String description) {
 		
-		ResultSet rs = database.sendStatement("SELECT `goals`.`currentValue`, `goals`.`goalValue` FROM `goals` INNER JOIN `user` ON `user`.`Username` = \"" + username + "\" WHERE `goals`.`description` = \"" + description + "\"");
+		ResultSet rs = database.sendStatement("SELECT `goals`.`currentValue`, `goals`.`goalValue` FROM `goals` WHERE `goals`.`description` = \"" + description + "\"");
 		try {
 			while(rs.next()) {
 				currentDescription = description;
@@ -546,7 +545,9 @@ public class GoalObjectPanel extends JPanel {
 				subCurrent.setText(Integer.toString(rs.getInt(1)));
 				subGoal.setText(Integer.toString(rs.getInt(2)));
 				subToGo.setText(Integer.toString(Math.abs(rs.getInt(1) - rs.getInt(2))));
+
 				//memberID = rs.getInt(3);
+
 			}
 		} catch (SQLException e1) {
 			e1.printStackTrace();
@@ -598,7 +599,7 @@ public class GoalObjectPanel extends JPanel {
 		}
 	}
 	
-	private void changeGoalButton(JLabel button, boolean mode, boolean entered) {
+	private void changeGoalButton(JLabel button, boolean mode, boolean entered) { //This is called to change asset used if button is entered
 		if(!entered) {
 			if(mode) {
 				button.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/SaveButton.png")));
@@ -615,5 +616,19 @@ public class GoalObjectPanel extends JPanel {
 				button.setIcon(new ImageIcon(GoalObjectPanel.class.getResource("/Assets/EditButtonHovered.png")));
 			}
 		}	
+		updateGoalsLeft();
+	}
+	
+	private void updateGoalsLeft() { //Called to update goals counted
+		ResultSet rs = database.sendStatement("SELECT COUNT(*) FROM goals WHERE `username` = \"" + username + "\"");
+		String count = "";
+		try {
+			while(rs.next()) {
+				count = rs.getString(1);
+			}
+			GoalsLeftCounter.setText(count);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
 	}
 }
