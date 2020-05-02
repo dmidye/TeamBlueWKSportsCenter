@@ -3,38 +3,28 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.Color;
+import javax.swing.SwingConstants;
 
 public class GymEventPanel extends JPanel {
 	
 	//This piece is used on the home page to display events. Upon the home screens creation one of these panels is created for each event held in the database.
 	
-	private String hour = "10";
-	private String minute = "00";
-	private String room = "Room A";
-	private String title = "Introduction to Yoga";
 
-	public GymEventPanel(String hour, String minute, String room, String title) {
+	public GymEventPanel(String date, String description) {
 		setBackground(Color.WHITE);
-		this.hour = hour;
-		this.minute = minute;
-		this.room = room;
-		this.title = title;
 		
 		setLayout(null);
+		System.out.println(date+ description);
 		
-		JLabel lblam = new JLabel(this.hour + ":" + this.minute + " AM");
+		JLabel lblam = new JLabel(date);
 		lblam.setFont(new Font("Tahoma", Font.PLAIN, 30));
-		lblam.setBounds(0, 0, 133, 37);
+		lblam.setBounds(0, 0, 185, 37);
 		add(lblam);
 		
-		JLabel lblMentalHealthAnd = new JLabel(this.title);
+		JLabel lblMentalHealthAnd = new JLabel(description);
+		lblMentalHealthAnd.setVerticalAlignment(SwingConstants.TOP);
 		lblMentalHealthAnd.setFont(new Font("Tahoma", Font.PLAIN, 30));
-		lblMentalHealthAnd.setBounds(158, 0, 431, 37);
+		lblMentalHealthAnd.setBounds(179, 0, 431, 93);
 		add(lblMentalHealthAnd);
-		
-		JLabel lblNewLabel = new JLabel(this.room);
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblNewLabel.setBounds(158, 48, 92, 22);
-		add(lblNewLabel);
 	}
 }

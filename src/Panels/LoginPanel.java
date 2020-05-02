@@ -64,13 +64,14 @@ public class LoginPanel extends JPanel {
 	
 	private JTextField newUsername;
 	private JTextField newPassword;
-	private JTextField newEmail;
+	private JTextField newPhoneNumber;
 	private JTextField newFirstName; 
 	private JTextField newLastName;
 	StaffView staffView;
 	private JPanel MainPanel;
 	
 	JLabel loginButton;
+	private JTextField textField;
 
 	/**
 	 * This class encompasses the login screen, password recovery screen, and new account screens.
@@ -191,27 +192,17 @@ public class LoginPanel extends JPanel {
 		NewAccountPanel.add(newPassword);
 		newPassword.setColumns(10);
 		
-		JLabel lblOptional = new JLabel("Optional:");
-		lblOptional.setHorizontalAlignment(SwingConstants.CENTER);
-		lblOptional.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblOptional.setBounds(167, 301, 89, 23);
-		NewAccountPanel.add(lblOptional);
-		
-		JLabel lblUsedForAccount = new JLabel("Used for account recovery");
-		lblUsedForAccount.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblUsedForAccount.setHorizontalAlignment(SwingConstants.CENTER);
-		lblUsedForAccount.setBounds(128, 335, 158, 17);
-		NewAccountPanel.add(lblUsedForAccount);
-		
 		JLabel lblEmail = new JLabel("Email:");
 		lblEmail.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblEmail.setBounds(128, 363, 73, 20);
+		lblEmail.setBounds(75, 305, 73, 20);
 		NewAccountPanel.add(lblEmail);
 		
-		newEmail = new JTextField();
-		newEmail.setBounds(211, 363, 148, 32);
-		NewAccountPanel.add(newEmail);
-		newEmail.setColumns(10);
+		newPhoneNumber = new JTextField();
+		newPhoneNumber.setHorizontalAlignment(SwingConstants.CENTER);
+		newPhoneNumber.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		newPhoneNumber.setBounds(193, 347, 138, 32);
+		NewAccountPanel.add(newPhoneNumber);
+		newPhoneNumber.setColumns(10);
 		
 		JButton btnContinueNewAccount = new JButton("Continue");
 		btnContinueNewAccount.setBounds(265, 416, 89, 23);
@@ -226,6 +217,16 @@ public class LoginPanel extends JPanel {
 		MissingUPError.setHorizontalAlignment(SwingConstants.CENTER);
 		MissingUPError.setBounds(99, 116, 208, 14);
 		NewAccountPanel.add(MissingUPError);
+		
+		JLabel lblPhoneNumber = new JLabel("Phone Number:");
+		lblPhoneNumber.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblPhoneNumber.setBounds(75, 354, 121, 20);
+		NewAccountPanel.add(lblPhoneNumber);
+		
+		textField = new JTextField();
+		textField.setBounds(183, 301, 148, 32);
+		NewAccountPanel.add(textField);
+		textField.setColumns(10);
 		MissingUPError.setVisible(false);
 		
 		JPanel FurtherInfoPanel = new JPanel();
@@ -236,31 +237,31 @@ public class LoginPanel extends JPanel {
 		JLabel lblAddFutherInformation = new JLabel("Add Futher Information");
 		lblAddFutherInformation.setHorizontalAlignment(SwingConstants.CENTER);
 		lblAddFutherInformation.setFont(new Font("Tahoma", Font.PLAIN, 26));
-		lblAddFutherInformation.setBounds(126, 58, 309, 37);
+		lblAddFutherInformation.setBounds(50, 58, 309, 37);
 		FurtherInfoPanel.add(lblAddFutherInformation);
 		
 		JLabel lblFirstName = new JLabel("First Name:");
 		lblFirstName.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblFirstName.setBounds(126, 241, 89, 20);
+		lblFirstName.setBounds(50, 231, 89, 20);
 		FurtherInfoPanel.add(lblFirstName);
 		
 		JLabel lblLastName = new JLabel("Last Name:");
 		lblLastName.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblLastName.setBounds(126, 297, 86, 20);
+		lblLastName.setBounds(50, 287, 86, 20);
 		FurtherInfoPanel.add(lblLastName);
 		
 		JLabel lblDateOfBirth = new JLabel("Date of Birth:");
 		lblDateOfBirth.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblDateOfBirth.setBounds(126, 343, 102, 26);
+		lblDateOfBirth.setBounds(50, 333, 102, 26);
 		FurtherInfoPanel.add(lblDateOfBirth);
 		
 		newFirstName = new JTextField();
-		newFirstName.setBounds(238, 237, 197, 32);
+		newFirstName.setBounds(162, 227, 197, 32);
 		FurtherInfoPanel.add(newFirstName);
 		newFirstName.setColumns(10);
 		
 		newLastName = new JTextField();
-		newLastName.setBounds(238, 294, 197, 31);
+		newLastName.setBounds(162, 284, 197, 31);
 		FurtherInfoPanel.add(newLastName);
 		newLastName.setColumns(10);
 		
@@ -270,20 +271,22 @@ public class LoginPanel extends JPanel {
 		
 		JSpinner newBirthday = new JSpinner();
 		newBirthday.setModel(new SpinnerDateModel(new Date(1576908000000L), null, null, Calendar.WEEK_OF_MONTH));
-		newBirthday.setBounds(293, 343, 86, 31);
+		newBirthday.setBounds(217, 333, 86, 31);
 		newBirthday.setEditor(new JSpinner.DateEditor(newBirthday, "MM/dd/yyyy"));
 		FurtherInfoPanel.add(newBirthday);
 		
 		JLabel missingFurtherInfo = new JLabel("Please fill out the required fields.");
 		missingFurtherInfo.setForeground(Color.RED);
 		missingFurtherInfo.setHorizontalAlignment(SwingConstants.CENTER);
-		missingFurtherInfo.setBounds(174, 121, 212, 14);
+		missingFurtherInfo.setBounds(93, 126, 212, 14);
 		FurtherInfoPanel.add(missingFurtherInfo);
 		missingFurtherInfo.setVisible(false);
 		
 		JButton btnFinish = new JButton("Finish");
-		btnFinish.setBounds(417, 516, 89, 23);
+		btnFinish.setBounds(308, 399, 89, 23);
 		FurtherInfoPanel.add(btnFinish);
+		
+
 		
 		Image loginImg = ImageIO.read(getClass().getResource("/Assets/enter.png"));
 		loginImg = loginImg.getScaledInstance(50, 50, 0);
@@ -328,18 +331,26 @@ public class LoginPanel extends JPanel {
 		btnContinueNewAccount.addActionListener(new ActionListener() {   //New Account Button
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(newPassword.getText().equals("") || newUsername.getText().equals("")) {
+				if(newPassword.getText().equals("") || newUsername.getText().equals("") || textField.getText().equals("") || newPhoneNumber.getText().contentEquals("")) {
 					MissingUPError.setVisible(true);
 				}
 				else {
-					tempAccountStorage.password = newPassword.getText();
-					tempAccountStorage.username = newUsername.getText();
-					if(!newEmail.getText().equals("")) {
-						tempAccountStorage.email = newEmail.getText();
+					try {
+						String phoneNumber = newPhoneNumber.getText();
+						String[] parts = phoneNumber.split("-");
+						System.out.println(parts[2]);
+						tempAccountStorage.password = newPassword.getText();
+						tempAccountStorage.username = newUsername.getText();
+						if(!newPhoneNumber.getText().equals("")) {
+							tempAccountStorage.email = newPhoneNumber.getText();
+						}
+						System.out.println(tempAccountStorage.password + " " + tempAccountStorage.username + " ");
+						MissingUPError.setVisible(false);
+						changeCurrentCard(FurtherInfoPanel);						
+					} catch(Exception j) {
+						MissingUPError.setVisible(true);
 					}
-					System.out.println(tempAccountStorage.password + " " + tempAccountStorage.username + " ");
-					MissingUPError.setVisible(false);
-					changeCurrentCard(FurtherInfoPanel);
+					
 				}
 			}
 		});
@@ -351,6 +362,9 @@ public class LoginPanel extends JPanel {
 
 			@Override
 			public void mousePressed(MouseEvent e) {
+				MissingUPError.setVisible(false);
+				lblEitherYourUsername.setVisible(false);
+				lblSignUp.setIcon(new ImageIcon(LoginPanel.class.getResource("/Assets/SignUpButton.png")));
 				changeCurrentCard(NewAccountPanel);
 			}
 			@Override
@@ -485,18 +499,22 @@ public class LoginPanel extends JPanel {
 					missingFurtherInfo.setVisible(false);
 					tempAccountStorage.firstName = newFirstName.getText();
 					tempAccountStorage.lastName = newLastName.getText();
+					tempAccountStorage.email = textField.getText();
+					String phoneNumber = newPhoneNumber.getText();
+					String[] parts = phoneNumber.split("-");
 					String[] dateParts = newBirthday.getNextValue().toString().split(" ", 6);
 					tempAccountStorage.birthday = dateParts[1] + "/" + dateParts[2] + "/" + dateParts[5];
 					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM/d/yyyy", Locale.ENGLISH);
 					LocalDate date = LocalDate.parse(tempAccountStorage.birthday, formatter);
 					System.out.println(date); // 2010-01-02
-					int result = databaseConnector.sendUpdate("INSERT INTO `user` (`Username`, `memberFirst`, `memberLast`, `memberEmail`, `memberPswd`)"
-							+ " VALUES (\"" + tempAccountStorage.username + "\", \"" + tempAccountStorage.firstName + "\", \"" + tempAccountStorage.lastName + "\", \"" + tempAccountStorage.email + "\", \"" + tempAccountStorage.password + "\")");
+					int result = databaseConnector.sendUpdate("INSERT INTO `user` (`Username`, `areaCode`, `phone`, `memberFirst`, `memberLast`, `memberEmail`, `memberPswd`, `status`, memberBday)"
+							+ " VALUES (\"" + tempAccountStorage.username + "\", \"" + parts[0] + "\", \"" + parts[1] + parts[2] + "\", \"" + tempAccountStorage.firstName + "\", \"" + tempAccountStorage.lastName + "\", \"" + tempAccountStorage.email + "\", \"" + tempAccountStorage.password + "\", \"Member\", \"" + date + "\")");
 					newUsername.setText("");
 					newFirstName.setText("");
 					newLastName.setText("");
-					newEmail.setText("");
+					newPhoneNumber.setText("");
 					newPassword.setText("");
+					textField.setText("");
 					changeCurrentCard(LoginPanel);
 				}
 			}
