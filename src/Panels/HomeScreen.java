@@ -62,6 +62,7 @@ public class HomeScreen extends JPanel {
 		this.owningFrame = owningFrame;
 		setLayout(null);
 		databaseConnector = new Database.databaseConnector();
+		this.username = username;
 		
 		welcomeBanner TopPanel = new welcomeBanner();
 		TopPanel.setBounds(0, 0, 1226, 56);
@@ -197,13 +198,14 @@ public class HomeScreen extends JPanel {
 		HomePanel.add(SchedulePanel);
 		SchedulePanel.setLayout(null);
 		
-		JLabel lblTodaysSchedule = new JLabel("Today's Schedule");
+		JLabel lblTodaysSchedule = new JLabel("Trainer Notes");
 		lblTodaysSchedule.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTodaysSchedule.setFont(new Font("Tahoma", Font.PLAIN, 50));
 		lblTodaysSchedule.setBounds(107, 53, 455, 61);
 		SchedulePanel.add(lblTodaysSchedule);
 		
 		eventsPanel = new JPanel();
+		eventsPanel.setBackground(Color.WHITE);
 		eventsPanel.setBounds(44, 144, 622, 441);
 		SchedulePanel.add(eventsPanel);
 		eventsPanel.setLayout(new GridLayout(0, 1, 0, 0));		
@@ -228,6 +230,7 @@ public class HomeScreen extends JPanel {
 		CardPanel.add(ReportsPanel, "name_44731238982200");
 		
 		accountPanel = new AccountPanel(username);
+		accountPanel.homeScreen = this;
 		CardPanel.add(accountPanel);
 		
 		JPanel FeedbackPanel = new FeedbackPanel(databaseConnector, CardPanel, HomePanel);                    //Create Feedback Panel
@@ -425,16 +428,11 @@ public class HomeScreen extends JPanel {
 	
 	public void fillEventsList() {
 		
-		ResultSet rs = databaseConnector.sendStatement("SELECT `Title`, `Location`, `Hour`, `Minute`, `AM/PM` FROM `events`");
+		ResultSet rs = databaseConnector.sendStatement("SELECT `date`, `trainingNotes`, `trainerID` FROM `trainingnotes` WHERE `username` = \"" + username + "\"");
 		
 		try {
 			while(rs.next()) {
-				if(rs.getString(4).equals("0")) {
-					eventsPanel.add(new GymEventPanel(rs.getString(3), "00", rs.getString(2), rs.getString(1)));
-				}
-				else {
-					eventsPanel.add(new GymEventPanel(rs.getString(3), rs.getString(4), rs.getString(2), rs.getString(1)));
-				}
+				eventsPanel.add(new GymEventPanel(rs.getString(1), rs.getString(2)));
 			}
 		}
 		catch(SQLException e) {
@@ -482,5 +480,15 @@ public class HomeScreen extends JPanel {
 		lblDay.setText(now.getDayOfWeek().toString());
 		lblMonth.setText(now.getMonth().toString());
 		lblNumberDay.setText(Integer.toString(now.getDayOfMonth()));
+	}
+	
+	public void logOut() {
+		try {
+			changePanel(new LoginPanel(owningFrame));
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		} catch (FontFormatException e1) {
+			e1.printStackTrace();
+		}		
 	}
 }

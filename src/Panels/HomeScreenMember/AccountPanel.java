@@ -2,16 +2,25 @@ package Panels.HomeScreenMember;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import Database.databaseConnector;
+import Panels.HomeScreen;
+import Panels.LoginPanel;
+
 import javax.swing.JButton;
+import javax.swing.JFrame;
+
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
 
@@ -23,6 +32,8 @@ public class AccountPanel extends JPanel {
 	private String username;
 	private databaseConnector databaseConnector;
 	JLabel PhotoHolder;
+	private boolean updating = false;
+	public HomeScreen homeScreen;
 	
 	public AccountPanel(String username) {
 		this.username = username;
@@ -81,18 +92,26 @@ public class AccountPanel extends JPanel {
 			add(panel_1);
 			panel_1.setLayout(null);
 			
-			JLabel lblPhonenumber = new JLabel("None");
+			JLabel lblThereIsAn = new JLabel("There is an error in your format");
+			lblThereIsAn.setForeground(Color.RED);
+			lblThereIsAn.setFont(new Font("Tahoma", Font.PLAIN, 15));
+			lblThereIsAn.setBounds(408, 219, 234, 14);
+			panel_1.add(lblThereIsAn);
+			
+			JTextField lblPhonenumber = new JTextField(rs.getString(5));
+			lblPhonenumber.setEditable(false);
 			lblPhonenumber.setFont(new Font("Tahoma", Font.PLAIN, 20));
-			lblPhonenumber.setBounds(179, 213, 158, 19);
+			lblPhonenumber.setBounds(183, 209, 158, 32);
 			panel_1.add(lblPhonenumber);
 			
 			JLabel lblBirthday = new JLabel("Birthday:");
-			lblBirthday.setBounds(408, 210, 83, 25);
+			lblBirthday.setBounds(408, 123, 83, 25);
 			panel_1.add(lblBirthday);
 			lblBirthday.setFont(new Font("Tahoma", Font.PLAIN, 20));
 			
-			JLabel lblBirthdayTestLabel = new JLabel("");
-			lblBirthdayTestLabel.setBounds(501, 210, 189, 25);
+			JTextField lblBirthdayTestLabel = new JTextField("");
+			lblBirthdayTestLabel.setEditable(false);
+			lblBirthdayTestLabel.setBounds(499, 120, 189, 32);
 			panel_1.add(lblBirthdayTestLabel);
 			lblBirthdayTestLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
 			lblBirthdayTestLabel.setText(rs.getString(5));
@@ -102,8 +121,9 @@ public class AccountPanel extends JPanel {
 			panel_1.add(lblEmail);
 			lblEmail.setFont(new Font("Tahoma", Font.PLAIN, 20));
 			
-			JLabel lblEmailTestLabel = new JLabel("");
-			lblEmailTestLabel.setBounds(105, 123, 189, 25);
+			JTextField lblEmailTestLabel = new JTextField("");
+			lblEmailTestLabel.setEditable(false);
+			lblEmailTestLabel.setBounds(105, 120, 266, 32);
 			panel_1.add(lblEmailTestLabel);
 			lblEmailTestLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
 			lblEmailTestLabel.setText(rs.getString(4));
@@ -132,7 +152,63 @@ public class AccountPanel extends JPanel {
 			PhotoHolder.setIcon(null);
 			PhotoHolder.setBounds(99, 29, 327, 327);
 			add(PhotoHolder);
+			
+			JButton btnUpdate = new JButton("Update");
+			btnUpdate.setBounds(989, 491, 89, 23);
+			add(btnUpdate);
+			
+			JButton deleteButton = new JButton("Delete Account");
+			deleteButton.setBounds(973, 525, 120, 23);
+			add(deleteButton);
 			SetAccountProfilePic();
+			
+			lblThereIsAn.setVisible(false);
+			
+			btnUpdate.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					if(!updating) {
+						updating = true;
+						btnUpdate.setText("Finish");
+						lblEmailTestLabel.setEditable(true);
+						lblPhonenumber.setEditable(true);
+						lblBirthdayTestLabel.setEditable(true);
+					}
+					else {
+						try {
+							lblThereIsAn.setVisible(false);
+							String number = lblPhonenumber.getText();
+							String[] parts = number.split("-");
+							String date = lblPhonenumber.getText();
+							String[] dateParts = lblBirthdayTestLabel.getText().split("-");
+							System.out.println(dateParts[2]);
+							databaseConnector.sendUpdate("UPDATE `user` SET `memberEmail` = \"" + lblEmailTestLabel.getText() + "\", `areaCode` = \"" + parts[0] + "\", `phone` = \"" + parts[1] + parts[2] + "\", `memberBday` = \"" + lblBirthdayTestLabel.getText() + "\" WHERE username = \"" + username + "\"");
+							updating = false;
+							btnUpdate.setText("Update");
+							lblEmailTestLabel.setEditable(false);
+							lblPhonenumber.setEditable(false);
+							lblBirthdayTestLabel.setEditable(false);
+						}
+						catch(Exception j) {
+							j.printStackTrace();
+							lblThereIsAn.setVisible(true);
+						}
+					}
+					
+				}
+				
+			});
+			
+			deleteButton.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					databaseConnector.sendUpdate("DELETE FROM `user` WHERE `username` = \"" + username + "\"");
+					homeScreen.logOut();	
+				}
+			
+			});
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
