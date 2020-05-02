@@ -265,7 +265,7 @@ public class DbManager {
 	    
 	    try {
 		    stmt.executeUpdate("UPDATE wk_sports_center_db.feedback "
-						+ "SET closed = 0 "
+						+ "SET closed = 1 "
 						+ "WHERE id = " + id);
 	    } catch(Exception e) {
 			e.printStackTrace();
@@ -278,9 +278,9 @@ public class DbManager {
 	    
 	    try {
 		   ResultSet rs1 = stmt.executeQuery("SELECT * FROM wk_sports_center_db.feedback "
-		   									+ "WHERE closed = 1" );
+		   									+ "WHERE closed = 0" );
 		   ResultSet rs2 = stmt2.executeQuery("SELECT COUNT(*) FROM wk_sports_center_db.feedback "
-				   							+ "WHERE closed = 1");
+				   							+ "WHERE closed = 0");
 		   if(rs1.next() == false) {
 	           return null;
 	       } else {
@@ -312,9 +312,9 @@ public class DbManager {
 	    
 	    try {
 		   ResultSet rs1 = stmt.executeQuery("SELECT * FROM wk_sports_center_db.feedback "
-		   									+ "WHERE closed = 0" );
+		   									+ "WHERE closed = 1" );
 		   ResultSet rs2 = stmt2.executeQuery("SELECT COUNT(*) FROM wk_sports_center_db.feedback "
-				   							+ "WHERE closed = 0");
+				   							+ "WHERE closed = 1");
 		   if(rs1.next() == false) {
 	           return null;
 	       } else {
